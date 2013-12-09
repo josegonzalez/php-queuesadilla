@@ -2,18 +2,37 @@
 
 $_type = 'Synchronous';
 
-require 'Backend.php';
-require 'Queue.php';
-require 'Job.php';
-require 'Worker.php';
+require 'src/Quesadilla/Backend.php';
+require 'src/Quesadilla/Queue.php';
+require 'src/Quesadilla/Job.php';
+require 'src/Quesadilla/Worker.php';
 
-require 'Backend/MemoryBackend.php';
-require 'Job/MemoryJob.php';
+require 'src/Quesadilla/Backend/MemoryBackend.php';
+require 'src/Quesadilla/Job/MemoryJob.php';
 
-require 'Backend/' . $_type . 'Backend.php';
-require 'Job/' . $_type . 'Job.php';
+require 'src/Quesadilla/Backend/' . $_type . 'Backend.php';
+require 'src/Quesadilla/Job/' . $_type . 'Job.php';
 
-require 'jobs.php';
+function raise($job) {
+  throw new Exception("Screw you");
+}
+
+class Output {
+  public function output($job) {
+    var_dump($job->data());
+  }
+}
+
+class MyJob {
+  public static function run($job) {
+    printf("[MyJob] " . $job->data('message') . "\n");
+    $sleep = $job->data('sleep');
+    if (!empty($sleep)) {
+      printf("[MyJob] Sleeping for " . $job->data('sleep') . " seconds\n");
+      sleep($job->data('sleep'));
+    }
+  }
+}
 
 $BackendClass = $_type . 'Backend';
 

@@ -13,7 +13,7 @@ class Worker {
   }
 
   public function log($message) {
-    printf("[%s Worker] %s\n", get_class($this->_backend), $message);
+    printf("[%s Worker] %s\n", str_replace('Backend', '', get_class($this->_backend)), $message);
   }
 
   public function work() {
