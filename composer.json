@@ -1,0 +1,24 @@
+{
+    "name": "josegonzalez/queuesadilla",
+    "type": "library",
+    "description": "Queue background jobs to any backend system",
+    "keywords": ["php", "queue"],
+    "homepage": "https://github.com/josegonzalez/php-queuesadilla",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jose Diaz-Gonzalez",
+            "email": "queuesadilla@josegonzalez.com",
+            "homepage": "http://josediazgonzalez.com",
+            "role": "Maintainer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Friendsofcake\\Queuesadilla": ["src", "tests"]
+        }
+    }
+}

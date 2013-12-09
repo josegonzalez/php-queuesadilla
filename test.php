@@ -2,16 +2,16 @@
 
 $_type = 'Synchronous';
 
-require 'src/Quesadilla/Backend.php';
-require 'src/Quesadilla/Queue.php';
-require 'src/Quesadilla/Job.php';
-require 'src/Quesadilla/Worker.php';
+require 'src/Queuesadilla/Backend.php';
+require 'src/Queuesadilla/Queue.php';
+require 'src/Queuesadilla/Job.php';
+require 'src/Queuesadilla/Worker.php';
 
-require 'src/Quesadilla/Backend/MemoryBackend.php';
-require 'src/Quesadilla/Job/MemoryJob.php';
+require 'src/Queuesadilla/Backend/MemoryBackend.php';
+require 'src/Queuesadilla/Job/MemoryJob.php';
 
-require 'src/Quesadilla/Backend/' . $_type . 'Backend.php';
-require 'src/Quesadilla/Job/' . $_type . 'Job.php';
+require 'src/Queuesadilla/Backend/' . $_type . 'Backend.php';
+require 'src/Queuesadilla/Job/' . $_type . 'Job.php';
 
 function raise($job) {
   throw new Exception("Screw you");
