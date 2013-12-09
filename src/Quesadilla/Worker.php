@@ -1,4 +1,7 @@
 <?php
+
+namespace Queuesadilla;
+
 class Worker {
 
   public function __construct($backend, $params = array()) {
@@ -10,10 +13,17 @@ class Worker {
     $this->_backend = $backend;
     $this->_queue = $params['queue'];
     $this->_max_iterations = $params['max_iterations'];
+
+    $this->_name = get_class($this->_backend);
+    if (preg_match('@\\\\([\w]+)$@', $this->_name, $matches)) {
+      $this->_name = $matches[1];
+    }
+
+    $this->_name = str_replace('Backend', '', $this->_name) . ' Worker';
   }
 
   public function log($message) {
-    printf("[%s Worker] %s\n", str_replace('Backend', '', get_class($this->_backend)), $message);
+    printf("[%s] %s\n", $this->_name, $message);
   }
 
   public function work() {
@@ -41,7 +51,7 @@ class Worker {
         try {
           call_user_func($item['class'], $job);
           $success = true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
           $this->log(sprintf('Exception! %s', $e->getMessage()));
         }
       } else {

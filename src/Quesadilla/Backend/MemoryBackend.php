@@ -1,14 +1,12 @@
 <?php
 
+namespace Queuesadilla\Backend;
+
+use \Queuesadilla\Backend;
+
 class MemoryBackend extends Backend {
 
-  protected $_redis = null;
-
   protected $_queue = array();
-
-  public function getJobClass() {
-    return 'MemoryJob';
-  }
 
   public function push($class, $vars = array(), $queue = null) {
     $this->_push(compact('class', 'vars'), $queue);

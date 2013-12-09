@@ -1,10 +1,11 @@
 <?php
 
-class SynchronousBackend extends MemoryBackend {
+namespace Queuesadilla\Backend;
 
-  public function getJobClass() {
-    return 'SynchronousJob';
-  }
+use \Queuesadilla\Backend\MemoryBackend;
+use \Queuesadilla\Worker;
+
+class SynchronousBackend extends MemoryBackend {
 
   public function push($class, $vars = array(), $queue = null) {
     parent::push($class, $vars, $queue);

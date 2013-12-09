@@ -1,5 +1,7 @@
 <?php
 
+namespace Queuesadilla;
+
 abstract class Job {
 
   protected $_item;

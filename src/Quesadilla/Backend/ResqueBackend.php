@@ -1,12 +1,12 @@
 <?php
 
+namespace Queuesadilla\Backend;
+
+use \Queuesadilla\Backend;
+
 class ResqueBackend extends Backend {
 
-  protected $_redis = null;
-
-  public function getJobClass() {
-    return 'ResqueJob';
-  }
+  protected $_connection = null;
 
   public function push($class, $vars = array(), $queue = null) {
     $this->_push(compact('class', 'vars'), $queue);
@@ -21,7 +21,7 @@ class ResqueBackend extends Backend {
       $queue = 'default';
     }
 
-    $item = $this->_datasource()->lpop('queue:' . $queue);
+    $item = $this->_connection()->lpop('queue:' . $queue);
     if (!$item) {
       return null;
     }
@@ -35,17 +35,17 @@ class ResqueBackend extends Backend {
       $queue = 'default';
     }
 
-    $this->_datasource()->sadd('queues', $queue);
-    $this->_datasource()->rpush('queue:' . $queue, json_encode($item));
+    $this->_connection()->sadd('queues', $queue);
+    $this->_connection()->rpush('queue:' . $queue, json_encode($item));
   }
 
-  protected function _datasource() {
-    if (!$this->_redis) {
-      $this->_redis = new Redis();
-      $this->_redis->connect('127.0.0.1', 6379);
+  protected function _connection() {
+    if (!$this->_connection) {
+      $this->_connection = new Redis();
+      $this->_connection->connect('127.0.0.1', 6379);
     }
 
-    return $this->_redis;
+    return $this->_connection;
   }
 
 }

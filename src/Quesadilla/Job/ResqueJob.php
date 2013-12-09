@@ -1,9 +1,13 @@
 <?php
 
+namespace Queuesadilla\Job;
+
+use \Queuesadilla\Job;
+
 class ResqueJob extends Job {
 
   public function delete() {
-    throw new LogicException("Job deletion unimplemented");
+    throw new \LogicException("Job deletion unimplemented");
   }
 
   public function attempts() {

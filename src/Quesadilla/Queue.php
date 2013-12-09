@@ -1,5 +1,7 @@
 <?php
 
+namespace Queuesadilla;
+
 class Queue {
 
   public function __construct($backend) {
