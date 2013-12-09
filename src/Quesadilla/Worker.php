@@ -52,16 +52,20 @@ class Worker {
           call_user_func($item['class'], $job);
           $success = true;
         } catch (\Exception $e) {
-          $this->log(sprintf('Exception! %s', $e->getMessage()));
+          $this->log(sprintf('Exception: "%s"', $e->getMessage()));
         }
       } else {
-        $this->log('Invalid callable for job!');
+        $this->log('Invalid callable for job. Deleting job from queue.');
+        $this->_backend->delete($item);
+        continue;
       }
 
       if ($success) {
-        $this->log('Success!');
+        $this->log('Success. Deleting job from queue.');
+        $job->delete();
       } else {
-        $this->log('Failed!');
+        $this->log('Failed. Releasing job to queue');
+        $job->release();
       }
     }
   }

@@ -4,9 +4,10 @@ namespace Queuesadilla\Job;
 
 use \Queuesadilla\Job;
 
-class MemoryJob extends Job {
+class PdoJob extends Job {
 
   public function delete() {
+    $this->_backend->delete($this->_item);
   }
 
   public function attempts() {

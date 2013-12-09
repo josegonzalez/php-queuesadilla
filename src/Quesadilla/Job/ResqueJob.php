@@ -7,7 +7,6 @@ use \Queuesadilla\Job;
 class ResqueJob extends Job {
 
   public function delete() {
-    throw new \LogicException("Job deletion unimplemented");
   }
 
   public function attempts() {
@@ -16,11 +15,6 @@ class ResqueJob extends Job {
     }
 
     return $this->_item['attempts'] = 0;
-  }
-
-  public function release($delay = 0) {
-    $this->_item['attempts'] += 1;
-    $this->_container->release($this->_item);
   }
 
 }

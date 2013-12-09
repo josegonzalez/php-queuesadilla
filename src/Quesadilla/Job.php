@@ -23,6 +23,15 @@ abstract class Job {
 
   abstract public function delete();
   abstract public function attempts();
-  abstract public function release($delay = 0);
+
+  public function release($delay = 0) {
+    if (!isset($this->_item['attempts'])) {
+      $this->_item['attempts'] = 0;
+    }
+
+    $this->_item['attempts'] += 1;
+    $this->_item['delay'] = $delay;
+    $this->_backend->release($this->_item);
+  }
 
 }
