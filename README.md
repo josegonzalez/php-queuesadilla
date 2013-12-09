@@ -1,6 +1,6 @@
 Usage:
 
-    $backend = new 'SynchronousBackend';
+    $backend = new SynchronousBackend;
     $queue = new Queue($backend);
 
     $queue->push('MyJob::run', array('sleep' => 3, 'message' => 'hi', 'raise' => false));
