@@ -13,10 +13,10 @@ class MemoryJob extends Job
 
     public function attempts()
     {
-        if (array_key_exists('attempts', $this->_item)) {
-            return $this->_item['attempts'];
+        if (array_key_exists('attempts', $this->item)) {
+            return $this->item['attempts'];
         }
 
-        return $this->_item['attempts'] = 0;
+        return $this->item['attempts'] = 0;
     }
 }

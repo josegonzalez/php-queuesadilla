@@ -12,38 +12,38 @@ class Worker
             'queue' => null,
         ), $params);
 
-        $this->_backend = $backend;
-        $this->_queue = $params['queue'];
-        $this->_max_iterations = $params['max_iterations'];
+        $this->backend = $backend;
+        $this->queue = $params['queue'];
+        $this->max_iterations = $params['max_iterations'];
 
-        $this->_name = get_class($this->_backend);
-        if (preg_match('@\\\\([\w]+)$@', $this->_name, $matches)) {
-            $this->_name = $matches[1];
+        $this->name = get_class($this->backend);
+        if (preg_match('@\\\\([\w]+)$@', $this->name, $matches)) {
+            $this->name = $matches[1];
         }
 
-        $this->_name = str_replace('Backend', '', $this->_name) . ' Worker';
+        $this->name = str_replace('Backend', '', $this->name) . ' Worker';
     }
 
     public function log($message)
     {
-        printf("[%s] %s\n", $this->_name, $message);
+        printf("[%s] %s\n", $this->name, $message);
     }
 
     public function work()
     {
-        $max_iterations = $this->_max_iterations ? sprintf(', max iterations %s', $this->_max_iterations) : '';
+        $max_iterations = $this->max_iterations ? sprintf(', max iterations %s', $this->max_iterations) : '';
         $this->log(sprintf('Starting worker%s', $max_iterations));
-        $jobClass = $this->_backend->getJobClass();
+        $jobClass = $this->backend->getJobClass();
         $iterations = 0;
         while (true) {
-            if (is_int($this->_max_iterations) && $iterations >= $this->_max_iterations) {
+            if (is_int($this->max_iterations) && $iterations >= $this->max_iterations) {
                 $this->log('Max iterations reached, exiting');
                 break;
             }
 
             $iterations++;
 
-            $item = $this->_backend->pop($this->_queue);
+            $item = $this->backend->pop($this->queue);
             if (empty($item)) {
                 sleep(1);
                 $this->log('No job!');
@@ -52,7 +52,7 @@ class Worker
 
             $success = false;
             if (is_callable($item['class'])) {
-                $job = new $jobClass($item, $this->_backend);
+                $job = new $jobClass($item, $this->backend);
                 try {
                     call_user_func($item['class'], $job);
                     $success = true;
@@ -61,7 +61,7 @@ class Worker
                 }
             } else {
                 $this->log('Invalid callable for job. Deleting job from queue.');
-                $this->_backend->delete($item);
+                $this->backend->delete($item);
                 continue;
             }
 
