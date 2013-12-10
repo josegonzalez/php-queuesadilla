@@ -1,8 +1,8 @@
 <?php
 
-namespace Queuesadilla\Job;
+namespace josegonzalez\Queuesadilla\Job;
 
-use \Queuesadilla\Job;
+use \josegonzalez\Queuesadilla\Job;
 
 class ResqueJob extends Job
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Backend;
 
-use \Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Backend;
 
 class MemoryBackend extends Backend
 {

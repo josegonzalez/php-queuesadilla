@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 */
 
-namespace Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \PDO;
 use \PDOException;
-use \Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Backend;
 
 class MysqlBackend extends Backend
 {

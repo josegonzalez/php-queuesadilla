@@ -1,9 +1,9 @@
 <?php
 
-namespace Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Backend;
 
-use \Queuesadilla\Backend\MemoryBackend;
-use \Queuesadilla\Worker;
+use \josegonzalez\Queuesadilla\Backend\MemoryBackend;
+use \josegonzalez\Queuesadilla\Worker;
 
 class SynchronousBackend extends MemoryBackend
 {

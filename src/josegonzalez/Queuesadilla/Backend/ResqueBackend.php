@@ -1,9 +1,9 @@
 <?php
 
-namespace Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \Redis;
-use \Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Backend;
 
 class ResqueBackend extends Backend
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Queuesadilla;
+namespace josegonzalez\Queuesadilla;
 
 class Worker
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Queuesadilla\Job;
+namespace josegonzalez\Queuesadilla\Job;
 
-use \Queuesadilla\Job\MemoryJob;
+use \josegonzalez\Queuesadilla\Job\MemoryJob;
 
 class SynchronousJob extends MemoryJob
 {
