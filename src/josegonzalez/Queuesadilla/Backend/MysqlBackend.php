@@ -110,9 +110,10 @@ class MysqlBackend extends Backend
             $queue = $this->settings['queue'];
         }
 
+        $data = json_encode($item);
         $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
         $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, json_encode($item), PDO::PARAM_STR);
+        $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
         $sth->execute();
         $this->last_job_id = $this->connection->lastInsertId();
