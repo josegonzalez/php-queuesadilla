@@ -48,7 +48,7 @@ class MysqlBackend extends Backend
 
     public function getJobClass()
     {
-        return '\\Queuesadilla\\Job\\PdoJob';
+        return '\\josegonzalez\\Queuesadilla\\Job\\PdoJob';
     }
 
     public function push($class, $vars = array(), $queue = null)

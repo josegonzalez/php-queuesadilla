@@ -25,7 +25,7 @@ abstract class Backend
                 $classname = $matches[1];
         }
 
-        return '\\Queuesadilla\\Job\\' . str_replace('Backend', 'Job', $classname);
+        return '\\josegonzalez\\Queuesadilla\\Job\\' . str_replace('Backend', 'Job', $classname);
     }
 
     abstract public function push($class, $vars = array(), $queue = null);
