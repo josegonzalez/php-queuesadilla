@@ -17,7 +17,7 @@ use \PDO;
 use \PDOException;
 use \Queuesadilla\Backend;
 
-class PdoBackend extends Backend
+class MysqlBackend extends Backend
 {
     protected $connection = null;
 
@@ -44,6 +44,11 @@ class PdoBackend extends Backend
 
         $this->settings = array_merge($this->baseConfig, $config);
         return $this->connect();
+    }
+
+    public function getJobClass()
+    {
+        return '\\Queuesadilla\\Job\\PdoJob';
     }
 
     public function push($class, $vars = array(), $queue = null)
