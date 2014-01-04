@@ -5,7 +5,7 @@ namespace josegonzalez\Queuesadilla\Backend;
 use \Redis;
 use \josegonzalez\Queuesadilla\Backend;
 
-class ResqueBackend extends Backend
+class RedisBackend extends Backend
 {
     protected $connection = null;
 

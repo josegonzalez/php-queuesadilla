@@ -4,7 +4,7 @@ namespace josegonzalez\Queuesadilla\Job;
 
 use \josegonzalez\Queuesadilla\Job;
 
-class ResqueJob extends Job
+class RedisJob extends Job
 {
 
     public function delete()
