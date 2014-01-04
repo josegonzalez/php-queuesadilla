@@ -22,14 +22,14 @@ class MysqlBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
-        'persistent' => true,
-        'host' => 'localhost',
-        'login' => 'root',
-        'password' => 'password',
         'database' => 'queuesadilla',
+        'login' => 'root',
+        'persistent' => true,
+        'password' => 'password',
         'port' => '3306',
-        'table' => 'jobs',
         'queue' => 'default'
+        'server' => '127.0.0.1',
+        'table' => 'jobs',
     );
 
     protected $results = null;
@@ -142,7 +142,7 @@ class MysqlBackend extends Backend
             $flags[PDO::MYSQL_ATTR_SSL_CA] = $config['ssl_ca'];
         }
         if (empty($config['unix_socket'])) {
-            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
+            $dsn = "mysql:host={$config['server']};port={$config['port']};dbname={$config['database']}";
         } else {
             $dsn = "mysql:unix_socket={$config['unix_socket']};dbname={$config['database']}";
         }

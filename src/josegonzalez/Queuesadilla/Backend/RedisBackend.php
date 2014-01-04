@@ -10,13 +10,15 @@ class RedisBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
-        'prefix' => null,
-        'server' => '127.0.0.1',
-        'port' => 6379,
+        'database' => null,
         'password' => false,
-        'timeout' => 0,
         'persistent' => true,
+        'port' => 6379,
+        'prefix' => 'jobs:',
+        'serializer' => null,
         'queue' => 'default',
+        'server' => '127.0.0.1',
+        'timeout' => 0,
     );
 
     protected $settings = null;
@@ -95,9 +97,23 @@ class RedisBackend extends Backend
         } catch (RedisException $e) {
             return false;
         }
+
+        if ($return && $this->settings['database'] !== null) {
+            $return = $this->connection->select((int)$this->settings['database']);
+        }
+
+        if ($return && $this->settings['prefix']) {
+            $return = $this->connection->setOption(Redis::OPT_PREFIX, $this->settings['prefix']);
+        }
+
+        if ($return && $this->settings['serializer']) {
+            $return = $this->connection->setOption(Redis::OPT_SERIALIZER, $this->settings['serializer']);
+        }
+
         if ($return && $this->settings['password']) {
             $return = $this->connection->auth($this->settings['password']);
         }
+
         return $return;
     }
 }
