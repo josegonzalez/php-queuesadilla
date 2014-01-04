@@ -35,6 +35,11 @@ class Worker
         $this->log(sprintf('Starting worker%s', $max_iterations));
         $jobClass = $this->backend->getJobClass();
         $iterations = 0;
+        if (!$this->backend->watch($this->queue)) {
+            $this->log(sprintf('Worker unable to watch queue %s, exiting', $this->queue));
+            return;
+        }
+
         while (true) {
             if (is_int($this->max_iterations) && $iterations >= $this->max_iterations) {
                 $this->log('Max iterations reached, exiting');

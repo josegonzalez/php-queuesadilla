@@ -24,6 +24,11 @@ abstract class Backend
         return '\\josegonzalez\\Queuesadilla\\Job';
     }
 
+    public function watch($queue = null)
+    {
+        return true;
+    }
+
     abstract public function push($class, $vars = array(), $queue = null);
 
     abstract public function release($item, $queue = null);
