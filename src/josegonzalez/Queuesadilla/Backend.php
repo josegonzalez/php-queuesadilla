@@ -2,6 +2,8 @@
 
 namespace josegonzalez\Queuesadilla;
 
+use \josegonzalez\Queuesadilla\Job;
+
 abstract class Backend
 {
 
@@ -19,13 +21,7 @@ abstract class Backend
 
     public function getJobClass()
     {
-        $classname = get_class($this);
-
-        if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) {
-                $classname = $matches[1];
-        }
-
-        return '\\josegonzalez\\Queuesadilla\\Job\\' . str_replace('Backend', 'Job', $classname);
+        return '\\josegonzalez\\Queuesadilla\\Job';
     }
 
     abstract public function push($class, $vars = array(), $queue = null);

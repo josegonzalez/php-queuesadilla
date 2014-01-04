@@ -46,11 +46,6 @@ class MysqlBackend extends Backend
         return $this->connect();
     }
 
-    public function getJobClass()
-    {
-        return '\\josegonzalez\\Queuesadilla\\Job\\PdoJob';
-    }
-
     public function push($class, $vars = array(), $queue = null)
     {
         $this->pdoPush(compact('class', 'vars'), $queue);

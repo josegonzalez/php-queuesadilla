@@ -7,11 +7,7 @@ require 'src/Queuesadilla/Queue.php';
 require 'src/Queuesadilla/Job.php';
 require 'src/Queuesadilla/Worker.php';
 
-require 'src/Queuesadilla/Backend/MemoryBackend.php';
-require 'src/Queuesadilla/Job/MemoryJob.php';
-
 require 'src/Queuesadilla/Backend/' . $_type . 'Backend.php';
-require 'src/Queuesadilla/Job/' . $_type . 'Job.php';
 
 function raise($job) {
   throw new Exception("Screw you");

@@ -2,7 +2,7 @@
 
 namespace josegonzalez\Queuesadilla;
 
-abstract class Job
+class Job
 {
     protected $item;
 
@@ -34,6 +34,18 @@ abstract class Job
         $this->backend->release($this->item);
     }
 
-    abstract public function delete();
-    abstract public function attempts();
+    public function delete()
+    {
+        $this->backend->delete($this->item);
+    }
+
+
+    public function attempts()
+    {
+        if (array_key_exists('attempts', $this->item)) {
+            return $this->item['attempts'];
+        }
+
+        return $this->item['attempts'] = 0;
+    }
 }
