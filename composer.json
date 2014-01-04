@@ -16,6 +16,9 @@
     "require": {
         "php": ">=5.3.0"
     },
+    "suggest": {
+        "davidpersson/beanstalk": "Adds support for Beanstalk background workers"
+    },
     "autoload": {
         "psr-0": {
             "josegonzalez\\Queuesadilla": ["src", "tests"]
