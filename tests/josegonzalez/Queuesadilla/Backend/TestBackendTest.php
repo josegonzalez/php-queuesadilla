@@ -20,6 +20,45 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::bulk
+     */
+    public function testBulk()
+    {
+        $this->assertEquals(array(true, true), $this->Backend->bulk(array(null, null)));
+
+        $this->Backend->return = false;
+        $this->assertEquals(array(false, false), $this->Backend->bulk(array(null, null)));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job', $this->Backend->getJobClass();
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend::getQueue
+     */
+    public function testGetQueue()
+    {
+        $this->assertEquals('non_default', $this->Backend->getQueue('non_default'));
+        $this->assertEquals('other', $this->Backend->getQueue('other'));
+        $this->assertEquals('default', $this->Backend->getQueue());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend::watch
+     */
+    public function testWatch()
+    {
+        $this->assertTrue($this->Backend->getQueue('non_default'));
+        $this->assertTrue($this->Backend->getQueue('other'));
+        $this->assertTrue($this->Backend->getQueue());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::connect
      */
     public function testConnect()

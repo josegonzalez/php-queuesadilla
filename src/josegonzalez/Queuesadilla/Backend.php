@@ -22,9 +22,13 @@ abstract class Backend
 
     public function bulk($jobs, $vars = array(), $queue = null)
     {
+        $queue = $this->getQueue($queue);
+        $return = array();
         foreach ((array)$jobs as $callable) {
-            $this->push($callable, $vars, $queue);
+            $return[] = $this->push($callable, $vars, $queue);
         }
+
+        return $return;
     }
 
     public function getJobClass()
@@ -43,6 +47,7 @@ abstract class Backend
 
     public function watch($queue = null)
     {
+        $queue = $this->getQueue($queue);
         return true;
     }
 
