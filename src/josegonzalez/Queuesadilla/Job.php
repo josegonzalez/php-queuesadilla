@@ -23,8 +23,12 @@ class Job
         return $this->item['attempts'] = 0;
     }
 
-    public function data($key, $default = null)
+    public function data($key = null, $default = null)
     {
+        if ($key === null) {
+            return $this->item['vars'];
+        }
+
         if (array_key_exists($key, $this->item['vars'])) {
             return $this->item['vars'][$key];
         }
