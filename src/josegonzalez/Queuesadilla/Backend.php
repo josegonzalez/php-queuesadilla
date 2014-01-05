@@ -47,7 +47,8 @@ abstract class Backend
         return $queue;
     }
 
-    public function setting($settings, $key, $default = null) {
+    public function setting($settings, $key, $default = null)
+    {
         if (!is_array($settings)) {
             $settings = array('queue' => $settings);
         }
