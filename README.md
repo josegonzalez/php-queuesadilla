@@ -1,4 +1,4 @@
-# PHP Queuesadilla [![Build Status](https://travis-ci.org/josegonzalez/php-queuesadilla.png?branch=master)](https://travis-ci.org/josegonzalez/php-queuesadilla)
+# PHP Queuesadilla [![Build Status](https://travis-ci.org/josegonzalez/php-queuesadilla.png?branch=master)](https://travis-ci.org/josegonzalez/php-queuesadilla) [![Coverage Status](https://coveralls.io/repos/josegonzalez/php-queuesadilla/badge.png?branch=master)](https://coveralls.io/r/josegonzalez/php-queuesadilla?branch=master)
 
 A job/worker system built that supports various queuing systems
 
