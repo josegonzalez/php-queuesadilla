@@ -42,6 +42,22 @@ class IronBackend extends Backend
         return parent::__construct($config);
     }
 
+/**
+ * Connects to a BeanstalkD server
+ *
+ * @return boolean True if BeanstalkD server was connected
+ */
+    protected function connect()
+    {
+        $settings = array();
+        foreach ($this->ironSettings as $key => $mapping) {
+            $settings[$mapping] = $this->settings[$key];
+        }
+
+        $this->connection = new IronMQ($settings);
+        return (bool)$this->connection;
+    }
+
     public function push($class, $vars = array(), $queue = null)
     {
         $queue = $this->getQueue($queue);
@@ -84,21 +100,5 @@ class IronBackend extends Backend
     {
         $queue = $this->getQueue($queue);
         $this->connection->deleteMessage($queue, $item['id']);
-    }
-
-/**
- * Connects to a BeanstalkD server
- *
- * @return boolean True if BeanstalkD server was connected
- */
-    protected function connect()
-    {
-        $settings = array();
-        foreach ($this->ironSettings as $key => $mapping) {
-            $settings[$mapping] = $this->settings[$key];
-        }
-
-        $this->connection = new IronMQ($settings);
-        return (bool)$this->connection;
     }
 }

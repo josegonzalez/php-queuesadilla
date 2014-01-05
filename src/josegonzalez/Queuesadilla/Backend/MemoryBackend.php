@@ -14,14 +14,18 @@ class MemoryBackend extends Backend
 
     protected $settings = null;
 
+    public function delete($item)
+    {
+    }
+
     public function push($class, $vars = array(), $queue = null)
     {
-        $this->memoryPush(compact('class', 'vars'), $queue);
+        array_push($this->queue, compact('class', 'vars'));
     }
 
     public function release($item, $queue = null)
     {
-        $this->memoryPush($item, $queue);
+        array_push($this->queue, $item);
     }
 
     public function pop($queue = null)
@@ -32,14 +36,5 @@ class MemoryBackend extends Backend
         }
 
         return $item;
-    }
-
-    public function delete($item)
-    {
-    }
-
-    protected function memoryPush($item, $queue = null)
-    {
-        array_push($this->queue, $item);
     }
 }

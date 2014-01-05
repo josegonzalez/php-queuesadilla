@@ -19,8 +19,6 @@ use \josegonzalez\Queuesadilla\Backend;
 
 class MysqlBackend extends Backend
 {
-    protected $connection = null;
-
     protected $baseConfig = array(
         'database' => 'queuesadilla',
         'login' => 'root',
@@ -32,10 +30,6 @@ class MysqlBackend extends Backend
         'table' => 'jobs',
     );
 
-    protected $results = null;
-
-    protected $last_job_id = null;
-
     public function __construct($config = array())
     {
         if (!class_exists('PDO')) {
@@ -43,69 +37,6 @@ class MysqlBackend extends Backend
         }
 
         return parent::__construct($config);
-    }
-
-    public function push($class, $vars = array(), $queue = null)
-    {
-        $this->pdoPush(compact('class', 'vars'), $queue);
-    }
-
-    public function release($item, $queue = null)
-    {
-        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
-        $sth->execute();
-        return $sth->rowCount() == 1;
-    }
-
-    public function delete($item)
-    {
-        $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
-        $sth->execute();
-        return $sth->rowCount() == 1;
-    }
-
-    public function pop($queue = null)
-    {
-        $queue = $this->getQueue($queue);
-
-        $sql = sprintf(
-            'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY id asc LIMIT 1',
-            $this->settings['table']
-        );
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $queue, PDO::PARAM_STR);
-        $sth->execute();
-        $result = $sth->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($result)) {
-            return null;
-        }
-
-        $sql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
-        $sth->execute();
-        if ($sth->rowCount() == 1) {
-            return json_decode($result['data'], true);
-        }
-
-        return null;
-    }
-
-    protected function pdoPush($item, $queue = null)
-    {
-        $queue = $this->getQueue($queue);
-        $data = json_encode($item);
-        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $data, PDO::PARAM_STR);
-        $sth->bindParam(2, $queue, PDO::PARAM_STR);
-        $sth->execute();
-        $this->last_job_id = $this->connection->lastInsertId();
     }
 
 /**
@@ -153,8 +84,64 @@ class MysqlBackend extends Backend
             }
         }
 
-
         return (bool)$this->connection;
+    }
+
+    public function delete($item)
+    {
+        $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->settings['table']);
+        $sth = $this->connection->prepare($sql);
+        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
+        $sth->execute();
+        return $sth->rowCount() == 1;
+    }
+
+    public function pop($queue = null)
+    {
+        $queue = $this->getQueue($queue);
+
+        $sql = sprintf(
+            'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY id asc LIMIT 1',
+            $this->settings['table']
+        );
+        $sth = $this->connection->prepare($sql);
+        $sth->bindParam(1, $queue, PDO::PARAM_STR);
+        $sth->execute();
+        $result = $sth->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $sql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
+        $sth = $this->connection->prepare($sql);
+        $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
+        $sth->execute();
+        if ($sth->rowCount() == 1) {
+            return json_decode($result['data'], true);
+        }
+
+        return null;
+    }
+
+    public function push($class, $vars = array(), $queue = null)
+    {
+        $queue = $this->getQueue($queue);
+        $data = json_encode(compact('class', 'vars'));
+        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
+        $sth = $this->connection->prepare($sql);
+        $sth->bindParam(1, $data, PDO::PARAM_STR);
+        $sth->bindParam(2, $queue, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
+    public function release($item, $queue = null)
+    {
+        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
+        $sth = $this->connection->prepare($sql);
+        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
+        $sth->execute();
+        return $sth->rowCount() == 1;
     }
 
 /**
@@ -182,7 +169,6 @@ class MysqlBackend extends Backend
             $query = $this->connection->prepare($sql, $prepareOptions);
             $query->setFetchMode(PDO::FETCH_LAZY);
             if (!$query->execute($params)) {
-                $this->results = $query;
                 $query->closeCursor();
                 return false;
             }

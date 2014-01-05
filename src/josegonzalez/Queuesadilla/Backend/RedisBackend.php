@@ -32,38 +32,6 @@ class RedisBackend extends Backend
         return parent::__construct($config);
     }
 
-    public function push($class, $vars = array(), $queue = null)
-    {
-        $this->redisPush(compact('class', 'vars'), $queue);
-    }
-
-    public function release($item, $queue = null)
-    {
-        $this->redisPush($item, $queue);
-    }
-
-    public function pop($queue = null)
-    {
-        $queue = $this->getQueue($queue);
-        $item = $this->connection->lpop('queue:' . $queue);
-        if (!$item) {
-            return null;
-        }
-
-        return json_decode($item, true);
-    }
-
-    public function delete($item)
-    {
-    }
-
-    protected function redisPush($item, $queue = null)
-    {
-        $queue = $this->getQueue($queue);
-        $this->connection->sadd('queues', $queue);
-        $this->connection->rpush('queue:' . $queue, json_encode($item));
-    }
-
 /**
  * Connects to a Redis server
  *
@@ -108,5 +76,34 @@ class RedisBackend extends Backend
         }
 
         return $return;
+    }
+
+    public function delete($item)
+    {
+    }
+
+    public function pop($queue = null)
+    {
+        $queue = $this->getQueue($queue);
+        $item = $this->connection->lpop('queue:' . $queue);
+        if (!$item) {
+            return null;
+        }
+
+        return json_decode($item, true);
+    }
+
+    public function push($class, $vars = array(), $queue = null)
+    {
+        $queue = $this->getQueue($queue);
+        $this->connection->sadd('queues', $queue);
+        $this->connection->rpush('queue:' . $queue, json_encode(compact('class', 'vars')));
+    }
+
+    public function release($item, $queue = null)
+    {
+        $queue = $this->getQueue($queue);
+        $this->connection->sadd('queues', $queue);
+        $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
 }

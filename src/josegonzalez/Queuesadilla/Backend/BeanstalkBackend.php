@@ -31,15 +31,35 @@ class BeanstalkBackend extends Backend
         return parent::__construct($config);
     }
 
-    public function getJobClass()
+/**
+ * Connects to a BeanstalkD server
+ *
+ * @return boolean True if BeanstalkD server was connected
+ */
+    protected function connect()
     {
-        return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';
+        $this->connection = new Socket_Beanstalk($this->settings);
+        return $this->connection->connect();
     }
 
-    public function watch($queue = null)
+    public function delete($item)
     {
-        $queue = $this->getQueue($queue);
-        return $this->connection->watch($queue);
+        $this->connection->delete($item['id']);
+    }
+
+    public function pop($queue = null)
+    {
+        $item = $this->connection->reserve();
+        if (!$item) {
+            return null;
+        }
+
+        $item['body'] = json_decode($item['body'], true);
+        $item['class'] = $item['body']['class'];
+        $item['vars'] = $item['vars'];
+        unset($item['body']);
+
+        return $item;
     }
 
     public function push($class, $vars = array(), $queue = null)
@@ -59,39 +79,19 @@ class BeanstalkBackend extends Backend
         $this->connection->bury($item['id']);
     }
 
-    public function pop($queue = null)
+    public function watch($queue = null)
     {
-        $item = $this->connection->reserve();
-        if (!$item) {
-            return null;
-        }
-
-        $item['body'] = json_decode($item['body'], true);
-        $item['class'] = $item['body']['class'];
-        $item['vars'] = $item['vars'];
-        unset($item['body']);
-
-        return $item;
+        $queue = $this->getQueue($queue);
+        return $this->connection->watch($queue);
     }
 
-    public function delete($item)
+    public function getJobClass()
     {
-        $this->connection->delete($item['id']);
+        return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';
     }
 
     public function statsJob($item)
     {
         $this->connection->statsJob($item['id']);
-    }
-
-/**
- * Connects to a BeanstalkD server
- *
- * @return boolean True if BeanstalkD server was connected
- */
-    protected function connect()
-    {
-        $this->connection = new Socket_Beanstalk($this->settings);
-        return $this->connection->connect();
     }
 }

@@ -14,6 +14,15 @@ class Job
         $this->backend = $backend;
     }
 
+    public function attempts()
+    {
+        if (array_key_exists('attempts', $this->item)) {
+            return $this->item['attempts'];
+        }
+
+        return $this->item['attempts'] = 0;
+    }
+
     public function data($key, $default = null)
     {
         if (array_key_exists($key, $this->item['vars'])) {
@@ -21,6 +30,11 @@ class Job
         }
 
         return $default;
+    }
+
+    public function delete()
+    {
+        $this->backend->delete($this->item);
     }
 
     public function release($delay = 0)
@@ -34,18 +48,4 @@ class Job
         $this->backend->release($this->item);
     }
 
-    public function delete()
-    {
-        $this->backend->delete($this->item);
-    }
-
-
-    public function attempts()
-    {
-        if (array_key_exists('attempts', $this->item)) {
-            return $this->item['attempts'];
-        }
-
-        return $this->item['attempts'] = 0;
-    }
 }

@@ -4,7 +4,6 @@ namespace josegonzalez\Queuesadilla;
 
 class Worker
 {
-
     public function __construct($backend, $params = array())
     {
         $params = array_merge(array(
