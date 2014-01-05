@@ -56,7 +56,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     public function testAttempts()
     {
         $this->assertEquals(0, $this->Jobs[0]->attempts());
-        $this->assertEquals(1, $this->Jobs[1]->attempts());
+        $this->assertEquals(0, $this->Jobs[1]->attempts());
         $this->assertEquals(1, $this->Jobs[2]->attempts());
     }
 
