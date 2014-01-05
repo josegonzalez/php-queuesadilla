@@ -36,6 +36,10 @@ class SequentialWorker extends Worker
             if (is_callable($item['class'])) {
                 $job = new $jobClass($item, $this->backend);
                 try {
+                    if (is_array($item['class']) && count($item['class']) == 2) {
+                        $item['class'][0] = new $item['class'][0];
+                    }
+
                     call_user_func($item['class'], $job);
                     $success = true;
                 } catch (\Exception $e) {
