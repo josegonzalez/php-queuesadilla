@@ -13,7 +13,7 @@ class JobTest extends PHPUnit_Framework_TestCase
         $items = array(
             array(
                 'delay' => 0,
-                'class' => 'Foo'
+                'class' => 'Foo',
                 'vars' => array(
                     'foo' => 'bar',
                     'baz' => 'qux',
@@ -22,16 +22,16 @@ class JobTest extends PHPUnit_Framework_TestCase
             array(
                 'attempts' => 0,
                 'delay' => 0,
-                'class' => 'Foo'
+                'class' => 'Foo',
                 'vars' => array(
                     'foo' => 'bar',
                     'baz' => 'qux',
                 ),
             ),
             array(
-                'attempts' => 1
+                'attempts' => 1,
                 'delay' => 0,
-                'class' => 'Foo'
+                'class' => 'Foo',
                 'vars' => array(
                     'foo' => 'bar',
                     'baz' => 'qux',
