@@ -10,10 +10,10 @@ class BeanstalkBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
+        'delay' => 0,
         'persistent' => true,
         'port' => 11300,
         'priority' => 4294967295,
-        'delay' => 0,
         'queue' => 'default'
         'server' => '127.0.0.1',
         'timeout' => 1,
