@@ -6,7 +6,9 @@ use \josegonzalez\Queuesadilla\Job;
 
 abstract class Backend
 {
-    protected $baseConfig = array();
+    protected $baseConfig = array(array(
+        'queue' => 'default',
+    ));
 
     protected $connection = null;
 
