@@ -41,9 +41,9 @@ class JobTest extends PHPUnit_Framework_TestCase
 
         $this->Backend = new TestBackend($config);
         $this->Jobs = array(
-            new Job($item[0], $this->Backend),
-            new Job($item[1], $this->Backend),
-            new Job($item[2], $this->Backend),
+            new Job($items[0], $this->Backend),
+            new Job($items[1], $this->Backend),
+            new Job($items[2], $this->Backend),
         );
     }
 
