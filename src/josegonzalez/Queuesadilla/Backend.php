@@ -46,7 +46,7 @@ abstract class Backend
         return true;
     }
 
-    abstract protected function connect();
+    abstract public function connect();
 
     abstract public function delete($item);
 

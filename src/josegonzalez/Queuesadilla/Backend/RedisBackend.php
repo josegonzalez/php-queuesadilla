@@ -37,7 +37,7 @@ class RedisBackend extends Backend
  *
  * @return boolean True if Redis server was connected
  */
-    protected function connect()
+    public function connect()
     {
         $return = false;
         try {

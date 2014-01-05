@@ -8,7 +8,7 @@ class TestBackend extends Backend
 {
     public $return = true;
 
-    protected function connect()
+    public function connect()
     {
         return $this->return;
     }

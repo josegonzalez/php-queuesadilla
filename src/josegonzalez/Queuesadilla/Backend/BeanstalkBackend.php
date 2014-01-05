@@ -36,7 +36,7 @@ class BeanstalkBackend extends Backend
  *
  * @return boolean True if BeanstalkD server was connected
  */
-    protected function connect()
+    public function connect()
     {
         $this->connection = new Socket_Beanstalk($this->settings);
         return $this->connection->connect();

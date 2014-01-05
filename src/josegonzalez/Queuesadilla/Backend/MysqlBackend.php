@@ -46,7 +46,7 @@ class MysqlBackend extends Backend
  * @throws PDOException
  */
 
-    protected function connect()
+    public function connect()
     {
         $config = $this->settings;
 

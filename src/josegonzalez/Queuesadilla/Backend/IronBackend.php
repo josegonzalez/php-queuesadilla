@@ -47,7 +47,7 @@ class IronBackend extends Backend
  *
  * @return boolean True if BeanstalkD server was connected
  */
-    protected function connect()
+    public function connect()
     {
         $settings = array();
         foreach ($this->ironSettings as $key => $mapping) {
