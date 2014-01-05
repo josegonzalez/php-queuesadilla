@@ -17,7 +17,8 @@
         "php": ">=5.3.0"
     },
     "suggest": {
-        "davidpersson/beanstalk": "Adds support for Beanstalk background workers"
+        "davidpersson/beanstalk": "Adds support for Beanstalk background workers",
+        "iron-io/iron_mq": "Adds support for IronMQ background workers"
     },
     "autoload": {
         "psr-0": {
