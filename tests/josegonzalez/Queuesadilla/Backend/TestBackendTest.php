@@ -69,6 +69,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::connect
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::connect
      */
     public function testConnect()
@@ -80,6 +81,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::delete
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::delete
      */
     public function testDelete()
@@ -91,6 +93,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::pop
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::pop
      */
     public function testPop()
@@ -102,6 +105,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::push
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::push
      */
     public function testPush()
@@ -113,6 +117,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::release
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::release
      */
     public function testRelease()
