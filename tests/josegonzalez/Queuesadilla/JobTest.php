@@ -119,10 +119,10 @@ class JobTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $this->Backend->return = true;
-        $this->assertTrue($this->Job[0]->delete());
+        $this->assertTrue($this->Jobs[0]->delete());
 
         $this->Backend->return = false;
-        $this->assertFalse($this->Job[0]->delete());
+        $this->assertFalse($this->Jobs[0]->delete());
     }
 
     /**
@@ -131,7 +131,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     public function testRelease()
     {
         $this->Backend->return = true;
-        $this->assertTrue($this->Job[0]->release(10));
+        $this->assertTrue($this->Jobs[0]->release(10));
         $this->assertEquals(array(
             'attempts' => 1,
             'delay' => 10,
@@ -143,7 +143,7 @@ class JobTest extends PHPUnit_Framework_TestCase
         ), $this->Jobs[0]->item());
 
         $this->Backend->return = false;
-        $this->assertFalse($this->Job[1]->release());
+        $this->assertFalse($this->Jobs[1]->release());
         $this->assertEquals(array(
             'attempts' => 2,
             'delay' => 0,
