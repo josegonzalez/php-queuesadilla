@@ -15,8 +15,8 @@ class RedisBackend extends Backend
         'persistent' => true,
         'port' => 6379,
         'prefix' => 'jobs:',
-        'serializer' => null,
         'queue' => 'default',
+        'serializer' => null,
         'server' => '127.0.0.1',
         'timeout' => 0,
     );

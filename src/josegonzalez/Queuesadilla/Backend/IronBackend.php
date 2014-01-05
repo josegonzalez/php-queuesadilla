@@ -10,16 +10,16 @@ class IronBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
+        'api_version' => 1,
         'delay' => 0,
+        'expires_in' => 86400,
         'login' => null,  # iron.project_id
         'password' => null,  # iron.token
         'port' => 443,
-        'queue' => 'default'
+        'protocol' => 'https',
+        'queue' => 'default',
         'server' => 'mq-aws-us-east-1.iron.io',  # iron.host
         'time_to_run' => 60,  # iron.timeout
-        'expires_in' => 86400,
-        'api_version' => 1,
-        'protocol' => 'https',
     );
 
     protected $settings = null;

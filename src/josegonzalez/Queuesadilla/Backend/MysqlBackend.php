@@ -22,10 +22,10 @@ class MysqlBackend extends Backend
     protected $baseConfig = array(
         'database' => 'queuesadilla',
         'login' => 'root',
-        'persistent' => true,
         'password' => 'password',
+        'persistent' => true,
         'port' => '3306',
-        'queue' => 'default'
+        'queue' => 'default',
         'server' => '127.0.0.1',
         'table' => 'jobs',
     );

@@ -13,11 +13,11 @@ class BeanstalkBackend extends Backend
         'delay' => 0,
         'persistent' => true,
         'port' => 11300,
-        'priority' => 4294967295,
-        'queue' => 'default'
+        'priority' => 0,
+        'queue' => 'default',
         'server' => '127.0.0.1',
-        'timeout' => 1,
         'time_to_run' => 60,
+        'timeout' => 0,  # unsupported
     );
 
     protected $settings = null;
