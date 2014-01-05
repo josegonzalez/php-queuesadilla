@@ -16,16 +16,17 @@ class MemoryBackend extends Backend
 
     public function delete($item)
     {
+        return true;
     }
 
     public function push($class, $vars = array(), $queue = null)
     {
-        array_push($this->queue, compact('class', 'vars'));
+        return array_push($this->queue, compact('class', 'vars')) !== count($this->queue);
     }
 
     public function release($item, $queue = null)
     {
-        array_push($this->queue, $item);
+        return array_push($this->queue, $item) !== count($this->queue);
     }
 
     public function pop($queue = null)

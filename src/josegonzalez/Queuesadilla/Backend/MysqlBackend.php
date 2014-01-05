@@ -133,6 +133,7 @@ class MysqlBackend extends Backend
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
         $sth->execute();
+        return $sth->rowCount() == 1;
     }
 
     public function release($item, $queue = null)

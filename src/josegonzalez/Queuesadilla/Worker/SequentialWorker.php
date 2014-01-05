@@ -59,5 +59,7 @@ class SequentialWorker extends Worker
                 $job->release();
             }
         }
+
+        return true;
     }
 }

@@ -44,7 +44,7 @@ class BeanstalkBackend extends Backend
 
     public function delete($item)
     {
-        $this->connection->delete($item['id']);
+        return $this->connection->delete($item['id']);
     }
 
     public function pop($queue = null)
@@ -66,7 +66,7 @@ class BeanstalkBackend extends Backend
     {
         $queue = $this->getQueue($queue);
         $this->connection->choose($queue);
-        $beanstalk->put(
+        return $this->connection->put(
             $this->settings['priority'],
             $this->settings['delay'],
             $this->settings['time_to_run'],
@@ -76,7 +76,7 @@ class BeanstalkBackend extends Backend
 
     public function release($item, $queue = null)
     {
-        $this->connection->bury($item['id']);
+        return $this->connection->bury($item['id']);
     }
 
     public function watch($queue = null)
@@ -92,6 +92,6 @@ class BeanstalkBackend extends Backend
 
     public function statsJob($item)
     {
-        $this->connection->statsJob($item['id']);
+        return $this->connection->statsJob($item['id']);
     }
 }

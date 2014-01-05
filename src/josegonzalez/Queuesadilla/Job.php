@@ -34,7 +34,7 @@ class Job
 
     public function delete()
     {
-        $this->backend->delete($this->item);
+        return $this->backend->delete($this->item);
     }
 
     public function release($delay = 0)
@@ -45,6 +45,6 @@ class Job
 
         $this->item['attempts'] += 1;
         $this->item['delay'] = $delay;
-        $this->backend->release($this->item);
+        return $this->backend->release($this->item);
     }
 }

@@ -80,6 +80,7 @@ class RedisBackend extends Backend
 
     public function delete($item)
     {
+        return true;
     }
 
     public function pop($queue = null)
@@ -97,13 +98,13 @@ class RedisBackend extends Backend
     {
         $queue = $this->getQueue($queue);
         $this->connection->sadd('queues', $queue);
-        $this->connection->rpush('queue:' . $queue, json_encode(compact('class', 'vars')));
+        return $this->connection->rpush('queue:' . $queue, json_encode(compact('class', 'vars')));
     }
 
     public function release($item, $queue = null)
     {
         $queue = $this->getQueue($queue);
         $this->connection->sadd('queues', $queue);
-        $this->connection->rpush('queue:' . $queue, json_encode($item));
+        return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
 }

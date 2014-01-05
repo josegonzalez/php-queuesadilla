@@ -11,6 +11,6 @@ class SynchronousBackend extends MemoryBackend
     {
         parent::push($class, $vars, $queue);
         $worker = new SequentialWorker($this, array('max_iterations' => 1));
-        $worker->work();
+        return $worker->work();
     }
 }

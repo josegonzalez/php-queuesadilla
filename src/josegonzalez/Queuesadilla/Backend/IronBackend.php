@@ -63,7 +63,7 @@ class IronBackend extends Backend
         $queue = $this->getQueue($queue);
 
         $item = json_encode(compact('class', 'vars'));
-        $this->connection->postMessage($queue, $item, array(
+        return $this->connection->postMessage($queue, $item, array(
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
@@ -73,7 +73,7 @@ class IronBackend extends Backend
     public function release($item, $queue = null)
     {
         $queue = $this->getQueue($queue);
-        $this->connection->postMessage($queue, $item, array(
+        return $this->connection->postMessage($queue, $item, array(
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
@@ -99,6 +99,6 @@ class IronBackend extends Backend
     public function delete($item)
     {
         $queue = $this->getQueue($queue);
-        $this->connection->deleteMessage($queue, $item['id']);
+        return $this->connection->deleteMessage($queue, $item['id']);
     }
 }
