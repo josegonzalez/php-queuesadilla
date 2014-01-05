@@ -54,7 +54,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Job::attempts
+     * @covers josegonzalez\Queuesadilla\Job::attempts
      */
     public function testAttempts()
     {
@@ -64,7 +64,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Job::data
+     * @covers josegonzalez\Queuesadilla\Job::data
      */
     public function testData()
     {
@@ -79,7 +79,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Job::item
+     * @covers josegonzalez\Queuesadilla\Job::item
      */
     public function testItem()
     {
@@ -114,7 +114,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Job::delete
+     * @covers josegonzalez\Queuesadilla\Job::delete
      */
     public function testDelete()
     {
@@ -126,7 +126,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Job::release
+     * @covers josegonzalez\Queuesadilla\Job::release
      */
     public function testRelease()
     {
