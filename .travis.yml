@@ -8,9 +8,13 @@ php:
 before_script:
   - composer self-update
   - composer install
+  - composer require --dev satooshi/php-coveralls:dev-master
   - pear install --alldeps PHP_CodeSniffer
   - phpenv rehash
 
 script:
   - phpcs --standard=psr2 src/
-  - phpunit --coverage-text
+  - phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+after_success:
+  - php vendor/bin/coveralls -v
