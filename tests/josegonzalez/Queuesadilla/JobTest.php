@@ -145,6 +145,17 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->Backend->return = false;
         $this->assertFalse($this->Jobs[1]->release());
         $this->assertEquals(array(
+            'attempts' => 1,
+            'delay' => 0,
+            'class' => 'Foo',
+            'vars' => array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        ), $this->Jobs[1]->item());
+
+        $this->assertFalse($this->Jobs[1]->release());
+        $this->assertEquals(array(
             'attempts' => 2,
             'delay' => 0,
             'class' => 'Foo',
