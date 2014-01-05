@@ -41,7 +41,8 @@ class Job
         return $this->backend->delete($this->item);
     }
 
-    public function item() {
+    public function item()
+    {
         return $this->item;
     }
 
