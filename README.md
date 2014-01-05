@@ -1,4 +1,12 @@
-Usage:
+# PHP Queuesadilla [![Build Status](https://travis-ci.org/josegonzalez/php-queuesadilla.png?branch=master)](https://travis-ci.org/josegonzalez/php-queuesadilla)
+
+A job/worker system built that supports various queuing systems
+
+## Installation
+
+TODO
+
+## Usage:
 
     $backend = new SynchronousBackend;
     $queue = new Queue($backend);
