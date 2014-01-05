@@ -20,6 +20,19 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend::__construct
+     * @covers josegonzalez\Queuesadilla\Backend::connected
+     */
+    public function testConstruct()
+    {
+        $Backend = new TestBackend(array());
+        $this->assertTrue($Backend->connected());
+
+        $Backend->return = false;
+        $this->assertFalse($Backend->connected());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Backend::bulk
      */
     public function testBulk()
