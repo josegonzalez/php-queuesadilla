@@ -14,11 +14,6 @@ class MemoryBackend extends Backend
 
     protected $settings = null;
 
-    public function __construct($config = array())
-    {
-        return true;
-    }
-
     public function push($class, $vars = array(), $queue = null)
     {
         $this->memoryPush(compact('class', 'vars'), $queue);
@@ -31,10 +26,6 @@ class MemoryBackend extends Backend
 
     public function pop($queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
         $item = array_shift($this->queue);
         if (!$item) {
             return null;
@@ -49,10 +40,6 @@ class MemoryBackend extends Backend
 
     protected function memoryPush($item, $queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
         array_push($this->queue, $item);
     }
 }

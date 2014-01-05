@@ -8,11 +8,11 @@ class BeanstalkJob extends Job
 {
     public function attempts()
     {
-    	$stats = $this->backend->statsJob($this->item);
-    	if ($stats !== null) {
-	        return (int)$stats['reserves'];
-	    }
+        $stats = $this->backend->statsJob($this->item);
+        if ($stats !== null) {
+            return (int)$stats['reserves'];
+        }
 
-	    return null;
+        return null;
     }
 }

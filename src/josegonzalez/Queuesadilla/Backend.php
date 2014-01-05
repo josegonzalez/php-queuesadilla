@@ -9,7 +9,8 @@ abstract class Backend
 
     public function __construct($config)
     {
-        return false;
+        $this->settings = array_merge($this->baseConfig, $config);
+        return $this->connect();
     }
 
     public function bulk($jobs, $vars = array(), $queue = null)
@@ -29,6 +30,15 @@ abstract class Backend
         return true;
     }
 
+    public function getQueue($queue = null)
+    {
+        if ($queue === null) {
+            $queue = $this->settings['queue'];
+        }
+
+        return $queue;
+    }
+
     abstract public function push($class, $vars = array(), $queue = null);
 
     abstract public function release($item, $queue = null);
@@ -36,4 +46,6 @@ abstract class Backend
     abstract public function pop($queue = null);
 
     abstract public function delete($item);
+
+    abstract protected function connect();
 }

@@ -29,8 +29,7 @@ class RedisBackend extends Backend
             return false;
         }
 
-        $this->settings = array_merge($this->baseConfig, $config);
-        return $this->connect();
+        return parent::__construct($config);
     }
 
     public function push($class, $vars = array(), $queue = null)
@@ -45,10 +44,7 @@ class RedisBackend extends Backend
 
     public function pop($queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
+        $queue = $this->getQueue($queue);
         $item = $this->connection->lpop('queue:' . $queue);
         if (!$item) {
             return null;
@@ -63,10 +59,7 @@ class RedisBackend extends Backend
 
     protected function redisPush($item, $queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
+        $queue = $this->getQueue($queue);
         $this->connection->sadd('queues', $queue);
         $this->connection->rpush('queue:' . $queue, json_encode($item));
     }

@@ -42,8 +42,7 @@ class MysqlBackend extends Backend
             return false;
         }
 
-        $this->settings = array_merge($this->baseConfig, $config);
-        return $this->connect();
+        return parent::__construct($config);
     }
 
     public function push($class, $vars = array(), $queue = null)
@@ -71,9 +70,7 @@ class MysqlBackend extends Backend
 
     public function pop($queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
+        $queue = $this->getQueue($queue);
 
         $sql = sprintf(
             'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY id asc LIMIT 1',
@@ -101,10 +98,7 @@ class MysqlBackend extends Backend
 
     protected function pdoPush($item, $queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
+        $queue = $this->getQueue($queue);
         $data = json_encode($item);
         $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
         $sth = $this->connection->prepare($sql);

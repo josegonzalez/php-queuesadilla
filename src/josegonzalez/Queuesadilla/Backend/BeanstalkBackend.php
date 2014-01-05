@@ -28,8 +28,7 @@ class BeanstalkBackend extends Backend
             return false;
         }
 
-        $this->settings = array_merge($this->baseConfig, $config);
-        return $this->connect();
+        return parent::__construct($config);
     }
 
     public function getJobClass()
@@ -39,19 +38,13 @@ class BeanstalkBackend extends Backend
 
     public function watch($queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
-        return $this->connection->watch();
+        $queue = $this->getQueue($queue);
+        return $this->connection->watch($queue);
     }
 
     public function push($class, $vars = array(), $queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
+        $queue = $this->getQueue($queue);
         $this->connection->choose($queue);
         $beanstalk->put(
             $this->settings['priority'],
@@ -68,10 +61,6 @@ class BeanstalkBackend extends Backend
 
     public function pop($queue = null)
     {
-        if ($queue === null) {
-            $queue = $this->settings['queue'];
-        }
-
         $item = $this->connection->reserve();
         if (!$item) {
             return null;
