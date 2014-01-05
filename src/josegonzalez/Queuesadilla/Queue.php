@@ -11,11 +11,11 @@ class Queue
 
     public function bulk($jobs, $vars = array(), $queue = null)
     {
-        $this->backend->bulk($jobs, $vars, $queue);
+        return $this->backend->bulk($jobs, $vars, $queue);
     }
 
     public function push($callable, $vars = array(), $queue = null)
     {
-        $this->backend->push($callable, $vars, $queue);
+        return $this->backend->push($callable, $vars, $queue);
     }
 }
