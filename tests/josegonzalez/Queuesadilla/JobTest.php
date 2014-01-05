@@ -54,6 +54,23 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Job::__construct
+     */
+    public function testConstruct() {
+        $data = array(
+            'delay' => 0,
+            'class' => 'Foo',
+            'vars' => array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        );
+
+        $job = new Job($data, $this->Backend);
+        $this->assertEquals($data, $job->item());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Job::attempts
      */
     public function testAttempts()
