@@ -62,7 +62,7 @@ class JobTest extends PHPUnit_Framework_TestCase
 
     public function testData()
     {
-        $this->assertNull(0, $this->Jobs[0]->data('unset_variable'));
+        $this->assertNull($this->Jobs[0]->data('unset_variable'));
         $this->assertTrue($this->Jobs[0]->data('unset_variable', true));
         $this->assertEquals('bar', $this->Jobs[0]->data('foo'));
         $this->assertEquals('qux', $this->Jobs[0]->data('baz'));
