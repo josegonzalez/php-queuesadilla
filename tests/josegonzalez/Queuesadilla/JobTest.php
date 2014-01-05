@@ -67,4 +67,36 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $this->Jobs[0]->data('foo'));
         $this->assertEquals('qux', $this->Jobs[0]->data('baz'));
     }
+
+    public function testItem()
+    {
+        $this->assertEquals(array(
+            'delay' => 0,
+            'class' => 'Foo',
+            'vars' => array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        ), $this->Jobs[0]->item());
+
+        $this->assertEquals(array(
+            'attempts' => 0,
+            'delay' => 0,
+            'class' => 'Foo',
+            'vars' => array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        ), $this->Jobs[0]->item());
+
+        $this->assertEquals(array(
+            'attempts' => 1,
+            'delay' => 0,
+            'class' => 'Foo',
+            'vars' => array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        ), $this->Jobs[0]->item());       
+    }
 }

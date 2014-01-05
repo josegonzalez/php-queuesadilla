@@ -41,6 +41,10 @@ class Job
         return $this->backend->delete($this->item);
     }
 
+    public function item() {
+        return $this->item;
+    }
+
     public function release($delay = 0)
     {
         if (!isset($this->item['attempts'])) {
