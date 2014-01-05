@@ -35,10 +35,10 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $this->assertTrue($this->Backend->delete());
+        $this->assertTrue($this->Backend->delete(null));
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->delete());
+        $this->assertTrue($this->Backend->delete(null));
     }
 
     /**
