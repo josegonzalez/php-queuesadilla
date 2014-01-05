@@ -7,8 +7,6 @@ use \josegonzalez\Queuesadilla\Backend;
 
 class RedisBackend extends Backend
 {
-    protected $connection = null;
-
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => 0,  # unsupported
@@ -28,8 +26,6 @@ class RedisBackend extends Backend
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,
     );
-
-    protected $settings = null;
 
     public function __construct($config = array())
     {

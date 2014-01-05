@@ -28,8 +28,6 @@ class MemoryBackend extends Backend
 
     protected $queue = array();
 
-    protected $settings = null;
-
     public function delete($item)
     {
         return true;

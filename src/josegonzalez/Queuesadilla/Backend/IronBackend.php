@@ -7,8 +7,6 @@ use \josegonzalez\Queuesadilla\Backend;
 
 class IronBackend extends Backend
 {
-    protected $connection = null;
-
     protected $baseConfig = array(
         'api_version' => 1,
         'delay' => 0,
@@ -28,8 +26,6 @@ class IronBackend extends Backend
         'time_to_run' => 60,  # iron.timeout
         'timeout' => 0,  # unsupported
     );
-
-    protected $settings = null;
 
     protected $ironSettings = array(
         'protocol' => 'protocol',

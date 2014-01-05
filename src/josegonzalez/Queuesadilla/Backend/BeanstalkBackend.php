@@ -7,8 +7,6 @@ use \josegonzalez\Queuesadilla\Backend;
 
 class BeanstalkBackend extends Backend
 {
-    protected $connection = null;
-
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => 0,
@@ -28,8 +26,6 @@ class BeanstalkBackend extends Backend
         'time_to_run' => 60,
         'timeout' => 0,  # unsupported
     );
-
-    protected $settings = null;
 
     public function __construct($config = array())
     {
