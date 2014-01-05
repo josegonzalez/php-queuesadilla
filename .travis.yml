@@ -13,7 +13,7 @@ php:
   - 5.5
 
 before_script:
-  - sudo apt-get install -qq --force-yes install beanstalkd > /dev/null
+  - sudo apt-get install -qq --force-yes install beanstalkd
   - service beanstalkd start
   - composer self-update
   - composer install
