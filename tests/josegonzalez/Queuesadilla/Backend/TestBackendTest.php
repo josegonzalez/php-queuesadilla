@@ -27,9 +27,6 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     {
         $Backend = new TestBackend(array());
         $this->assertTrue($Backend->connected());
-
-        $Backend->return = false;
-        $this->assertFalse($Backend->connected());
     }
 
     /**
@@ -66,9 +63,9 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testWatch()
     {
-        $this->assertTrue($this->Backend->getQueue('non_default'));
-        $this->assertTrue($this->Backend->getQueue('other'));
-        $this->assertTrue($this->Backend->getQueue());
+        $this->assertTrue($this->Backend->watch('non_default'));
+        $this->assertTrue($this->Backend->watch('other'));
+        $this->assertTrue($this->Backend->watch());
     }
 
     /**
