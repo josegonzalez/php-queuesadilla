@@ -22,7 +22,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     /**
      * @covers josegonzalez\Queuesadilla\Backend\TestBackend::connect
      */
-    protected function testConnect()
+    public function testConnect()
     {
         $this->assertTrue($this->Backend->connect());
 
