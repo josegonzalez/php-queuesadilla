@@ -48,7 +48,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testGetJobClass()
     {
-        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job', $this->Backend->getJobClass();
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job', $this->Backend->getJobClass());
     }
 
     /**

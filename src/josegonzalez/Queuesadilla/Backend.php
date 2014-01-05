@@ -53,7 +53,8 @@ abstract class Backend
         return true;
     }
 
-    public function connected() {
+    public function connected()
+    {
         return $this->connected;
     }
 
