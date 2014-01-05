@@ -47,5 +47,4 @@ class Job
         $this->item['delay'] = $delay;
         $this->backend->release($this->item);
     }
-
 }
