@@ -6,7 +6,11 @@ use \josegonzalez\Queuesadilla\Job;
 
 abstract class Backend
 {
+    protected $baseConfig = array();
+
     protected $connection = null;
+
+    protected $settings = array();
 
     public function __construct($config)
     {
