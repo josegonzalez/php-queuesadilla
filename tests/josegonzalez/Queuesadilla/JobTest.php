@@ -53,6 +53,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         unset($this->Jobs);
     }
 
+    /**
+     * @covers Job::attempts
+     */
     public function testAttempts()
     {
         $this->assertEquals(0, $this->Jobs[0]->attempts());
@@ -60,6 +63,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->Jobs[2]->attempts());
     }
 
+    /**
+     * @covers Job::data
+     */
     public function testData()
     {
         $this->assertNull($this->Jobs[0]->data('unset_variable'));
@@ -72,6 +78,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         ), $this->Jobs[0]->data());
     }
 
+    /**
+     * @covers Job::item
+     */
     public function testItem()
     {
         $this->assertEquals(array(
@@ -104,6 +113,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         ), $this->Jobs[2]->item());       
     }
 
+    /**
+     * @covers Job::delete
+     */
     public function testDelete()
     {
         $this->Backend->return = true;
@@ -113,6 +125,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Job[0]->delete());
     }
 
+    /**
+     * @covers Job::release
+     */
     public function testRelease()
     {
         $this->Backend->return = true;
