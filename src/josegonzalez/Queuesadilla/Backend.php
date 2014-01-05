@@ -47,6 +47,22 @@ abstract class Backend
         return $queue;
     }
 
+    public function setting($settings, $key, $default = null) {
+        if (!is_array($settings)) {
+            $settings = array('queue' => $settings);
+        }
+
+        $settings = array_merge($this->settings, $settings);
+
+        if (isset($settings[$key])) {
+            $value = $settings[$key];
+        } else {
+            $value = $default;
+        }
+
+        return $value;
+    }
+
     public function watch($queue = null)
     {
         $queue = $this->getQueue($queue);
