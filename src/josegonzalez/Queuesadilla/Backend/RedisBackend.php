@@ -10,14 +10,22 @@ class RedisBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
+        'api_version' => 1,  # unsupported
+        'delay' => 0,  # unsupported
         'database' => null,
+        'expires_in' => 86400,  # unsupported
+        'login' => null,  # unsupported
         'password' => false,
         'persistent' => true,
         'port' => 6379,
         'prefix' => 'jobs:',
+        'priority' => 0,  # unsupported
+        'protocol' => 'https',  # unsupported
         'queue' => 'default',
         'serializer' => null,
         'server' => '127.0.0.1',
+        'table' => null,  # unsupported
+        'time_to_run' => 60,  # unsupported
         'timeout' => 0,
     );
 

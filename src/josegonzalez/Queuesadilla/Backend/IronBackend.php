@@ -12,14 +12,21 @@ class IronBackend extends Backend
     protected $baseConfig = array(
         'api_version' => 1,
         'delay' => 0,
+        'database' => 'queuesadilla',  # unsupported
         'expires_in' => 86400,
         'login' => null,  # iron.project_id
         'password' => null,  # iron.token
+        'persistent' => true,  # unsupported
         'port' => 443,
+        'prefix' => null,  # unsupported
+        'priority' => 0,  # unsupported
         'protocol' => 'https',
         'queue' => 'default',
+        'serializer' => null,  # unsupported
         'server' => 'mq-aws-us-east-1.iron.io',  # iron.host
+        'table' => null,  # unsupported
         'time_to_run' => 60,  # iron.timeout
+        'timeout' => 0,  # unsupported
     );
 
     protected $settings = null;

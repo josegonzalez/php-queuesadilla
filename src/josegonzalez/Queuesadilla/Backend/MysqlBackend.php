@@ -20,14 +20,23 @@ use \josegonzalez\Queuesadilla\Backend;
 class MysqlBackend extends Backend
 {
     protected $baseConfig = array(
+        'api_version' => 1,  # unsupported
+        'delay' => 0,  # unsupported
         'database' => 'queuesadilla',
+        'expires_in' => 86400,  # unsupported
         'login' => 'root',
         'password' => 'password',
         'persistent' => true,
         'port' => '3306',
+        'prefix' => null,  # unsupported
+        'priority' => 0,  # unsupported
+        'protocol' => 'https',  # unsupported
         'queue' => 'default',
+        'serializer' => null,  # unsupported
         'server' => '127.0.0.1',
         'table' => 'jobs',
+        'time_to_run' => 60,  # unsupported
+        'timeout' => 0,  # unsupported
     );
 
     public function __construct($config = array())

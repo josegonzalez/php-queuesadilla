@@ -7,7 +7,23 @@ use \josegonzalez\Queuesadilla\Backend;
 class MemoryBackend extends Backend
 {
     protected $baseConfig = array(
+        'api_version' => 1,  # unsupported
+        'delay' => 0,  # unsupported
+        'database' => 'queuesadilla',  # unsupported
+        'expires_in' => 86400,  # unsupported
+        'login' => null,  # unsupported
+        'password' => null,  # unsupported
+        'persistent' => true,  # unsupported
+        'port' => 0,  # unsupported
+        'prefix' => null,  # unsupported
+        'priority' => 0,  # unsupported
+        'protocol' => 'https',  # unsupported
         'queue' => 'default',
+        'serializer' => null,  # unsupported
+        'server' => '127.0.0.1',  # unsupported
+        'table' => null,  # unsupported
+        'time_to_run' => 60,  # unsupported
+        'timeout' => 0,  # unsupported
     );
 
     protected $queue = array();

@@ -10,12 +10,21 @@ class BeanstalkBackend extends Backend
     protected $connection = null;
 
     protected $baseConfig = array(
+        'api_version' => 1,  # unsupported
         'delay' => 0,
+        'database' => 'queuesadilla',  # unsupported
+        'expires_in' => 86400,  # unsupported
+        'login' => null,  # unsupported
+        'password' => null,  # unsupported
         'persistent' => true,
         'port' => 11300,
+        'prefix' => null,  # unsupported
         'priority' => 0,
+        'protocol' => 'https',  # unsupported
         'queue' => 'default',
+        'serializer' => null,  # unsupported
         'server' => '127.0.0.1',
+        'table' => null,  # unsupported
         'time_to_run' => 60,
         'timeout' => 0,  # unsupported
     );
