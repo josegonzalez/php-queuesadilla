@@ -27,7 +27,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->connect());
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->connect());
+        $this->assertFalse($this->Backend->connect());
     }
 
     /**
@@ -38,7 +38,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->delete(null));
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->delete(null));
+        $this->assertFalse($this->Backend->delete(null));
     }
 
     /**
@@ -49,7 +49,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->pop('default'));
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->pop('default'));
+        $this->assertFalse($this->Backend->pop('default'));
     }
 
     /**
@@ -60,7 +60,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->push(null, array(), 'default'));
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->connect(null, array(), 'default'));
+        $this->assertFalse($this->Backend->connect(null, array(), 'default'));
     }
 
     /**
@@ -71,7 +71,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->release(null, 'default'));
 
         $this->Backend->return = false;
-        $this->assertTrue($this->Backend->release(null, 'default'));
+        $this->assertFalse($this->Backend->release(null, 'default'));
     }
 
 }
