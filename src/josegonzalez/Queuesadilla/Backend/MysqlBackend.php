@@ -134,7 +134,13 @@ class MysqlBackend extends Backend
                 $sth->execute();
                 if ($sth->rowCount() == 1) {
                     $this->connection->commit();
-                    return json_decode($result['data'], true);
+
+                    $data = json_decode($result['data'], true);
+                    return array(
+                        'id' => $result['id'],
+                        'class' => $data['class'],
+                        'vars' => $data['vars'],
+                    );
                 }
             }
             $this->connection->commit();
