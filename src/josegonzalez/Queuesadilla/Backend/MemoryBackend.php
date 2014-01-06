@@ -10,7 +10,7 @@ class MemoryBackend extends Backend
         'api_version' => 1,  # unsupported
         'delay' => 0,  # unsupported
         'database' => 'queuesadilla',  # unsupported
-        'expires_in' => 86400,  # unsupported
+        'expires_in' => null,  # unsupported
         'login' => null,  # unsupported
         'password' => null,  # unsupported
         'persistent' => true,  # unsupported

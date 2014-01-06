@@ -11,12 +11,12 @@ class RedisBackend extends Backend
         'api_version' => 1,  # unsupported
         'delay' => 0,  # unsupported
         'database' => null,
-        'expires_in' => 86400,  # unsupported
+        'expires_in' => null,  # unsupported
         'login' => null,  # unsupported
         'password' => false,
         'persistent' => true,
         'port' => 6379,
-        'prefix' => 'jobs:',
+        'prefix' => null,
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',

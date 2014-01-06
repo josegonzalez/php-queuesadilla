@@ -11,7 +11,7 @@ class IronBackend extends Backend
         'api_version' => 1,
         'delay' => 0,
         'database' => 'queuesadilla',  # unsupported
-        'expires_in' => 86400,
+        'expires_in' => null,
         'login' => null,  # iron.project_id
         'password' => null,  # iron.token
         'persistent' => true,  # unsupported
