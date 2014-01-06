@@ -111,26 +111,41 @@ class MysqlBackend extends Backend
     public function pop($options = array())
     {
         $queue = $this->setting($options, 'queue');
+        try {
+            $sql = sprintf(
+                implode(" ", array(
+                    'SELECT `id`, `data`',
+                    'FROM `%s`',
+                    'WHERE `queue` = ? AND `locked` != 1',
+                    'AND (expires_at IS NULL or expires_at > ?)',
+                    'AND (delay_until IS NULL or delay_until < ?)',
+                    'ORDER BY priority asc',
+                    'LIMIT 1 FOR UPDATE',
+                )),
+                $this->settings['table']
+            );
+            $this->connection->beginTransaction();
 
-        $sql = sprintf(
-            'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY priority asc LIMIT 1',
-            $this->settings['table']
-        );
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $queue, PDO::PARAM_STR);
-        $sth->execute();
-        $result = $sth->fetch(PDO::FETCH_ASSOC);
+            $sth = $this->connection->prepare($sql);
+            $sth->bindParam(1, $queue, PDO::PARAM_STR);
+            $sth->bindParam(2, (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $sth->bindParam(3, (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $sth->execute();
+            $result = $sth->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($result)) {
-            return null;
-        }
-
-        $sql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
-        $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
-        $sth->execute();
-        if ($sth->rowCount() == 1) {
-            return json_decode($result['data'], true);
+            if (!empty($result)) {
+                $sql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
+                $sth = $this->connection->prepare($sql);
+                $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
+                $sth->execute();
+                if ($sth->rowCount() == 1) {
+                    $this->connection->commit();
+                    return json_decode($result['data'], true);
+                }
+            }
+            $this->connection->commit();
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
         }
 
         return null;
@@ -138,9 +153,17 @@ class MysqlBackend extends Backend
 
     public function push($class, $vars = array(), $options = array())
     {
+        $delay = $this->setting($options, 'delay');
+        $expires_in = $this->setting($options, 'expires_in');
         $queue = $this->setting($options, 'queue');
         $priority = $this->setting($options, 'priority');
-        $expires_in = $this->setting($options, 'expires_in');
+
+        $delay_until = null;
+        if ($delay) {
+            $delay_until = (new \DateTime())
+                            ->add(new DateInterval(sprintf('PT%sS', $delay)))
+                            ->format('Y-m-d H:i:s');
+        }
 
         $expires_at = null;
         if ($expires_in) {
@@ -150,12 +173,13 @@ class MysqlBackend extends Backend
         }
 
         $data = json_encode(compact('class', 'vars'));
-        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`) VALUES (?, ?, ?, ?)', $this->settings['table']);
+        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)', $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
         $sth->bindParam(3, $priority, PDO::PARAM_INT);
         $sth->bindParam(4, $expires_at, PDO::PARAM_STR);
+        $sth->bindParam(5, $delay_until, PDO::PARAM_STR);
         $sth->execute();
         return $sth->rowCount() == 1;
     }
