@@ -112,18 +112,14 @@ class MysqlBackend extends Backend
     {
         $queue = $this->setting($options, 'queue');
         try {
-            $sql = sprintf(
-                implode(" ", array(
-                    'SELECT `id`, `data`',
-                    'FROM `%s`',
-                    'WHERE `queue` = ? AND `locked` != 1',
-                    'AND (expires_at IS NULL or expires_at > ?)',
-                    'AND (delay_until IS NULL or delay_until < ?)',
-                    'ORDER BY priority asc',
-                    'LIMIT 1 FOR UPDATE',
-                )),
-                $this->settings['table']
-            );
+            $sql = implode(" ", array(
+                'SELECT `id`, `data` FROM `%s`',
+                'WHERE `queue` = ? AND `locked` != 1',
+                'AND (expires_at IS NULL OR expires_at > ?)',
+                'AND (delay_until IS NULL OR delay_until < ?)',
+                'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
+            ));
+            $sql = sprintf($sql, $this->settings['table']);
             $this->connection->beginTransaction();
 
             $sth = $this->connection->prepare($sql);
@@ -173,11 +169,9 @@ class MysqlBackend extends Backend
         }
 
         $data = json_encode(compact('class', 'vars'));
-        $sql = sprintf(implode('', array(
-            'INSERT INTO `%s`',
-            '(`data`, `queue`, `priority`, `expires_at`, `delay_until`)',
-            'VALUES (?, ?, ?, ?, ?)',
-        ), $this->settings['table']);
+
+        $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';
+        $sql = sprintf($sql, $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
