@@ -18,18 +18,21 @@ class TestBackend extends Backend
         return $this->return;
     }
 
-    public function pop($queue = null)
+    public function pop($options = array())
     {
+        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
-    public function push($class, $vars = array(), $queue = null)
+    public function push($class, $vars = array(), $options = array())
     {
+        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
-    public function release($item, $queue = null)
+    public function release($item, $options = array())
     {
+        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 }

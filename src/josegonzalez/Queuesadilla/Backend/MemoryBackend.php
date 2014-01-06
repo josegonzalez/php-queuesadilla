@@ -33,18 +33,21 @@ class MemoryBackend extends Backend
         return true;
     }
 
-    public function push($class, $vars = array(), $queue = null)
+    public function push($class, $vars = array(), $options = array())
     {
+        $queue = $this->setting($options, 'queue');
         return array_push($this->queue, compact('class', 'vars')) !== count($this->queue);
     }
 
-    public function release($item, $queue = null)
+    public function release($item, $options = array())
     {
+        $queue = $this->setting($options, 'queue');
         return array_push($this->queue, $item) !== count($this->queue);
     }
 
-    public function pop($queue = null)
+    public function pop($options = array())
     {
+        $queue = $this->setting($options, 'queue');
         $item = array_shift($this->queue);
         if (!$item) {
             return null;

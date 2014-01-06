@@ -61,9 +61,9 @@ class IronBackend extends Backend
         return (bool)$this->connection;
     }
 
-    public function push($class, $vars = array(), $queue = null)
+    public function push($class, $vars = array(), $options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
 
         $item = json_encode(compact('class', 'vars'));
         return $this->connection->postMessage($queue, $item, array(
@@ -73,9 +73,9 @@ class IronBackend extends Backend
         ));
     }
 
-    public function release($item, $queue = null)
+    public function release($item, $options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         return $this->connection->postMessage($queue, $item, array(
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],
@@ -83,9 +83,9 @@ class IronBackend extends Backend
         ));
     }
 
-    public function pop($queue = null)
+    public function pop($options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         $item = $this->connection->getMessage($queue);
         if (!$item) {
             return null;

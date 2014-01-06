@@ -105,9 +105,9 @@ class MysqlBackend extends Backend
         return $sth->rowCount() == 1;
     }
 
-    public function pop($queue = null)
+    public function pop($options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
 
         $sql = sprintf(
             'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY id asc LIMIT 1',
@@ -133,7 +133,7 @@ class MysqlBackend extends Backend
         return null;
     }
 
-    public function push($class, $vars = array(), $queue = null)
+    public function push($class, $vars = array(), $options = array())
     {
         $queue = $this->getQueue($queue);
         $data = json_encode(compact('class', 'vars'));
@@ -145,8 +145,9 @@ class MysqlBackend extends Backend
         return $sth->rowCount() == 1;
     }
 
-    public function release($item, $queue = null)
+    public function release($item, $options = array())
     {
+        $queue = $this->setting($options, 'queue');
         $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);

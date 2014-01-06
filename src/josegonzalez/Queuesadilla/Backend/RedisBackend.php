@@ -87,9 +87,9 @@ class RedisBackend extends Backend
         return true;
     }
 
-    public function pop($queue = null)
+    public function pop($options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         $item = $this->connection->lpop('queue:' . $queue);
         if (!$item) {
             return null;
@@ -98,16 +98,16 @@ class RedisBackend extends Backend
         return json_decode($item, true);
     }
 
-    public function push($class, $vars = array(), $queue = null)
+    public function push($class, $vars = array(), $options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
         return $this->connection->rpush('queue:' . $queue, json_encode(compact('class', 'vars')));
     }
 
-    public function release($item, $queue = null)
+    public function release($item, $options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
