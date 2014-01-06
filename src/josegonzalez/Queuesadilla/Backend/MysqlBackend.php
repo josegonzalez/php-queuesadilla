@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 namespace josegonzalez\Queuesadilla\Backend;
 
+use \DateInterval;
 use \DateTime;
 use \PDO;
 use \PDOException;
