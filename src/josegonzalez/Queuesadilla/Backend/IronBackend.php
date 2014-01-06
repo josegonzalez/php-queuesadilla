@@ -10,7 +10,7 @@ class IronBackend extends Backend
     protected $baseConfig = array(
         'api_version' => 1,
         'delay' => null,
-        'database' => 'queuesadilla',  # unsupported
+        'database' => 'database_name',  # unsupported
         'expires_in' => null,
         'login' => null,  # iron.project_id
         'password' => null,  # iron.token

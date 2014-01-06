@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data` mediumtext NOT NULL,
   `priority` int(1) NOT NULL DEFAULT '0',
   `expires_at` datetime DEFAULT NULL,
+  `delay_until` datetime DEFAULT NULL,
   `locked` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `queue` (`queue`,`locked`)
@@ -24,7 +25,7 @@ class MysqlBackend extends Backend
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => null,  # unsupported
-        'database' => 'queuesadilla',
+        'database' => 'database_name',
         'expires_in' => null,  # unsupported
         'login' => 'root',
         'password' => 'password',

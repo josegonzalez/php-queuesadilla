@@ -13,8 +13,14 @@ php:
   - 5.5
 
 before_script:
+  # beanstalkd
   - sudo apt-get install -qq --force-yes beanstalkd
   - sudo beanstalkd -d -l 127.0.0.1 -p 11300
+
+  # mysql
+  - mysql -e 'CREATE DATABASE database_name;'
+  - mysql database_name < config/schema-mysql.sql
+
   - composer self-update
   - composer install
   - pear install --alldeps PHP_CodeSniffer
