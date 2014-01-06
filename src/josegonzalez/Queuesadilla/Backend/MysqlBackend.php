@@ -115,10 +115,11 @@ class MysqlBackend extends Backend
             $this->connection->beginTransaction();
 
             $dt = new DateTime();
+            $dtFormatted = $dt->format('Y-m-d H:i:s');
             $sth = $this->connection->prepare($sql);
             $sth->bindParam(1, $queue, PDO::PARAM_STR);
-            $sth->bindParam(2, $dt->format('Y-m-d H:i:s'), PDO::PARAM_STR);
-            $sth->bindParam(3, $dt->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $sth->bindParam(2, $dtFormatted, PDO::PARAM_STR);
+            $sth->bindParam(3, $dtFormatted, PDO::PARAM_STR);
             $sth->execute();
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
