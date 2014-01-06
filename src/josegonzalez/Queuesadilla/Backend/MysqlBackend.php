@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 namespace josegonzalez\Queuesadilla\Backend;
 
+use \DateTime;
 use \PDO;
 use \PDOException;
 use \josegonzalez\Queuesadilla\Backend;
@@ -113,10 +114,11 @@ class MysqlBackend extends Backend
             $sql = sprintf($sql, $this->settings['table']);
             $this->connection->beginTransaction();
 
+            $dt = new DateTime();
             $sth = $this->connection->prepare($sql);
             $sth->bindParam(1, $queue, PDO::PARAM_STR);
-            $sth->bindParam(2, (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
-            $sth->bindParam(3, (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $sth->bindParam(2, $dt->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $sth->bindParam(3, $dt->format('Y-m-d H:i:s'), PDO::PARAM_STR);
             $sth->execute();
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -147,16 +149,14 @@ class MysqlBackend extends Backend
 
         $delay_until = null;
         if ($delay) {
-            $delay_until = (new \DateTime())
-                            ->add(new DateInterval(sprintf('PT%sS', $delay)))
-                            ->format('Y-m-d H:i:s');
+            $dt = new DateTime();
+            $delay_until = $dt->add(new DateInterval(sprintf('PT%sS', $delay)))->format('Y-m-d H:i:s');
         }
 
         $expires_at = null;
         if ($expires_in) {
-            $expires_at = (new \DateTime())
-                            ->add(new DateInterval(sprintf('PT%sS', $expires_in)))
-                            ->format('Y-m-d H:i:s');
+            $dt = new DateTime();
+            $expires_at = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)))->format('Y-m-d H:i:s');
         }
 
         $data = json_encode(compact('class', 'vars'));

@@ -11,6 +11,8 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
     {
         $this->Backend = new MysqlBackend(array(
             'queue' => 'default',
+            'login' => 'travis',
+            'password' => '',
         ));
     }
 
