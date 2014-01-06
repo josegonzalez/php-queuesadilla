@@ -201,14 +201,6 @@ class MysqlBackend extends Backend
     protected function execute($sql, $params = array(), $prepareOptions = array())
     {
         $sql = trim($sql);
-        if (preg_match('/^(?:CREATE|ALTER|DROP)\s+(?:TABLE|INDEX)/i', $sql)) {
-            $statements = array_filter(explode(';', $sql));
-            if (count($statements) > 1) {
-                $result = array_map(array($this, 'execute'), $statements);
-                return array_search(false, $result) === false;
-            }
-        }
-
         try {
             $query = $this->connection->prepare($sql, $prepareOptions);
             $query->setFetchMode(PDO::FETCH_LAZY);
