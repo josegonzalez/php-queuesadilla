@@ -33,6 +33,17 @@ class MemoryBackend extends Backend
         return true;
     }
 
+    public function pop($options = array())
+    {
+        $queue = $this->setting($options, 'queue');
+        $item = array_shift($this->queue);
+        if (!$item) {
+            return null;
+        }
+
+        return $item;
+    }
+
     public function push($class, $vars = array(), $options = array())
     {
         $queue = $this->setting($options, 'queue');
@@ -43,16 +54,5 @@ class MemoryBackend extends Backend
     {
         $queue = $this->setting($options, 'queue');
         return array_push($this->queue, $item) !== count($this->queue);
-    }
-
-    public function pop($options = array())
-    {
-        $queue = $this->setting($options, 'queue');
-        $item = array_shift($this->queue);
-        if (!$item) {
-            return null;
-        }
-
-        return $item;
     }
 }

@@ -61,6 +61,28 @@ class IronBackend extends Backend
         return (bool)$this->connection;
     }
 
+    public function delete($item)
+    {
+        $queue = $this->setting($options, 'queue');
+        return $this->connection->deleteMessage($queue, $item['id']);
+    }
+
+    public function pop($options = array())
+    {
+        $queue = $this->setting($options, 'queue');
+        $item = $this->connection->getMessage($queue);
+        if (!$item) {
+            return null;
+        }
+
+        $data = json_decode($item->body, true);
+        return array(
+            'id' => $item->id,
+            'class' => $data['class'],
+            'vars' => $data['vars'],
+        );
+    }
+
     public function push($class, $vars = array(), $options = array())
     {
         $queue = $this->setting($options, 'queue');
@@ -81,27 +103,5 @@ class IronBackend extends Backend
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
         ));
-    }
-
-    public function pop($options = array())
-    {
-        $queue = $this->setting($options, 'queue');
-        $item = $this->connection->getMessage($queue);
-        if (!$item) {
-            return null;
-        }
-
-        $data = json_decode($item->body, true);
-        return array(
-            'id' => $item->id,
-            'class' => $data['class'],
-            'vars' => $data['vars'],
-        );
-    }
-
-    public function delete($item)
-    {
-        $queue = $this->setting($options, 'queue');
-        return $this->connection->deleteMessage($queue, $item['id']);
     }
 }
