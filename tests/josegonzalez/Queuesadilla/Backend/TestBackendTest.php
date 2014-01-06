@@ -53,6 +53,7 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testSetting()
     {
+        $this->assertEquals('string_to_array', $this->Backend->setting('string_to_array', 'queue'));
         $this->assertEquals('non_default', $this->Backend->setting(array('queue' => 'non_default'), 'queue'));
         $this->assertEquals('default', $this->Backend->setting(array(), 'queue'));
         $this->assertEquals('other', $this->Backend->setting(array(), 'other', 'other'));
