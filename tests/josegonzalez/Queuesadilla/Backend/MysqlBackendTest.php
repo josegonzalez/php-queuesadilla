@@ -45,7 +45,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $this->assertTrue($this->Backend->delete(null));
+        $this->assertFalse($this->Backend->delete(null));
     }
 
     /**
@@ -53,10 +53,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
-        $this->assertTrue($this->Backend->pop('default'));
-
-        $this->Backend->return = false;
-        $this->assertFalse($this->Backend->pop('default'));
+        $this->assertNull($this->Backend->pop('default'));
     }
 
     /**
@@ -72,7 +69,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->assertTrue($this->Backend->release(null, 'default'));
+        $this->assertFalse($this->Backend->release(null, 'default'));
     }
 
 }
