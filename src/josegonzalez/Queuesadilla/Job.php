@@ -4,6 +4,13 @@ namespace josegonzalez\Queuesadilla;
 
 class Job
 {
+
+    public static LOW = 4;
+    public static NORMAL = 3;
+    public static MEDIUM = 2;
+    public static HIGH = 1;
+    public static CRITICAL = 0;
+
     protected $item;
 
     protected $backend;
