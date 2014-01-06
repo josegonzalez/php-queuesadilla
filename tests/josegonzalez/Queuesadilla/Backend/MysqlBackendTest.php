@@ -9,11 +9,12 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->Backend = new MysqlBackend(array(
+    	$this->config = array(
             'queue' => 'default',
             'login' => 'travis',
             'password' => '',
-        ));
+        );
+        $this->Backend = new MysqlBackend($this->config);
     }
 
     public function tearDown()
@@ -27,7 +28,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Backend = new MysqlBackend;
+        $Backend = new MysqlBackend($this->config);
         $this->assertTrue($Backend->connected());
     }
 
