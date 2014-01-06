@@ -173,7 +173,11 @@ class MysqlBackend extends Backend
         }
 
         $data = json_encode(compact('class', 'vars'));
-        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)', $this->settings['table']);
+        $sql = sprintf(implode('', array(
+            'INSERT INTO `%s`',
+            '(`data`, `queue`, `priority`, `expires_at`, `delay_until`)',
+            'VALUES (?, ?, ?, ?, ?)',
+        ), $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
