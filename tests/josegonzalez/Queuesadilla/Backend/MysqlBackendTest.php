@@ -70,6 +70,24 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
     public function testPush()
     {
         $this->assertTrue($this->Backend->push(null, array(), 'default'));
+        $this->assertTrue($this->Backend->push('some_function', array(), array(
+            'delay_until' => 30,
+        )));
+        $this->assertTrue($this->Backend->push('another_function', array(), array(
+            'expires_in' => 1,
+        )));
+
+        sleep(2);
+
+        $pop1 = $this->Backend->pop();
+        $pop2 = $this->Backend->pop();
+        $pop3 = $this->Backend->pop();
+
+        $this->assertNotEmpty($pop1['id']);
+        $this->assertNull($pop1['class']);
+        $this->assertEmpty($pop1['vars']);
+        $this->assertNull($pop2);
+        $this->assertNull($pop3);
     }
 
     /**
