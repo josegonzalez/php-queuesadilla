@@ -93,6 +93,10 @@ class MysqlBackend extends Backend
 
     public function delete($item)
     {
+        if (!is_array($item) || !isset($item['id'])) {
+            return false;
+        }
+
         $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
