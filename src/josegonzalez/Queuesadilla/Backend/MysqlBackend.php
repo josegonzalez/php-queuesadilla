@@ -2,13 +2,15 @@
 
 /*
 CREATE TABLE IF NOT EXISTS `jobs` (
-    `id` mediumint(20) NOT NULL AUTO_INCREMENT,
-    `queue` char(32) NULL DEFAULT 'default',
-    `data` mediumtext NULL DEFAULT '',
-    `locked` tinyint(1) NULL DEFAULT 0,
-    PRIMARY KEY (`id`),
-    KEY `queue` (`queue`, `locked`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `id` mediumint(20) NOT NULL AUTO_INCREMENT,
+  `queue` char(32) NOT NULL DEFAULT 'default',
+  `data` mediumtext NOT NULL,
+  `priority` int(1) NOT NULL DEFAULT '0',
+  `expires_at` datetime DEFAULT NULL,
+  `locked` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `queue` (`queue`,`locked`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
 namespace josegonzalez\Queuesadilla\Backend;
@@ -23,13 +25,13 @@ class MysqlBackend extends Backend
         'api_version' => 1,  # unsupported
         'delay' => 0,  # unsupported
         'database' => 'queuesadilla',
-        'expires_in' => 86400,  # unsupported
+        'expires_in' => null,  # unsupported
         'login' => 'root',
         'password' => 'password',
         'persistent' => true,
         'port' => '3306',
         'prefix' => null,  # unsupported
-        'priority' => 0,  # unsupported
+        'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
         'serializer' => null,  # unsupported
@@ -110,7 +112,7 @@ class MysqlBackend extends Backend
         $queue = $this->setting($options, 'queue');
 
         $sql = sprintf(
-            'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY id asc LIMIT 1',
+            'SELECT `id`, `data` FROM `%s` WHERE `queue` = ? and `locked` != 1 ORDER BY priority asc LIMIT 1',
             $this->settings['table']
         );
         $sth = $this->connection->prepare($sql);
@@ -136,11 +138,23 @@ class MysqlBackend extends Backend
     public function push($class, $vars = array(), $options = array())
     {
         $queue = $this->setting($options, 'queue');
+        $priority = $this->setting($options, 'priority');
+        $expires_in = $this->setting($options, 'expires_in');
+
+        $expires_at = null;
+        if ($expires_in) {
+            $expires_at = (new \DateTime())
+                            ->add(new DateInterval(sprintf('PT%sS', $expires_in)))
+                            ->format('Y-m-d H:i:s');
+        }
+
         $data = json_encode(compact('class', 'vars'));
-        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
+        $sql = sprintf('INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`) VALUES (?, ?, ?, ?)', $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
+        $sth->bindParam(3, $priority, PDO::PARAM_INT);
+        $sth->bindParam(4, $expires_at, PDO::PARAM_STR);
         $sth->execute();
         return $sth->rowCount() == 1;
     }
