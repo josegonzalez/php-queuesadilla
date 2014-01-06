@@ -135,7 +135,7 @@ class MysqlBackend extends Backend
 
     public function push($class, $vars = array(), $options = array())
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         $data = json_encode(compact('class', 'vars'));
         $sql = sprintf('INSERT INTO `%s` (`data`, `queue`) VALUES (?, ?)', $this->settings['table']);
         $sth = $this->connection->prepare($sql);

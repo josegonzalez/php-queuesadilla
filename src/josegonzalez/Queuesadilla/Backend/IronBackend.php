@@ -101,7 +101,7 @@ class IronBackend extends Backend
 
     public function delete($item)
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->setting($options, 'queue');
         return $this->connection->deleteMessage($queue, $item['id']);
     }
 }

@@ -9,13 +9,13 @@ class Queue
         $this->backend = $backend;
     }
 
-    public function bulk($jobs, $vars = array(), $queue = null)
+    public function bulk($jobs, $vars = array(), $options = array())
     {
-        return $this->backend->bulk($jobs, $vars, $queue);
+        return $this->backend->bulk($jobs, $vars, $options);
     }
 
-    public function push($callable, $vars = array(), $queue = null)
+    public function push($callable, $vars = array(), $options = array())
     {
-        return $this->backend->push($callable, $vars, $queue);
+        return $this->backend->push($callable, $vars, $options);
     }
 }

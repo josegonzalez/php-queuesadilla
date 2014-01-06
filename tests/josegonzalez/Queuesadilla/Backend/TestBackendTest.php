@@ -49,13 +49,13 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Backend::getQueue
+     * @covers josegonzalez\Queuesadilla\Backend::setting
      */
-    public function testGetQueue()
+    public function testSetting()
     {
-        $this->assertEquals('non_default', $this->Backend->getQueue('non_default'));
-        $this->assertEquals('other', $this->Backend->getQueue('other'));
-        $this->assertEquals('default', $this->Backend->getQueue());
+        $this->assertEquals('non_default', $this->Backend->setting(array('queue' => 'non_default'), 'queue'));
+        $this->assertEquals('default', $this->Backend->setting(array(), 'queue'));
+        $this->assertEquals('other', $this->Backend->setting(array(), 'other', 'other'));
     }
 
     /**
