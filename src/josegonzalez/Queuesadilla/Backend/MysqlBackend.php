@@ -42,15 +42,6 @@ class MysqlBackend extends Backend
         'timeout' => 0,  # unsupported
     );
 
-    public function __construct($config = array())
-    {
-        if (!class_exists('PDO')) {
-            return false;
-        }
-
-        return parent::__construct($config);
-    }
-
 /**
  * Connects to a PDO-compatible server
  *
