@@ -9,7 +9,7 @@ class BeanstalkBackend extends Backend
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
-        'delay' => 0,
+        'delay' => null,
         'database' => 'queuesadilla',  # unsupported
         'expires_in' => null,  # unsupported
         'login' => null,  # unsupported
