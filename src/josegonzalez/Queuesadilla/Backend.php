@@ -16,7 +16,7 @@ abstract class Backend
 
     protected $settings = array();
 
-    public function __construct($config)
+    public function __construct($config = array())
     {
         $this->settings = array_merge($this->baseConfig, $config);
         return $this->connected = $this->connect();
