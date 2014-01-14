@@ -118,7 +118,8 @@ class RedisBackend extends Backend
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
 
-    public function execute($command, $params = array()) {
+    public function execute($command, $params = array())
+    {
         if (empty($params)) {
             return call_user_func(array($this->connection, $command));
         }
