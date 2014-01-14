@@ -3,19 +3,10 @@
 use \PHPUnit_Framework_TestCase;
 
 use josegonzalez\Queuesadilla\Backend\SynchronousBackend;
-use \josegonzalez\Queuesadilla\Worker;
-
-class TestWorker extends Worker
-{
-    public function work()
-    {
-        return $this->backend->pop();
-    }
-}
+use \josegonzalez\Queuesadilla\Worker\TestWorker;
 
 class SynchronousBackendTest extends PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->Backend = $this->getMock('josegonzalez\Queuesadilla\Backend\SynchronousBackend', array('getWorker', 'id'));
@@ -71,5 +62,4 @@ class SynchronousBackendTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->Backend->pop());
         $this->assertNull($this->Backend->pop());
     }
-
 }

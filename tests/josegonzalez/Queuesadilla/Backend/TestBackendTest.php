@@ -6,7 +6,6 @@ use josegonzalez\Queuesadilla\Backend\TestBackend;
 
 class TestBackendTest extends PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->Backend = new TestBackend(array(
@@ -128,5 +127,4 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->Backend->return = false;
         $this->assertFalse($this->Backend->release(null, 'default'));
     }
-
 }

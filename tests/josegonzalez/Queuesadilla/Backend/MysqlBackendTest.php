@@ -6,7 +6,6 @@ use josegonzalez\Queuesadilla\Backend\MysqlBackend;
 
 class MysqlBackendTest extends PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->config = array(
@@ -130,5 +129,4 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->push(null, array(), 'default'));
         $this->Backend->execute('derp');
     }
-
 }

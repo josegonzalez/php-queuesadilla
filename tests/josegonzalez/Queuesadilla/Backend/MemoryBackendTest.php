@@ -6,7 +6,6 @@ use josegonzalez\Queuesadilla\Backend\MemoryBackend;
 
 class MemoryBackendTest extends PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         $this->Backend = new MemoryBackend();
@@ -113,5 +112,4 @@ class MemoryBackendTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->Backend->release(null, 'default'));
     }
-
 }
