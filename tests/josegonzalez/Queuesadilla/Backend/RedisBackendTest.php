@@ -118,5 +118,15 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
     public function testRelease()
     {
         $this->assertFalse($this->Backend->release(null, 'default'));
+        $this->assertEquals(1, $this->Backend->release(array(
+            'id' => '1',
+            'class' => null,
+            'vars' => array()
+        ), 'default'));
+        $this->assertEquals(array(
+            'id' => '1',
+            'class' => null,
+            'vars' => array()
+        ), $this->Backend->pop('default'));
     }
 }
