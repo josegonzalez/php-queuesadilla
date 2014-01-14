@@ -5,7 +5,7 @@ services:
   # - mongodb
   - mysql
   # - rabbitmq
-  - redis
+  - redis-server
 
 php:
   - 5.3
