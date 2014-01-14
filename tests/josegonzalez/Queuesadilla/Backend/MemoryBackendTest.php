@@ -9,7 +9,7 @@ class MemoryBackendTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->Backend = new MemoryBackend($this->config);
+        $this->Backend = new MemoryBackend();
     }
 
     public function tearDown()
@@ -23,7 +23,7 @@ class MemoryBackendTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Backend = new MemoryBackend($this->config);
+        $Backend = new MemoryBackend();
         $this->assertTrue($Backend->connected());
     }
 
