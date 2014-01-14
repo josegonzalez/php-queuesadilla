@@ -96,8 +96,8 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($pop1['class']);
         $this->assertEquals('1', $pop2['class']);
-        $this->assertEquals('2', $pop2['class']);
-        $this->assertEquals('3', $pop2['class']);
+        $this->assertEquals('2', $pop3['class']);
+        $this->assertEquals('3', $pop4['class']);
     }
     /**
      * @covers josegonzalez\Queuesadilla\Backend\RedisBackend::push
