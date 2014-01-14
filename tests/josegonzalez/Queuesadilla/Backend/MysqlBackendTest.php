@@ -15,12 +15,12 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
             'password' => '',
         );
         $this->Backend = new MysqlBackend($this->config);
-        $this->Backend->drop();
+        $this->Backend->execute(sprintf('TRUNCATE TABLE %s', $this->settings['table']));
     }
 
     public function tearDown()
     {
-        $this->Backend->drop();
+        $this->Backend->execute(sprintf('TRUNCATE TABLE %s', $this->settings['table']));
         unset($this->Backend);
     }
 
