@@ -19,7 +19,6 @@ class BeanstalkBackend extends Backend
         'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'serializer' => null,  # unsupported
         'server' => '127.0.0.1',
         'table' => null,  # unsupported
         'time_to_run' => 60,

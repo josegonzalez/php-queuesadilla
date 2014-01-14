@@ -19,7 +19,6 @@ class RedisBackend extends Backend
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'serializer' => null,
         'server' => '127.0.0.1',
         'table' => null,  # unsupported
         'time_to_run' => 60,  # unsupported
@@ -60,10 +59,6 @@ class RedisBackend extends Backend
 
         if ($return && $this->settings['database'] !== null) {
             $return = $this->connection->select((int)$this->settings['database']);
-        }
-
-        if ($return && $this->settings['serializer']) {
-            $return = $this->connection->setOption(Redis::OPT_SERIALIZER, $this->settings['serializer']);
         }
 
         if ($return && $this->settings['password']) {

@@ -19,7 +19,6 @@ class IronBackend extends Backend
         'priority' => 0,  # unsupported
         'protocol' => 'https',
         'queue' => 'default',
-        'serializer' => null,  # unsupported
         'server' => 'mq-aws-us-east-1.iron.io',  # iron.host
         'table' => null,  # unsupported
         'time_to_run' => 60,  # iron.timeout
