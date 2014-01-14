@@ -40,7 +40,7 @@ class SequentialWorker extends Worker
                         $item['class'][0] = new $item['class'][0];
                     }
 
-                    $success = call_user_func($item['class'], $job);
+                    $success = $item['class']($job);
                     if ($success !== false) {
                         $success = true;
                     }
