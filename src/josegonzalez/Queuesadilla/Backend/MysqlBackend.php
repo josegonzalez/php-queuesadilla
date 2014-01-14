@@ -58,11 +58,11 @@ class MysqlBackend extends Backend
             $config['flags'] = array();
         }
 
-        $flags = array_merge(array(
+        $flags = array(
             PDO::ATTR_PERSISTENT => $config['persistent'],
             PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ), (array)$config['flags']);
+        ) + $config['flags'];
 
         if (empty($config['unix_socket'])) {
             $dsn = "mysql:host={$config['server']};port={$config['port']};dbname={$config['database']}";
