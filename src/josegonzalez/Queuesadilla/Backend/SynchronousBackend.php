@@ -9,9 +9,7 @@ class SynchronousBackend extends MemoryBackend
 {
     public function push($class, $vars = array(), $options = array())
     {
-        if (!parent::push($class, $vars, $options)) {
-            return false;
-        }
+        parent::push($class, $vars, $options);
         $worker = $this->getWorker();
         return $worker->work();
     }
