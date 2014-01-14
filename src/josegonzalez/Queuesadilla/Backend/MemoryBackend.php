@@ -152,9 +152,4 @@ class MemoryBackend extends Backend
             $this->queues[$queue] = array();
         }
     }
-
-    protected function id()
-    {
-        return rand();
-    }
 }

@@ -107,9 +107,4 @@ class RedisBackend extends Backend
         $this->connection->sadd('queues', $queue);
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
-
-    protected function id()
-    {
-        return rand();
-    }
 }

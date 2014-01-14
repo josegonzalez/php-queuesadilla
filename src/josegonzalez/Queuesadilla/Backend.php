@@ -66,6 +66,11 @@ abstract class Backend
         return $this->connected;
     }
 
+    protected function id()
+    {
+        return rand();
+    }
+
     abstract public function connect();
 
     abstract public function delete($item);
