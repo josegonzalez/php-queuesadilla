@@ -92,7 +92,7 @@ class MemoryBackend extends Backend
             $dt = new DateTime();
             if (!empty($item['options']['delay_until'])) {
                 if ($dt < $item['options']['delay_until']) {
-                    array_push($this->queues[$queue], $item);
+                    $this->queues[$queue][] = $item;
                     $item = null;
                     continue;
                 }
@@ -115,7 +115,7 @@ class MemoryBackend extends Backend
             $options = array('queue' => $options);
         }
 
-        $queue = $this->setting($options, 'queue');
+        $options['queue'] = $this->setting($options, 'queue');
         $delay = $this->setting($options, 'delay');
         $expires_in = $this->setting($options, 'expires_in');
         $priority = $this->setting($options, 'priority');
@@ -125,15 +125,17 @@ class MemoryBackend extends Backend
         if ($delay) {
             $dt = new DateTime();
             $options['delay_until'] = $dt->add(new DateInterval(sprintf('PT%sS', $delay)));
+            unset($options['delay']);
         }
 
         if ($expires_in) {
             $dt = new DateTime();
             $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
+            unset($options['expires_in']);
         }
 
-        $oldCount = count($this->queues[$queue]);
-        $newCount = array_push($this->queues[$queue], compact('id', 'class', 'vars', 'options'));
+        $oldCount = count($this->queues[$options['queue']]);
+        $newCount = array_push($this->queues[$options['queue']], compact('id', 'class', 'vars', 'options'));
         return $newCount === ($oldCount + 1);
     }
 

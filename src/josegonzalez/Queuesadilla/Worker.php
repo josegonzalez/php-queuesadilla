@@ -2,13 +2,13 @@
 
 namespace josegonzalez\Queuesadilla;
 
-class Worker
+abstract class Worker
 {
     public function __construct($backend, $params = array())
     {
         $params = array_merge(array(
             'max_iterations' => null,
-            'queue' => null,
+            'queue' => 'default',
         ), $params);
 
         $this->backend = $backend;
