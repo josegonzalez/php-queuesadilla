@@ -127,4 +127,14 @@ class TestBackendTest extends PHPUnit_Framework_TestCase
         $this->Backend->return = false;
         $this->assertFalse($this->Backend->release(null, 'default'));
     }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend::id
+     */
+    public function testId()
+    {
+        $this->assertInternalType('int', $this->Backend->id());
+        $this->assertInternalType('int', $this->Backend->id());
+        $this->assertInternalType('int', $this->Backend->id());
+    }
 }
