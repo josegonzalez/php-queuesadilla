@@ -66,7 +66,7 @@ abstract class Backend
         return $this->connected;
     }
 
-    protected function id()
+    public function id()
     {
         return rand();
     }
