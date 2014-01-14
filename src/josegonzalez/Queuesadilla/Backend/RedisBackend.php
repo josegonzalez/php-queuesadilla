@@ -84,6 +84,10 @@ class RedisBackend extends Backend
 
     public function delete($item)
     {
+        if (!is_array($item) || !isset($item['id'])) {
+            return false;
+        }
+
         return true;
     }
 
@@ -102,13 +106,32 @@ class RedisBackend extends Backend
     {
         $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
-        return $this->connection->rpush('queue:' . $queue, json_encode(compact('class', 'vars')));
+
+        $id = $this->id();
+        return $this->connection->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
     }
 
     public function release($item, $options = array())
     {
+        if (!is_array($item) || !isset($item['id'])) {
+            return false;
+        }
+
         $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
+    }
+
+    public function execute($command, $params = array()) {
+        if (empty($params)) {
+            return call_user_func(array($this->connection, $command));
+        }
+
+        return call_user_func(array($this->connection, $command), $params);
+    }
+
+    protected function id()
+    {
+        return rand();
     }
 }
