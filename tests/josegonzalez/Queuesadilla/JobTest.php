@@ -2,8 +2,8 @@
 
 use \PHPUnit_Framework_TestCase;
 
-use josegonzalez\Queuesadilla\Job;
-use josegonzalez\Queuesadilla\Backend\TestBackend;
+use \josegonzalez\Queuesadilla\Job;
+use \josegonzalez\Queuesadilla\Backend\TestBackend;
 
 class JobTest extends PHPUnit_Framework_TestCase
 {

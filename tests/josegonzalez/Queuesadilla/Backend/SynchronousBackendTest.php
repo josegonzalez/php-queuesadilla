@@ -2,8 +2,8 @@
 
 use \PHPUnit_Framework_TestCase;
 
-use josegonzalez\Queuesadilla\Backend\SynchronousBackend;
-use josegonzalez\Queuesadilla\Worker\TestWorker;
+use \josegonzalez\Queuesadilla\Backend\SynchronousBackend;
+use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
 
 class SynchronousBackendTest extends PHPUnit_Framework_TestCase
 {

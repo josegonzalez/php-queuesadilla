@@ -2,7 +2,7 @@
 
 use \PHPUnit_Framework_TestCase;
 
-use josegonzalez\Queuesadilla\Backend\MemoryBackend;
+use \josegonzalez\Queuesadilla\Backend\MemoryBackend;
 
 class MemoryBackendTest extends PHPUnit_Framework_TestCase
 {

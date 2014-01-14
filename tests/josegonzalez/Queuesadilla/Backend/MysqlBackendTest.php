@@ -2,7 +2,7 @@
 
 use \PHPUnit_Framework_TestCase;
 
-use josegonzalez\Queuesadilla\Backend\MysqlBackend;
+use \josegonzalez\Queuesadilla\Backend\MysqlBackend;
 
 class MysqlBackendTest extends PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 use \PHPUnit_Framework_TestCase;
 
-use josegonzalez\Queuesadilla\Backend\TestBackend;
+use \josegonzalez\Queuesadilla\Backend\TestBackend;
 
 class TestBackendTest extends PHPUnit_Framework_TestCase
 {
