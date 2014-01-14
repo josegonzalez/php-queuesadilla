@@ -210,7 +210,7 @@ class MysqlBackend extends Backend
  * query returning no rows, such as a CREATE statement, false otherwise
  * @throws PDOException
  */
-    protected function execute($sql, $params = array(), $prepareOptions = array())
+    public function execute($sql, $params = array(), $prepareOptions = array())
     {
         $sql = trim($sql);
         try {

@@ -109,4 +109,14 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Backend->release(null, 'default'));
     }
 
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend\MysqlBackend::execute
+     * @expectedException PDOException
+     */
+    public function testExecutePdoException()
+    {
+        $this->assertTrue($this->Backend->push(null, array(), 'default'));
+        $this->Backend->execute('derp');
+    }
+
 }
