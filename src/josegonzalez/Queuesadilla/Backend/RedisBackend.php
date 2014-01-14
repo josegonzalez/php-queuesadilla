@@ -16,7 +16,6 @@ class RedisBackend extends Backend
         'password' => false,
         'persistent' => true,
         'port' => 6379,
-        'prefix' => null,
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
@@ -61,10 +60,6 @@ class RedisBackend extends Backend
 
         if ($return && $this->settings['database'] !== null) {
             $return = $this->connection->select((int)$this->settings['database']);
-        }
-
-        if ($return && $this->settings['prefix']) {
-            $return = $this->connection->setOption(Redis::OPT_PREFIX, $this->settings['prefix']);
         }
 
         if ($return && $this->settings['serializer']) {

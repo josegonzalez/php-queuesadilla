@@ -16,7 +16,6 @@ class BeanstalkBackend extends Backend
         'password' => null,  # unsupported
         'persistent' => true,
         'port' => 11300,
-        'prefix' => null,  # unsupported
         'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',

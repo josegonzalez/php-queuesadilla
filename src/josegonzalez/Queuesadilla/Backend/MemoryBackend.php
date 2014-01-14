@@ -17,7 +17,6 @@ class MemoryBackend extends Backend
         'password' => null,  # unsupported
         'persistent' => true,  # unsupported
         'port' => 0,  # unsupported
-        'prefix' => null,  # unsupported
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',

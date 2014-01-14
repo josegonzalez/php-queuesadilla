@@ -16,7 +16,6 @@ class IronBackend extends Backend
         'password' => null,  # iron.token
         'persistent' => true,  # unsupported
         'port' => 443,
-        'prefix' => null,  # unsupported
         'priority' => 0,  # unsupported
         'protocol' => 'https',
         'queue' => 'default',

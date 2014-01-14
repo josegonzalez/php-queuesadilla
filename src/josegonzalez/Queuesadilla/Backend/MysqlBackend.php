@@ -33,7 +33,6 @@ class MysqlBackend extends Backend
         'password' => 'password',
         'persistent' => true,
         'port' => '3306',
-        'prefix' => null,  # unsupported
         'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
