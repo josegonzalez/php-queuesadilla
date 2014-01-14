@@ -35,6 +35,19 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend\MysqlBackend::__construct
+     * @covers josegonzalez\Queuesadilla\Backend\MysqlBackend::connected
+     * @expectedException PDOException
+     */
+    public function testConstructException()
+    {
+        $config = $this->config;
+        $config['unix_socket'] = '/tmp/missing/mysql.sock';
+        $SocketBackend = new MysqlBackend($config);
+        $this->assertTrue($Backend->connected());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Backend\MysqlBackend::connect
      */
     public function testConnect()
