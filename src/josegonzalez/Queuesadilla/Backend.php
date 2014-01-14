@@ -12,9 +12,9 @@ abstract class Backend
 
     protected $connected = false;
 
-    protected $connection = null;
-
     protected $settings = array();
+
+    public $connection = null;
 
     public function __construct($config = array())
     {

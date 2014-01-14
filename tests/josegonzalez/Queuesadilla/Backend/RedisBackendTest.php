@@ -22,12 +22,12 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
                 ->method('id')
                 ->will($this->returnValue('1'));
 
-        $this->Backend->execute('flushdb');
+        $this->Backend->connection->flushdb();
     }
 
     public function tearDown()
     {
-        $this->Backend->execute('flushdb');
+        $this->Backend->connection->flushdb();
         unset($this->Backend);
     }
 
