@@ -29,10 +29,6 @@ class RedisBackend extends Backend
 
     public function __construct($config = array())
     {
-        if (!class_exists('Redis')) {
-            return false;
-        }
-
         return parent::__construct($config);
     }
 
