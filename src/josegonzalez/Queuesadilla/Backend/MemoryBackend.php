@@ -2,15 +2,17 @@
 
 namespace josegonzalez\Queuesadilla\Backend;
 
+use \DateInterval;
+use \DateTime;
 use \josegonzalez\Queuesadilla\Backend;
 
 class MemoryBackend extends Backend
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
-        'delay' => null,  # unsupported
+        'delay' => null,
         'database' => 'database_name',  # unsupported
-        'expires_in' => null,  # unsupported
+        'expires_in' => null,
         'login' => null,  # unsupported
         'password' => null,  # unsupported
         'persistent' => true,  # unsupported
@@ -26,19 +28,82 @@ class MemoryBackend extends Backend
         'timeout' => 0,  # unsupported
     );
 
-    protected $queue = array();
+    protected $queues = array();
+
+    public function connect()
+    {
+        return true;
+    }
 
     public function delete($item)
     {
+        if (!is_array($item) || !isset($item['id'])) {
+            return false;
+        }
+
+        $deleteFromQueue = false;
+        foreach ($this->queues as $name => $queue) {
+            foreach ($queue as $queueItem) {
+                if ($queueItem['id'] === $item['id']) {
+                    $deleteFromQueue = $name;
+                    break 2;
+                }
+            }
+        }
+
+        if (!$deleteFromQueue) {
+            return false;
+        }
+
+        $queue = array();
+        foreach ($this->queues[$deleteFromQueue] as $queueItem) {
+            if ($queueItem['id'] !== $item['id']) {
+                array_push($queue, $queueItem);
+            }
+        }
+        $this->queues[$deleteFromQueue] = $queue;
         return true;
     }
 
     public function pop($options = array())
     {
         $queue = $this->setting($options, 'queue');
-        $item = array_shift($this->queue);
-        if (!$item) {
-            return null;
+        $this->requireQueue($options);
+
+        $itemId = null;
+        $item = null;
+        while ($item === null) {
+            $item = array_shift($this->queues[$queue]);
+            if (!$item) {
+                return null;
+            }
+
+            if ($itemId === null) {
+                $itemId = $item['id'];
+            } elseif ($itemId === $item['id']) {
+                array_push($this->queues[$queue], $item);
+                return null;
+            }
+
+            if (empty($item['options'])) {
+                break;
+            }
+
+            $dt = new DateTime();
+            if (!empty($item['options']['delay_until'])) {
+                if ($dt < $item['options']['delay_until']) {
+                    array_push($this->queues[$queue], $item);
+                    $item = null;
+                    continue;
+                }
+            }
+
+            if (!empty($item['options']['expires_at'])) {
+                if ($dt > $item['options']['expires_at']) {
+                    $item = null;
+                    continue;
+                }
+            }
         }
 
         return $item;
@@ -46,13 +111,50 @@ class MemoryBackend extends Backend
 
     public function push($class, $vars = array(), $options = array())
     {
+        if (!is_array($options)) {
+            $options = array('queue' => $options);
+        }
+
         $queue = $this->setting($options, 'queue');
-        return array_push($this->queue, compact('class', 'vars')) !== count($this->queue);
+        $delay = $this->setting($options, 'delay');
+        $expires_in = $this->setting($options, 'expires_in');
+        $priority = $this->setting($options, 'priority');
+        $this->requireQueue($options);
+        $id = $this->id();
+
+        if ($delay) {
+            $dt = new DateTime();
+            $options['delay_until'] = $dt->add(new DateInterval(sprintf('PT%sS', $delay)));
+        }
+
+        if ($expires_in) {
+            $dt = new DateTime();
+            $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
+        }
+
+        $oldCount = count($this->queues[$queue]);
+        $newCount = array_push($this->queues[$queue], compact('id', 'class', 'vars', 'options'));
+        return $newCount === ($oldCount + 1);
     }
 
     public function release($item, $options = array())
     {
         $queue = $this->setting($options, 'queue');
-        return array_push($this->queue, $item) !== count($this->queue);
+        $this->requireQueue($options);
+
+        return array_push($this->queues[$queue], $item) !== count($this->queues[$queue]);
+    }
+
+    protected function requireQueue($options)
+    {
+        $queue = $this->setting($options, 'queue');
+        if (!isset($this->queues[$queue])) {
+            $this->queues[$queue] = array();
+        }
+    }
+
+    protected function id()
+    {
+        return rand();
     }
 }

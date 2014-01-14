@@ -26,9 +26,9 @@ class MysqlBackend extends Backend
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
-        'delay' => null,  # unsupported
+        'delay' => null,
         'database' => 'database_name',
-        'expires_in' => null,  # unsupported
+        'expires_in' => null,
         'login' => 'root',
         'password' => 'password',
         'persistent' => true,

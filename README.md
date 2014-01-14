@@ -147,7 +147,7 @@ Queuing options are configured either at Backend creation or when queuing a job.
 
 - `queue`: Name of a queue to place a job on. All queues are dynamic, and need not be declared beforehand.
 - `attempts`: Max number of attempts a job can be performed until it is marked as dead.
-- `priority`: Jobs with smaller priority values will be scheduled before jobs with larger priorities. Job priorities are constants, and there are 5 priorities:
+- `priority`: Jobs with smaller priority values will be scheduled before jobs with larger priorities. Not available with the `MemoryBackend` or `SynchronousBackend`. Job priorities are constants, and there are 5 priorities:
     - Job::LOW
     - Job::NORMAL
     - Job::MEDIUM
