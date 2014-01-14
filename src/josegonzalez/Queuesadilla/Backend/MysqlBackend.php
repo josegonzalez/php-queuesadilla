@@ -76,11 +76,6 @@ class MysqlBackend extends Backend
             $config['password'],
             $flags
         );
-        if (!empty($config['settings'])) {
-            foreach ($config['settings'] as $key => $value) {
-                $this->execute("SET $key=$value");
-            }
-        }
 
         return (bool)$this->connection;
     }
