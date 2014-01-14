@@ -9,12 +9,6 @@ class MemoryBackendTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = array(
-            'queue' => 'default',
-            'login' => 'travis',
-            'password' => '',
-            'login' => 'travis', 'database' => 'test', 'port' => 13306
-        );
         $this->Backend = new MemoryBackend($this->config);
     }
 
@@ -84,6 +78,7 @@ class MemoryBackendTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Backend\MemoryBackend::push
+     * @covers josegonzalez\Queuesadilla\Backend\MemoryBackend::pop
      */
     public function testPush()
     {
