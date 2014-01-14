@@ -195,6 +195,10 @@ class MysqlBackend extends Backend
         return $sth->rowCount() == 1;
     }
 
+    public function drop() {
+        return $this->execute(sprintf('TRUNCATE TABLE %s', $this->settings['table']));
+    }
+
 /**
  * Executes given SQL statement.
  *

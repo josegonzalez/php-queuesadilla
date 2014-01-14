@@ -15,10 +15,12 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
             'password' => '',
         );
         $this->Backend = new MysqlBackend($this->config);
+        $this->Backend->drop();
     }
 
     public function tearDown()
     {
+        $this->Backend->drop();
         unset($this->Backend);
     }
 
@@ -71,7 +73,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->Backend->push(null, array(), 'default'));
         $this->assertTrue($this->Backend->push('some_function', array(), array(
-            'delay_until' => 30,
+            'delay' => 30,
         )));
         $this->assertTrue($this->Backend->push('another_function', array(), array(
             'expires_in' => 1,
