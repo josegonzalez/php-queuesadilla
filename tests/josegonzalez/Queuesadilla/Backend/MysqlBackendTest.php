@@ -44,7 +44,6 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
         $config = $this->config;
         $config['unix_socket'] = '/tmp/missing/mysql.sock';
         $SocketBackend = new MysqlBackend($config);
-        $this->assertTrue($Backend->connected());
     }
 
     /**
