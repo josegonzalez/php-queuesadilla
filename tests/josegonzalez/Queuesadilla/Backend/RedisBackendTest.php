@@ -85,6 +85,26 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
     public function testPush()
     {
         $this->assertEquals(1, $this->Backend->push(null, array(), 'default'));
+        $this->assertEquals(2, $this->Backend->push('1', array(), 'default'));
+        $this->assertEquals(3, $this->Backend->push('2', array(), 'default'));
+        $this->assertEquals(4, $this->Backend->push('3', array(), 'default'));
+
+        $pop1 = $this->Backend->pop();
+        $pop2 = $this->Backend->pop();
+        $pop3 = $this->Backend->pop();
+        $pop4 = $this->Backend->pop();
+
+        $this->assertNull($pop1['class']);
+        $this->assertEquals('1', $pop2['class']);
+        $this->assertEquals('2', $pop2['class']);
+        $this->assertEquals('3', $pop2['class']);
+    }
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend\RedisBackend::push
+     */
+    public function testPushWithOptions()
+    {
+        $this->assertEquals(1, $this->Backend->push(null, array(), 'default'));
         $this->assertEquals(2, $this->Backend->push('some_function', array(), array(
             'delay' => 30,
         )));
