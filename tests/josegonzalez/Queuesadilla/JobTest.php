@@ -127,7 +127,7 @@ class JobTest extends PHPUnit_Framework_TestCase
                 'foo' => 'bar',
                 'baz' => 'qux',
             ),
-        ), $this->Jobs[2]->item());       
+        ), $this->Jobs[2]->item());
     }
 
     /**

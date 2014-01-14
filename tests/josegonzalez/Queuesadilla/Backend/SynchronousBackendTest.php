@@ -1,9 +1,11 @@
 <?php
 
 use \PHPUnit_Framework_TestCase;
+use \ReflectionClass;
 
 use \josegonzalez\Queuesadilla\Backend\SynchronousBackend;
 use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
+use \josegonzalez\Queuesadilla\Worker\TestWorker;
 
 class SynchronousBackendTest extends PHPUnit_Framework_TestCase
 {
@@ -61,5 +63,25 @@ class SynchronousBackendTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->Backend->pop());
         $this->assertNull($this->Backend->pop());
         $this->assertNull($this->Backend->pop());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Backend\SynchronousBackend::getWorker
+     */
+    public function testGetWorker()
+    {
+        $Backend = new SynchronousBackend();
+        $this->assertInstanceOf(
+            '\josegonzalez\Queuesadilla\Worker\SequentialWorker',
+            $this->protectedMethodCall($Backend, 'getWorker')
+        );
+    }
+
+    public function protectedMethodCall(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
     }
 }
