@@ -24,9 +24,9 @@ class SynchronousBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Backend\SynchronousBackendTest::push
-     * @covers josegonzalez\Queuesadilla\Backend\MemoryBackendTest::push
-     * @covers josegonzalez\Queuesadilla\Backend\MemoryBackendTest::pop
+     * @covers josegonzalez\Queuesadilla\Backend\SynchronousBackend::push
+     * @covers josegonzalez\Queuesadilla\Backend\MemoryBackend::push
+     * @covers josegonzalez\Queuesadilla\Backend\MemoryBackend::pop
      */
     public function testPush()
     {
