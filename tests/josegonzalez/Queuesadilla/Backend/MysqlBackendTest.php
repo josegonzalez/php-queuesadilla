@@ -64,6 +64,12 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $this->assertNull($this->Backend->pop('default'));
+        $this->assertTrue($this->Backend->push(null, array(), 'default'));
+        $this->assertEquals(array(
+            'id' => '1',
+            'class' => null,
+            'vars' => array()
+        ), $this->Backend->pop('default'));
     }
 
     /**
@@ -78,18 +84,21 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Backend->push('another_function', array(), array(
             'expires_in' => 1,
         )));
+        $this->assertTrue($this->Backend->push('yet_another_function', array(), 'default'));
 
         sleep(2);
 
         $pop1 = $this->Backend->pop();
         $pop2 = $this->Backend->pop();
         $pop3 = $this->Backend->pop();
+        $pop4 = $this->Backend->pop();
 
         $this->assertNotEmpty($pop1['id']);
         $this->assertNull($pop1['class']);
         $this->assertEmpty($pop1['vars']);
-        $this->assertNull($pop2);
+        $this->assertEquals('yet_another_function', $pop2['class']);
         $this->assertNull($pop3);
+        $this->assertNull($pop4);
     }
 
     /**
