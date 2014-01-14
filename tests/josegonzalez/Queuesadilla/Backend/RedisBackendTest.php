@@ -113,6 +113,7 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Backend\RedisBackend::push
      * @covers josegonzalez\Queuesadilla\Backend\RedisBackend::release
      */
     public function testRelease()
