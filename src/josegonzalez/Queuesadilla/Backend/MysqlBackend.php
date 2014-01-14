@@ -54,23 +54,16 @@ class MysqlBackend extends Backend
     public function connect()
     {
         $config = $this->settings;
+        if (empty($config['flags'])) {
+            $config['flags'] = array();
+        }
 
-        $flags = array(
+        $flags = array_merge(array(
             PDO::ATTR_PERSISTENT => $config['persistent'],
             PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        );
+        ), (array)$config['flags']);
 
-        if (!empty($config['encoding'])) {
-            $flags[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['encoding'];
-        }
-        if (!empty($config['ssl_key']) && !empty($config['ssl_cert'])) {
-            $flags[PDO::MYSQL_ATTR_SSL_KEY] = $config['ssl_key'];
-            $flags[PDO::MYSQL_ATTR_SSL_CERT] = $config['ssl_cert'];
-        }
-        if (!empty($config['ssl_ca'])) {
-            $flags[PDO::MYSQL_ATTR_SSL_CA] = $config['ssl_ca'];
-        }
         if (empty($config['unix_socket'])) {
             $dsn = "mysql:host={$config['server']};port={$config['port']};dbname={$config['database']}";
         } else {
