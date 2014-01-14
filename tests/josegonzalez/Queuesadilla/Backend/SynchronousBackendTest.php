@@ -3,7 +3,7 @@
 use \PHPUnit_Framework_TestCase;
 
 use josegonzalez\Queuesadilla\Backend\SynchronousBackend;
-use \josegonzalez\Queuesadilla\Worker\TestWorker;
+use josegonzalez\Queuesadilla\Worker\TestWorker;
 
 class SynchronousBackendTest extends PHPUnit_Framework_TestCase
 {
