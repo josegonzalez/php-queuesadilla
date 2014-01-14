@@ -8,7 +8,10 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->skipIf(!class_exists('Redis'), 'Redis is not installed or configured properly.');
+        if (!class_exists('Redis')) {
+            $this->markTestSkipped('Redis is not installed or configured properly.');
+        }
+
         $this->config = array(
             'queue' => 'default',
             'login' => 'travis',
