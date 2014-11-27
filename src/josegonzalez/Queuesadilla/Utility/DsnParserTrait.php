@@ -32,6 +32,7 @@ trait DsnParserTrait
 
         if (!empty($parsed['path'])) {
             $parsed['database'] = substr($parsed['path'], 1);
+            unset($parsed['path']);
         }
 
         $stringMap = [
