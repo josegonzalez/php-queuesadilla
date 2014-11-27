@@ -59,6 +59,11 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($Engine->connect());
 
         $config = $this->config;
+        $config['database'] = 1;
+        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $this->assertTrue($Engine->connect());
+
+        $config = $this->config;
         $config['persistent'] = false;
         $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
         $this->assertTrue($Engine->connect());
