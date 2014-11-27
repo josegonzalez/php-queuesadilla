@@ -1,8 +1,9 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \josegonzalez\Queuesadilla\Backend\TestBackend;
+use \PHPUnit_Framework_TestCase;
 
 class TestBackendTest extends PHPUnit_Framework_TestCase
 {

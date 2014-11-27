@@ -1,11 +1,14 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
-use \ReflectionClass;
+namespace josegonzalez\Queuesadilla\Backend;
 
+use \DateTime;
+use \DateInterval;
 use \josegonzalez\Queuesadilla\Backend\SynchronousBackend;
 use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
 use \josegonzalez\Queuesadilla\Worker\TestWorker;
+use \PHPUnit_Framework_TestCase;
+use \ReflectionClass;
 
 class SynchronousBackendTest extends PHPUnit_Framework_TestCase
 {
@@ -40,15 +43,15 @@ class SynchronousBackendTest extends PHPUnit_Framework_TestCase
         ), $this->Backend->push(null, array(), 'default'));
         $this->assertNull($this->Backend->push('some_function', array(), array('delay' => 30)));
 
-        $dt = new DateTime();
+        $datetime = new DateTime();
         $this->assertEquals(array(
             'id' => '3',
             'class' => 'another_function',
             'vars' => array(),
             'options' => array(
               'queue' => 'default',
-              'expires_at' => $dt->add(new DateInterval(sprintf('PT%sS', 1))
-            )),
+              'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
+            ),
         ), $this->Backend->push('another_function', array(), array('expires_in' => 1)));
         $this->assertEquals(array(
             'id' => '4',

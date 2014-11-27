@@ -1,8 +1,9 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \josegonzalez\Queuesadilla\Backend\RedisBackend;
+use \PHPUnit_Framework_TestCase;
 
 class RedisBackendTest extends PHPUnit_Framework_TestCase
 {
@@ -124,7 +125,7 @@ class RedisBackendTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($pop1['vars']);
 
         $this->markTestIncomplete(
-          'RedisBackend does not yet implement delay or expires_in (tbd sorted sets)'
+            'RedisBackend does not yet implement delay or expires_in (tbd sorted sets)'
         );
 
         $this->assertEquals('yet_another_function', $pop2['class']);

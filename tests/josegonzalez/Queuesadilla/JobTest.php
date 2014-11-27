@@ -1,9 +1,10 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
+namespace josegonzalez\Queuesadilla;
 
 use \josegonzalez\Queuesadilla\Job;
 use \josegonzalez\Queuesadilla\Backend\TestBackend;
+use \PHPUnit_Framework_TestCase;
 
 class JobTest extends PHPUnit_Framework_TestCase
 {
@@ -56,7 +57,8 @@ class JobTest extends PHPUnit_Framework_TestCase
     /**
      * @covers josegonzalez\Queuesadilla\Job::__construct
      */
-    public function testConstruct() {
+    public function testConstruct()
+    {
         $data = array(
             'delay' => 0,
             'class' => 'Foo',

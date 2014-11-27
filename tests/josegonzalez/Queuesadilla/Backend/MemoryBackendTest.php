@@ -1,8 +1,9 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \josegonzalez\Queuesadilla\Backend\MemoryBackend;
+use \PHPUnit_Framework_TestCase;
 
 class MemoryBackendTest extends PHPUnit_Framework_TestCase
 {

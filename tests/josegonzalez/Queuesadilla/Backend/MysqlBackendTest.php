@@ -1,8 +1,9 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
+namespace josegonzalez\Queuesadilla\Backend;
 
 use \josegonzalez\Queuesadilla\Backend\MysqlBackend;
+use \PHPUnit_Framework_TestCase;
 
 class MysqlBackendTest extends PHPUnit_Framework_TestCase
 {
@@ -43,6 +44,7 @@ class MysqlBackendTest extends PHPUnit_Framework_TestCase
         $config = $this->config;
         $config['unix_socket'] = '/tmp/missing/mysql.sock';
         $SocketBackend = new MysqlBackend($config);
+        $SocketBackend;
     }
 
     /**
