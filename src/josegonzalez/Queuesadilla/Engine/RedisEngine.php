@@ -27,6 +27,10 @@ class RedisEngine extends Base
 
     public function __construct($config = [])
     {
+        if (!class_exists('Redis')) {
+            return false;
+        }
+
         return parent::__construct($config);
     }
 
