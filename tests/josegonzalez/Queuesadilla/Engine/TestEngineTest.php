@@ -147,7 +147,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::jobId
      */
-    public function testId()
+    public function testJobId()
     {
         $this->assertInternalType('int', $this->Engine->jobId());
         $this->assertInternalType('int', $this->Engine->jobId());
