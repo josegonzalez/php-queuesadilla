@@ -30,6 +30,10 @@ trait DsnParserTrait
             unset($parsed['query']);
         }
 
+        if (!empty($parsed['path'])) {
+            $parsed['database'] = substr($parsed['path'], 1);
+        }
+
         $stringMap = [
             'true' => true,
             'false' => false,
@@ -46,5 +50,4 @@ trait DsnParserTrait
         $parsed = $queryArgs + $parsed;
         return $parsed;
     }
-
 }
