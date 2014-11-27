@@ -48,13 +48,13 @@ class RedisEngine extends Base
                 $return = $this->connection->connect(
                     $this->settings['host'],
                     $this->settings['port'],
-                    $this->settings['timeout']
+                    (int)$this->settings['timeout']
                 );
             } else {
                 $return = $this->connection->pconnect(
                     $this->settings['host'],
                     $this->settings['port'],
-                    $this->settings['timeout']
+                    (int)$this->settings['timeout']
                 );
             }
         } catch (RedisException $e) {
