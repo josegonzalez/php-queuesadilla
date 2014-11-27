@@ -19,7 +19,7 @@ class IronEngine extends Base
         'priority' => 0,  # unsupported
         'protocol' => 'https',
         'queue' => 'default',
-        'server' => 'mq-aws-us-east-1.iron.io',  # iron.host
+        'host' => 'mq-aws-us-east-1.iron.io',  # iron.host
         'table' => null,  # unsupported
         'time_to_run' => 60,  # iron.timeout
         'timeout' => 0,  # unsupported
@@ -27,7 +27,7 @@ class IronEngine extends Base
 
     protected $ironSettings = [
         'protocol' => 'protocol',
-        'server' => 'host',
+        'host' => 'host',
         'port' => 'port',
         'api_version' => 'api_version',
         'user' => 'project_id',

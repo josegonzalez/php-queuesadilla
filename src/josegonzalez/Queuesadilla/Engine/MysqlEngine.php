@@ -36,7 +36,7 @@ class MysqlEngine extends Base
         'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'server' => '127.0.0.1',
+        'host' => '127.0.0.1',
         'table' => 'jobs',
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,  # unsupported
@@ -63,7 +63,7 @@ class MysqlEngine extends Base
         ] + $config['flags'];
 
         if (empty($config['unix_socket'])) {
-            $dsn = "mysql:host={$config['server']};port={$config['port']};dbname={$config['database']}";
+            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
         } else {
             $dsn = "mysql:unix_socket={$config['unix_socket']};dbname={$config['database']}";
         }

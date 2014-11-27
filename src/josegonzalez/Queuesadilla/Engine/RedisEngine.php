@@ -19,7 +19,7 @@ class RedisEngine extends Base
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'server' => '127.0.0.1',
+        'host' => '127.0.0.1',
         'table' => null,  # unsupported
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,
@@ -46,13 +46,13 @@ class RedisEngine extends Base
             $this->connection = new Redis();
             if (empty($this->settings['persistent'])) {
                 $return = $this->connection->connect(
-                    $this->settings['server'],
+                    $this->settings['host'],
                     $this->settings['port'],
                     $this->settings['timeout']
                 );
             } else {
                 $return = $this->connection->pconnect(
-                    $this->settings['server'],
+                    $this->settings['host'],
                     $this->settings['port'],
                     $this->settings['timeout']
                 );

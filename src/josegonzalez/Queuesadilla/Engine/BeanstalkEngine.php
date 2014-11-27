@@ -19,7 +19,7 @@ class BeanstalkEngine extends Engine
         'priority' => 0,
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'server' => '127.0.0.1',
+        'host' => '127.0.0.1',
         'table' => null,  # unsupported
         'time_to_run' => 60,
         'timeout' => 0,  # unsupported

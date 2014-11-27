@@ -20,7 +20,7 @@ class MemoryEngine extends Base
         'priority' => 0,  # unsupported
         'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'server' => '127.0.0.1',  # unsupported
+        'host' => '127.0.0.1',  # unsupported
         'table' => null,  # unsupported
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,  # unsupported
