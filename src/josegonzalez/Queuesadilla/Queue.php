@@ -9,12 +9,12 @@ class Queue
         $this->engine = $engine;
     }
 
-    public function bulk($jobs, $vars = array(), $options = array())
+    public function bulk($jobs, $vars = [], $options = [])
     {
         return $this->engine->bulk($jobs, $vars, $options);
     }
 
-    public function push($callable, $vars = array(), $options = array())
+    public function push($callable, $vars = [], $options = [])
     {
         return $this->engine->push($callable, $vars, $options);
     }

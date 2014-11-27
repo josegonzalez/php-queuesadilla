@@ -7,7 +7,7 @@ use \josegonzalez\Queuesadilla\Engine;
 
 class BeanstalkEngine extends Engine
 {
-    protected $baseConfig = array(
+    protected $baseConfig = [
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',  # unsupported
@@ -23,9 +23,9 @@ class BeanstalkEngine extends Engine
         'table' => null,  # unsupported
         'time_to_run' => 60,
         'timeout' => 0,  # unsupported
-    );
+    ];
 
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         if (!class_exists('Socket_Beanstalk')) {
             return false;
@@ -50,7 +50,7 @@ class BeanstalkEngine extends Engine
         return $this->connection->delete($item['id']);
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         $item = $this->connection->reserve();
@@ -66,7 +66,7 @@ class BeanstalkEngine extends Engine
         return $item;
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->connection->choose($queue);
@@ -78,13 +78,13 @@ class BeanstalkEngine extends Engine
         );
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->connection->bury($item['id']);
     }
 
-    public function watch($options = array())
+    public function watch($options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->connection->watch($queue);

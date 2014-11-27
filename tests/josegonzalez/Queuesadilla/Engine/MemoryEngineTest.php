@@ -67,11 +67,11 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
                 ->will($this->returnValue('1'));
 
         $this->assertNull($Engine->pop('default'));
-        $this->assertTrue($Engine->push(null, array(), 'default'));
+        $this->assertTrue($Engine->push(null, [], 'default'));
         $this->assertEquals(array(
             'id' => '1',
             'class' => null,
-            'vars' => array(),
+            'vars' => [],
             'options' => array('queue' => 'default'),
         ), $Engine->pop('default'));
     }
@@ -82,14 +82,14 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, array(), 'default'));
-        $this->assertTrue($this->Engine->push('some_function', array(), array(
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
+        $this->assertTrue($this->Engine->push('some_function', [], array(
             'delay' => 30,
         )));
-        $this->assertTrue($this->Engine->push('another_function', array(), array(
+        $this->assertTrue($this->Engine->push('another_function', [], array(
             'expires_in' => 1,
         )));
-        $this->assertTrue($this->Engine->push('yet_another_function', array(), 'default'));
+        $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);
 

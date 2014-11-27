@@ -77,11 +77,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $this->assertNull($this->Engine->pop('default'));
-        $this->assertTrue($this->Engine->push(null, array(), 'default'));
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
         $this->assertEquals(array(
             'id' => '1',
             'class' => null,
-            'vars' => array()
+            'vars' => []
         ), $this->Engine->pop('default'));
     }
 
@@ -90,14 +90,14 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, array(), 'default'));
-        $this->assertTrue($this->Engine->push('some_function', array(), array(
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
+        $this->assertTrue($this->Engine->push('some_function', [], array(
             'delay' => 30,
         )));
-        $this->assertTrue($this->Engine->push('another_function', array(), array(
+        $this->assertTrue($this->Engine->push('another_function', [], array(
             'expires_in' => 1,
         )));
-        $this->assertTrue($this->Engine->push('yet_another_function', array(), 'default'));
+        $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);
 
@@ -128,7 +128,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testExecutePdoException()
     {
-        $this->assertTrue($this->Engine->push(null, array(), 'default'));
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
         $this->Engine->execute('derp');
     }
 }

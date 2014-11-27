@@ -72,11 +72,11 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $this->assertNull($this->Engine->pop('default'));
-        $this->assertEquals(1, $this->Engine->push(null, array(), 'default'));
+        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
         $this->assertEquals(array(
             'id' => '1',
             'class' => null,
-            'vars' => array()
+            'vars' => []
         ), $this->Engine->pop('default'));
     }
 
@@ -85,10 +85,10 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertEquals(1, $this->Engine->push(null, array(), 'default'));
-        $this->assertEquals(2, $this->Engine->push('1', array(), 'default'));
-        $this->assertEquals(3, $this->Engine->push('2', array(), 'default'));
-        $this->assertEquals(4, $this->Engine->push('3', array(), 'default'));
+        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
+        $this->assertEquals(2, $this->Engine->push('1', [], 'default'));
+        $this->assertEquals(3, $this->Engine->push('2', [], 'default'));
+        $this->assertEquals(4, $this->Engine->push('3', [], 'default'));
 
         $pop1 = $this->Engine->pop();
         $pop2 = $this->Engine->pop();
@@ -105,14 +105,14 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPushWithOptions()
     {
-        $this->assertEquals(1, $this->Engine->push(null, array(), 'default'));
-        $this->assertEquals(2, $this->Engine->push('some_function', array(), array(
+        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
+        $this->assertEquals(2, $this->Engine->push('some_function', [], array(
             'delay' => 30,
         )));
-        $this->assertEquals(3, $this->Engine->push('another_function', array(), array(
+        $this->assertEquals(3, $this->Engine->push('another_function', [], array(
             'expires_in' => 1,
         )));
-        $this->assertEquals(4, $this->Engine->push('yet_another_function', array(), 'default'));
+        $this->assertEquals(4, $this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);
 
@@ -139,11 +139,11 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->assertEquals(1, $this->Engine->push(null, array(), 'default'));
+        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
         $this->assertEquals(array(
             'id' => '1',
             'class' => null,
-            'vars' => array()
+            'vars' => []
         ), $this->Engine->pop('default'));
 
         $this->assertFalse($this->Engine->release(null, 'default'));
@@ -151,12 +151,12 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->Engine->release(array(
             'id' => '2',
             'class' => 'some_function',
-            'vars' => array()
+            'vars' => []
         ), 'default'));
         $this->assertEquals(array(
             'id' => '2',
             'class' => 'some_function',
-            'vars' => array()
+            'vars' => []
         ), $this->Engine->pop('default'));
     }
 }

@@ -4,12 +4,12 @@ namespace josegonzalez\Queuesadilla;
 
 abstract class Worker
 {
-    public function __construct($engine, $params = array())
+    public function __construct($engine, $params = [])
     {
-        $params = array_merge(array(
+        $params = array_merge([
             'max_iterations' => null,
             'queue' => 'default',
-        ), $params);
+        ], $params);
 
         $this->engine = $engine;
         $this->queue = $params['queue'];

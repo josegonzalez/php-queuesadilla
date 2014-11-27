@@ -10,7 +10,7 @@ class JobTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $config = array();
+        $config = [];
         $items = array(
             array(
                 'delay' => 0,

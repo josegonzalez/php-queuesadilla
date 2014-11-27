@@ -18,19 +18,19 @@ class TestEngine extends Base
         return $this->return;
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->return;

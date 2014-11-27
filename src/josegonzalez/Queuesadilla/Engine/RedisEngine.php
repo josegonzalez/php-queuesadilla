@@ -25,7 +25,7 @@ class RedisEngine extends Base
         'timeout' => 0,
     );
 
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         return parent::__construct($config);
     }
@@ -77,7 +77,7 @@ class RedisEngine extends Base
         return true;
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         $item = $this->connection->lpop('queue:' . $queue);
@@ -88,7 +88,7 @@ class RedisEngine extends Base
         return json_decode($item, true);
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
@@ -97,7 +97,7 @@ class RedisEngine extends Base
         return $this->connection->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         if (!is_array($item) || !isset($item['id'])) {
             return false;

@@ -8,13 +8,13 @@ namespace josegonzalez\Queuesadilla\Engine;
 interface EngineInterface
 {
 
-    public function bulk($jobs, $vars = array(), $options = array());
+    public function bulk($jobs, $vars = [], $options = []);
 
     public function getJobClass();
 
     public function setting($settings, $key, $default = null);
 
-    public function watch($options = array());
+    public function watch($options = []);
 
     public function connected();
 
@@ -24,9 +24,9 @@ interface EngineInterface
 
     public function delete($item);
 
-    public function pop($options = array());
+    public function pop($options = []);
 
-    public function push($class, $vars = array(), $options = array());
+    public function push($class, $vars = [], $options = []);
 
-    public function release($item, $options = array());
+    public function release($item, $options = []);
 }

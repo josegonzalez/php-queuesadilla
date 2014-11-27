@@ -7,7 +7,7 @@ use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
 
 class SynchronousEngine extends MemoryEngine
 {
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         parent::push($class, $vars, $options);
         $worker = $this->getWorker();

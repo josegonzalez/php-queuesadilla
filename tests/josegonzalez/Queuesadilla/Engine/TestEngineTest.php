@@ -25,7 +25,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new TestEngine(array());
+        $Engine = new TestEngine([]);
         $this->assertTrue($Engine->connected());
     }
 
@@ -55,8 +55,8 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('string_to_array', $this->Engine->setting('string_to_array', 'queue'));
         $this->assertEquals('non_default', $this->Engine->setting(array('queue' => 'non_default'), 'queue'));
-        $this->assertEquals('default', $this->Engine->setting(array(), 'queue'));
-        $this->assertEquals('other', $this->Engine->setting(array(), 'other', 'other'));
+        $this->assertEquals('default', $this->Engine->setting([], 'queue'));
+        $this->assertEquals('other', $this->Engine->setting([], 'other', 'other'));
     }
 
     /**
@@ -111,10 +111,10 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, array(), 'default'));
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
 
         $this->Engine->return = false;
-        $this->assertFalse($this->Engine->connect(null, array(), 'default'));
+        $this->assertFalse($this->Engine->connect(null, [], 'default'));
     }
 
     /**

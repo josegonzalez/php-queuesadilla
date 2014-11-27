@@ -11,17 +11,17 @@ abstract class Base implements EngineInterface
 
     use DsnParserTrait;
 
-    protected $baseConfig = array(array(
+    protected $baseConfig = [
         'queue' => 'default',
-    ));
+    ];
 
     protected $connected = false;
 
-    protected $settings = array();
+    protected $settings = [];
 
     public $connection = null;
 
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         if (is_array($config) && isset($config['dsn'])) {
             $config = array_merge($config, $this->parseDsn($config['dsn']));
@@ -33,10 +33,10 @@ abstract class Base implements EngineInterface
         return $this->connected = $this->connect();
     }
 
-    public function bulk($jobs, $vars = array(), $options = array())
+    public function bulk($jobs, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $return = array();
+        $return = [];
         foreach ((array)$jobs as $callable) {
             $return[] = $this->push($callable, $vars, $queue);
         }
@@ -52,7 +52,7 @@ abstract class Base implements EngineInterface
     public function setting($settings, $key, $default = null)
     {
         if (!is_array($settings)) {
-            $settings = array('queue' => $settings);
+            $settings = ['queue' => $settings];
         }
 
         $settings = array_merge($this->settings, $settings);
@@ -66,7 +66,7 @@ abstract class Base implements EngineInterface
         return $value;
     }
 
-    public function watch($options = array())
+    public function watch($options = [])
     {
         $this->setting($options, 'queue');
         return true;
@@ -86,9 +86,9 @@ abstract class Base implements EngineInterface
 
     abstract public function delete($item);
 
-    abstract public function pop($options = array());
+    abstract public function pop($options = []);
 
-    abstract public function push($class, $vars = array(), $options = array());
+    abstract public function push($class, $vars = [], $options = []);
 
-    abstract public function release($item, $options = array());
+    abstract public function release($item, $options = []);
 }

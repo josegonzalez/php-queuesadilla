@@ -38,27 +38,27 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(
             'id' => '1',
             'class' => null,
-            'vars' => array(),
+            'vars' => [],
             'options' => array('queue' => 'default'),
-        ), $this->Engine->push(null, array(), 'default'));
-        $this->assertNull($this->Engine->push('some_function', array(), array('delay' => 30)));
+        ), $this->Engine->push(null, [], 'default'));
+        $this->assertNull($this->Engine->push('some_function', [], array('delay' => 30)));
 
         $datetime = new DateTime();
         $this->assertEquals(array(
             'id' => '3',
             'class' => 'another_function',
-            'vars' => array(),
+            'vars' => [],
             'options' => array(
               'queue' => 'default',
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
             ),
-        ), $this->Engine->push('another_function', array(), array('expires_in' => 1)));
+        ), $this->Engine->push('another_function', [], array('expires_in' => 1)));
         $this->assertEquals(array(
             'id' => '4',
             'class' => 'yet_another_function',
-            'vars' => array(),
+            'vars' => [],
             'options' => array('queue' => 'default'),
-        ), $this->Engine->push('yet_another_function', array(), 'default'));
+        ), $this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);
 
@@ -80,7 +80,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function protectedMethodCall(&$object, $methodName, array $parameters = array())
+    public function protectedMethodCall(&$object, $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

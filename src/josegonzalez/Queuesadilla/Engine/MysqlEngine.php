@@ -53,7 +53,7 @@ class MysqlEngine extends Base
     {
         $config = $this->settings;
         if (empty($config['flags'])) {
-            $config['flags'] = array();
+            $config['flags'] = [];
         }
 
         $flags = array(
@@ -91,7 +91,7 @@ class MysqlEngine extends Base
         return $sth->rowCount() == 1;
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         try {
@@ -138,7 +138,7 @@ class MysqlEngine extends Base
         return null;
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         $delay = $this->setting($options, 'delay');
         $expires_in = $this->setting($options, 'expires_in');
@@ -171,7 +171,7 @@ class MysqlEngine extends Base
         return $sth->rowCount() == 1;
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
@@ -191,7 +191,7 @@ class MysqlEngine extends Base
  * query returning no rows, such as a CREATE statement, false otherwise
  * @throws PDOException
  */
-    public function execute($sql, $params = array(), $prepareOptions = array())
+    public function execute($sql, $params = [], $prepareOptions = [])
     {
         $sql = trim($sql);
         try {

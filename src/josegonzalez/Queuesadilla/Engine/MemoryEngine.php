@@ -26,7 +26,7 @@ class MemoryEngine extends Base
         'timeout' => 0,  # unsupported
     );
 
-    protected $queues = array();
+    protected $queues = [];
 
     public function connect()
     {
@@ -53,7 +53,7 @@ class MemoryEngine extends Base
             return false;
         }
 
-        $queue = array();
+        $queue = [];
         foreach ($this->queues[$deleteFromQueue] as $queueItem) {
             if ($queueItem['id'] !== $item['id']) {
                 array_push($queue, $queueItem);
@@ -63,7 +63,7 @@ class MemoryEngine extends Base
         return true;
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
@@ -107,7 +107,7 @@ class MemoryEngine extends Base
         return $item;
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         if (!is_array($options)) {
             $options = array('queue' => $options);
@@ -137,7 +137,7 @@ class MemoryEngine extends Base
         return $newCount === ($oldCount + 1);
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
@@ -149,7 +149,7 @@ class MemoryEngine extends Base
     {
         $queue = $this->setting($options, 'queue');
         if (!isset($this->queues[$queue])) {
-            $this->queues[$queue] = array();
+            $this->queues[$queue] = [];
         }
     }
 }

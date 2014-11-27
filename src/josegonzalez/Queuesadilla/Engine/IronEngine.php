@@ -34,7 +34,7 @@ class IronEngine extends Base
         'pass' => 'token',
     );
 
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         if (!class_exists('IronMQ')) {
             return false;
@@ -50,7 +50,7 @@ class IronEngine extends Base
  */
     public function connect()
     {
-        $settings = array();
+        $settings = [];
         foreach ($this->ironSettings as $key => $mapping) {
             $settings[$mapping] = $this->settings[$key];
         }
@@ -65,7 +65,7 @@ class IronEngine extends Base
         return $this->connection->deleteMessage($queue, $item['id']);
     }
 
-    public function pop($options = array())
+    public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
         $item = $this->connection->getMessage($queue);
@@ -81,7 +81,7 @@ class IronEngine extends Base
         );
     }
 
-    public function push($class, $vars = array(), $options = array())
+    public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
 
@@ -93,7 +93,7 @@ class IronEngine extends Base
         ));
     }
 
-    public function release($item, $options = array())
+    public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         return $this->connection->postMessage($queue, $item, array(
