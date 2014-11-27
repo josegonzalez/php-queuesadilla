@@ -41,7 +41,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, array('jobId'));
+        $Engine = $this->getMock($engineClass, ['jobId']);
         $Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));
@@ -50,11 +50,11 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($Engine->delete(false));
         $this->assertFalse($Engine->delete(1));
         $this->assertFalse($Engine->delete('string'));
-        $this->assertFalse($Engine->delete(array('key' => 'value')));
-        $this->assertFalse($Engine->delete(array('id' => '1')));
+        $this->assertFalse($Engine->delete(['key' => 'value']));
+        $this->assertFalse($Engine->delete(['id' => '1']));
 
         $this->assertTrue($Engine->push('some_function'));
-        $this->assertTrue($Engine->delete(array('id' => '1')));
+        $this->assertTrue($Engine->delete(['id' => '1']));
     }
 
     /**
@@ -63,19 +63,19 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, array('jobId'));
+        $Engine = $this->getMock($engineClass, ['jobId']);
         $Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));
 
         $this->assertNull($Engine->pop('default'));
         $this->assertTrue($Engine->push(null, [], 'default'));
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => '1',
             'class' => null,
             'vars' => [],
-            'options' => array('queue' => 'default'),
-        ), $Engine->pop('default'));
+            'options' => ['queue' => 'default'],
+        ], $Engine->pop('default'));
     }
 
     /**
@@ -85,12 +85,12 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     public function testPush()
     {
         $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertTrue($this->Engine->push('some_function', [], array(
+        $this->assertTrue($this->Engine->push('some_function', [], [
             'delay' => 30,
-        )));
-        $this->assertTrue($this->Engine->push('another_function', [], array(
+        ]));
+        $this->assertTrue($this->Engine->push('another_function', [], [
             'expires_in' => 1,
-        )));
+        ]));
         $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);

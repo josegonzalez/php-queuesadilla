@@ -9,9 +9,9 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->Engine = new TestEngine(array(
+        $this->Engine = new TestEngine([
             'queue' => 'default',
-        ));
+        ]);
     }
 
     public function tearDown()
@@ -34,10 +34,10 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testBulk()
     {
-        $this->assertEquals(array(true, true), $this->Engine->bulk(array(null, null)));
+        $this->assertEquals([true, true], $this->Engine->bulk([null, null]));
 
         $this->Engine->return = false;
-        $this->assertEquals(array(false, false), $this->Engine->bulk(array(null, null)));
+        $this->assertEquals([false, false], $this->Engine->bulk([null, null]));
     }
 
     /**
@@ -54,7 +54,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     public function testSetting()
     {
         $this->assertEquals('string_to_array', $this->Engine->setting('string_to_array', 'queue'));
-        $this->assertEquals('non_default', $this->Engine->setting(array('queue' => 'non_default'), 'queue'));
+        $this->assertEquals('non_default', $this->Engine->setting(['queue' => 'non_default'], 'queue'));
         $this->assertEquals('default', $this->Engine->setting([], 'queue'));
         $this->assertEquals('other', $this->Engine->setting([], 'other', 'other'));
     }

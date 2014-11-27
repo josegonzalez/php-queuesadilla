@@ -8,7 +8,7 @@ use \josegonzalez\Queuesadilla\Engine\Base;
 
 class MemoryEngine extends Base
 {
-    protected $baseConfig = array(
+    protected $baseConfig = [
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',  # unsupported
@@ -24,7 +24,7 @@ class MemoryEngine extends Base
         'table' => null,  # unsupported
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,  # unsupported
-    );
+    ];
 
     protected $queues = [];
 
@@ -110,7 +110,7 @@ class MemoryEngine extends Base
     public function push($class, $vars = [], $options = [])
     {
         if (!is_array($options)) {
-            $options = array('queue' => $options);
+            $options = ['queue' => $options];
         }
 
         $options['queue'] = $this->setting($options, 'queue');

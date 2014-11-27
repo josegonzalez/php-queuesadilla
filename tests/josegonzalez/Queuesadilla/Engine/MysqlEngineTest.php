@@ -9,11 +9,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = array(
+        $this->config = [
             'queue' => 'default',
             'user' => 'travis',
             'pass' => '',
-        );
+        ];
         $this->Engine = new MysqlEngine($this->config);
         $this->Engine->execute('TRUNCATE TABLE jobs');
     }
@@ -64,11 +64,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(false));
         $this->assertFalse($this->Engine->delete(1));
         $this->assertFalse($this->Engine->delete('string'));
-        $this->assertFalse($this->Engine->delete(array('key' => 'value')));
-        $this->assertFalse($this->Engine->delete(array('id' => '1')));
+        $this->assertFalse($this->Engine->delete(['key' => 'value']));
+        $this->assertFalse($this->Engine->delete(['id' => '1']));
 
         $this->assertTrue($this->Engine->push('some_function'));
-        $this->assertTrue($this->Engine->delete(array('id' => '1')));
+        $this->assertTrue($this->Engine->delete(['id' => '1']));
     }
 
     /**
@@ -78,11 +78,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->Engine->pop('default'));
         $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => '1',
             'class' => null,
             'vars' => []
-        ), $this->Engine->pop('default'));
+        ], $this->Engine->pop('default'));
     }
 
     /**
@@ -91,12 +91,12 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testPush()
     {
         $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertTrue($this->Engine->push('some_function', [], array(
+        $this->assertTrue($this->Engine->push('some_function', [], [
             'delay' => 30,
-        )));
-        $this->assertTrue($this->Engine->push('another_function', [], array(
+        ]));
+        $this->assertTrue($this->Engine->push('another_function', [], [
             'expires_in' => 1,
-        )));
+        ]));
         $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);

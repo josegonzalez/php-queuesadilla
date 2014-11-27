@@ -7,7 +7,7 @@ use \josegonzalez\Queuesadilla\Engine\Base;
 
 class RedisEngine extends Base
 {
-    protected $baseConfig = array(
+    protected $baseConfig = [
         'api_version' => 1,  # unsupported
         'delay' => null,  # unsupported
         'database' => null,
@@ -23,7 +23,7 @@ class RedisEngine extends Base
         'table' => null,  # unsupported
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,
-    );
+    ];
 
     public function __construct($config = [])
     {

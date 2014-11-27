@@ -11,41 +11,41 @@ class JobTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $config = [];
-        $items = array(
-            array(
+        $items = [
+            [
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => array(
+                'vars' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'attempts' => 0,
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => array(
+                'vars' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'attempts' => 1,
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => array(
+                'vars' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->Engine = new TestEngine($config);
-        $this->Jobs = array(
+        $this->Jobs = [
             new Job($items[0], $this->Engine),
             new Job($items[1], $this->Engine),
             new Job($items[2], $this->Engine),
-        );
+        ];
     }
 
     public function tearDown()
@@ -59,14 +59,14 @@ class JobTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $data = array(
+        $data = [
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        );
+            ],
+        ];
 
         $job = new Job($data, $this->Engine);
         $this->assertEquals($data, $job->item());
@@ -91,10 +91,10 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Jobs[0]->data('unset_variable', true));
         $this->assertEquals('bar', $this->Jobs[0]->data('foo'));
         $this->assertEquals('qux', $this->Jobs[0]->data('baz'));
-        $this->assertEquals(array(
+        $this->assertEquals([
                 'foo' => 'bar',
                 'baz' => 'qux',
-        ), $this->Jobs[0]->data());
+        ], $this->Jobs[0]->data());
     }
 
     /**
@@ -102,34 +102,34 @@ class JobTest extends PHPUnit_Framework_TestCase
      */
     public function testItem()
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[0]->item());
+            ],
+        ], $this->Jobs[0]->item());
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'attempts' => 0,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[1]->item());
+            ],
+        ], $this->Jobs[1]->item());
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[2]->item());
+            ],
+        ], $this->Jobs[2]->item());
     }
 
     /**
@@ -151,37 +151,37 @@ class JobTest extends PHPUnit_Framework_TestCase
     {
         $this->Engine->return = true;
         $this->assertTrue($this->Jobs[0]->release(10));
-        $this->assertEquals(array(
+        $this->assertEquals([
             'attempts' => 1,
             'delay' => 10,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[0]->item());
+            ],
+        ], $this->Jobs[0]->item());
 
         $this->Engine->return = false;
         $this->assertFalse($this->Jobs[1]->release());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[1]->item());
+            ],
+        ], $this->Jobs[1]->item());
 
         $this->assertFalse($this->Jobs[2]->release());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'attempts' => 2,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => array(
+            'vars' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
-            ),
-        ), $this->Jobs[2]->item());
+            ],
+        ], $this->Jobs[2]->item());
     }
 }

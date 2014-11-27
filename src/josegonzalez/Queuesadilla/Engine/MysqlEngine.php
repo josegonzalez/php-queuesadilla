@@ -24,7 +24,7 @@ use \josegonzalez\Queuesadilla\Engine\Base;
 
 class MysqlEngine extends Base
 {
-    protected $baseConfig = array(
+    protected $baseConfig = [
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',
@@ -40,7 +40,7 @@ class MysqlEngine extends Base
         'table' => 'jobs',
         'time_to_run' => 60,  # unsupported
         'timeout' => 0,  # unsupported
-    );
+    ];
 
 /**
  * Connects to a PDO-compatible server
@@ -56,11 +56,11 @@ class MysqlEngine extends Base
             $config['flags'] = [];
         }
 
-        $flags = array(
+        $flags = [
             PDO::ATTR_PERSISTENT => $config['persistent'],
             PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ) + $config['flags'];
+        ] + $config['flags'];
 
         if (empty($config['unix_socket'])) {
             $dsn = "mysql:host={$config['server']};port={$config['port']};dbname={$config['database']}";
@@ -95,13 +95,13 @@ class MysqlEngine extends Base
     {
         $queue = $this->setting($options, 'queue');
         try {
-            $sql = implode(" ", array(
+            $sql = implode(" ", [
                 'SELECT `id`, `data` FROM `%s`',
                 'WHERE `queue` = ? AND `locked` != 1',
                 'AND (expires_at IS NULL OR expires_at > ?)',
                 'AND (delay_until IS NULL OR delay_until < ?)',
                 'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
-            ));
+            ]);
             $sql = sprintf($sql, $this->settings['table']);
             $this->connection->beginTransaction();
 
@@ -123,11 +123,11 @@ class MysqlEngine extends Base
                     $this->connection->commit();
 
                     $data = json_decode($result['data'], true);
-                    return array(
+                    return [
                         'id' => $result['id'],
                         'class' => $data['class'],
                         'vars' => $data['vars'],
-                    );
+                    ];
                 }
             }
             $this->connection->commit();

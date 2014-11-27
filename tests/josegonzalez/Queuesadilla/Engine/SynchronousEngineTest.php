@@ -15,7 +15,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
-        $this->Engine = $this->getMock($engineClass, array('getWorker', 'jobId'));
+        $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId']);
         $this->Engine->expects($this->any())
                 ->method('getWorker')
                 ->will($this->returnValue(new TestWorker($this->Engine)));
@@ -36,30 +36,30 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => '1',
             'class' => null,
             'vars' => [],
-            'options' => array('queue' => 'default'),
-        ), $this->Engine->push(null, [], 'default'));
-        $this->assertNull($this->Engine->push('some_function', [], array('delay' => 30)));
+            'options' => ['queue' => 'default'],
+        ], $this->Engine->push(null, [], 'default'));
+        $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
 
         $datetime = new DateTime();
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => '3',
             'class' => 'another_function',
             'vars' => [],
-            'options' => array(
+            'options' => [
               'queue' => 'default',
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
-            ),
-        ), $this->Engine->push('another_function', [], array('expires_in' => 1)));
-        $this->assertEquals(array(
+            ],
+        ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
+        $this->assertEquals([
             'id' => '4',
             'class' => 'yet_another_function',
             'vars' => [],
-            'options' => array('queue' => 'default'),
-        ), $this->Engine->push('yet_another_function', [], 'default'));
+            'options' => ['queue' => 'default'],
+        ], $this->Engine->push('yet_another_function', [], 'default'));
 
         sleep(2);
 
