@@ -40,8 +40,8 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             'id' => '1',
             'class' => null,
             'vars' => [],
-            'options' => ['queue' => 'default'],
-        ], $this->Engine->push(null, [], 'default'));
+            'options' => [],
+        ], $this->Engine->push(null, []));
         $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
 
         $datetime = new DateTime();
@@ -50,7 +50,6 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             'class' => 'another_function',
             'vars' => [],
             'options' => [
-              'queue' => 'default',
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
             ],
         ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
@@ -58,8 +57,8 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             'id' => '4',
             'class' => 'yet_another_function',
             'vars' => [],
-            'options' => ['queue' => 'default'],
-        ], $this->Engine->push('yet_another_function', [], 'default'));
+            'options' => [],
+        ], $this->Engine->push('yet_another_function', []));
 
         sleep(2);
 

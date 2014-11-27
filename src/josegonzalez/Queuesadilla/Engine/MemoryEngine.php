@@ -113,7 +113,7 @@ class MemoryEngine extends Base
             $options = ['queue' => $options];
         }
 
-        $options['queue'] = $this->setting($options, 'queue');
+        $queue = $this->setting($options, 'queue');
         $delay = $this->setting($options, 'delay');
         $expires_in = $this->setting($options, 'expires_in');
         $priority = $this->setting($options, 'priority');
@@ -132,8 +132,8 @@ class MemoryEngine extends Base
             unset($options['expires_in']);
         }
 
-        $oldCount = count($this->queues[$options['queue']]);
-        $newCount = array_push($this->queues[$options['queue']], compact('id', 'class', 'vars', 'options'));
+        $oldCount = count($this->queues[$queue]);
+        $newCount = array_push($this->queues[$queue], compact('id', 'class', 'vars', 'options'));
         return $newCount === ($oldCount + 1);
     }
 
