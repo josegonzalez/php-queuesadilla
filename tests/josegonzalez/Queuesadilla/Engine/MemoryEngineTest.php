@@ -40,7 +40,8 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $Engine = $this->getMock('josegonzalez\Queuesadilla\Engine\MemoryEngine', array('jobId'));
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
+        $Engine = $this->getMock($engineClass, array('jobId'));
         $Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));
@@ -61,7 +62,8 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
-        $Engine = $this->getMock('josegonzalez\Queuesadilla\Engine\MemoryEngine', array('jobId'));
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
+        $Engine = $this->getMock($engineClass, array('jobId'));
         $Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));

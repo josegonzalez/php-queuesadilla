@@ -18,7 +18,8 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
             'user' => 'travis',
             'pass' => '',
         );
-        $this->Engine = $this->getMock('josegonzalez\Queuesadilla\Engine\RedisEngine', array('jobId'), array($this->config));
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
+        $this->Engine = $this->getMock($engineClass, array('jobId'), array($this->config));
         $this->Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));

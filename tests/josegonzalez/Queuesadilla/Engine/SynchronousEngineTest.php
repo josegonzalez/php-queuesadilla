@@ -14,7 +14,8 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->Engine = $this->getMock('josegonzalez\Queuesadilla\Engine\SynchronousEngine', array('getWorker', 'jobId'));
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
+        $this->Engine = $this->getMock($engineClass, array('getWorker', 'jobId'));
         $this->Engine->expects($this->any())
                 ->method('getWorker')
                 ->will($this->returnValue(new TestWorker($this->Engine)));
