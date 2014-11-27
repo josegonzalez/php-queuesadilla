@@ -161,4 +161,22 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
             'vars' => []
         ], $this->Engine->pop('default'));
     }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::queues
+     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::requireQueue
+     */
+    public function testQueues()
+    {
+        $this->assertEquals([], $this->Engine->queues());
+        $this->Engine->push('some_function');
+        $this->assertEquals(['default'], $this->Engine->queues());
+        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $this->assertEquals(['default', 'other'], $this->Engine->queues());
+
+        $this->Engine->pop();
+        $this->Engine->pop();
+        $this->assertEquals(['default', 'other'], $this->Engine->queues());
+    }
+
 }

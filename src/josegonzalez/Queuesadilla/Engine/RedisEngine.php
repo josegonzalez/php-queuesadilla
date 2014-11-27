@@ -115,7 +115,7 @@ class RedisEngine extends Base
 
     public function queues()
     {
-        return $this->connection->smembers();
+        return $this->connection->smembers('queues');
     }
 
     protected function requireQueue($options)
