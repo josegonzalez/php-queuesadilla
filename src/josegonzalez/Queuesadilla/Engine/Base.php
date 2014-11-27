@@ -2,9 +2,10 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \josegonzalez\Queuesadilla\Job;
 
-abstract class Base
+abstract class Base implements EngineInterface
 {
 
     protected $baseConfig = array(array(
