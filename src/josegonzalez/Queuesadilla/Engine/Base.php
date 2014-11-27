@@ -26,10 +26,11 @@ abstract class Base implements EngineInterface
         if (is_array($config) && !empty($config['url'])) {
             $config = array_merge($config, $this->parseDsn($config['url']));
         } elseif (is_string($config)) {
-            $config = $this->parseDsn($config['url']);
+            $config = $this->parseDsn($config);
         }
 
-        $this->settings = array_merge($this->baseConfig, $config);
+        $this->settings = $this->baseConfig;
+        $this->config($config);
         return $this->connected = $this->connect();
     }
 
@@ -47,6 +48,28 @@ abstract class Base implements EngineInterface
     public function getJobClass()
     {
         return '\\josegonzalez\\Queuesadilla\\Job';
+    }
+
+    public function config($key = null, $value = null)
+    {
+        if (is_array($key)) {
+            $this->settings = array_merge($this->settings, $key);
+            $key = null;
+        }
+
+        if ($key === null) {
+            return $this->settings;
+        }
+
+        if ($value === null) {
+            if (isset($this->settings[$key])) {
+                return $this->settings[$key];
+            }
+
+            return null;
+        }
+
+        return $this->settings[$key] = $value;
     }
 
     public function setting($settings, $key, $default = null)
@@ -91,4 +114,6 @@ abstract class Base implements EngineInterface
     abstract public function push($class, $vars = [], $options = []);
 
     abstract public function release($item, $options = []);
+
+    abstract public function queues();
 }

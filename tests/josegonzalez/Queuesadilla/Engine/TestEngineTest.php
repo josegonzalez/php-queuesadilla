@@ -27,6 +27,9 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     {
         $Engine = new TestEngine([]);
         $this->assertTrue($Engine->connected());
+
+        $Engine = new TestEngine('test://user:pass@host:port');
+        $this->assertTrue($Engine->connected());
     }
 
     /**
@@ -46,6 +49,18 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     public function testGetJobClass()
     {
         $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job', $this->Engine->getJobClass());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::config
+     */
+    public function testConfig()
+    {
+        $this->assertEquals(['queue' => 'default'], $this->Engine->config());
+        $this->assertEquals(['queue' => 'other'], $this->Engine->config(['queue' => 'other']));
+        $this->assertEquals('other', $this->Engine->config('queue'));
+        $this->assertEquals('another', $this->Engine->config('queue', 'another'));
+        $this->assertEquals(null, $this->Engine->config('random'));
     }
 
     /**
@@ -137,5 +152,14 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $this->Engine->jobId());
         $this->assertInternalType('int', $this->Engine->jobId());
         $this->assertInternalType('int', $this->Engine->jobId());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::queues
+     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::queues
+     */
+    public function testQueues()
+    {
+        $this->assertEquals([], $this->Engine->queues());
     }
 }
