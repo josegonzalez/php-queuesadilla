@@ -1,11 +1,12 @@
 <?php
 
-namespace josegonzalez\Queuesadilla;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Job;
 
-abstract class Backend
+abstract class Base
 {
+
     protected $baseConfig = array(array(
         'queue' => 'default',
     ));
@@ -57,7 +58,7 @@ abstract class Backend
 
     public function watch($options = array())
     {
-        $queue = $this->setting($options, 'queue');
+        $this->setting($options, 'queue');
         return true;
     }
 
@@ -66,7 +67,7 @@ abstract class Backend
         return $this->connected;
     }
 
-    public function id()
+    public function jobId()
     {
         return rand();
     }

@@ -1,19 +1,19 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \IronMQ;
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine\Base;
 
-class IronBackend extends Backend
+class IronEngine extends Base
 {
     protected $baseConfig = array(
         'api_version' => 1,
         'delay' => null,
         'database' => 'database_name',  # unsupported
         'expires_in' => null,
-        'login' => null,  # iron.project_id
-        'password' => null,  # iron.token
+        'user' => null,  # iron.project_id
+        'pass' => null,  # iron.token
         'persistent' => true,  # unsupported
         'port' => 443,
         'priority' => 0,  # unsupported
@@ -30,8 +30,8 @@ class IronBackend extends Backend
         'server' => 'host',
         'port' => 'port',
         'api_version' => 'api_version',
-        'login' => 'project_id',
-        'password' => 'token',
+        'user' => 'project_id',
+        'pass' => 'token',
     );
 
     public function __construct($config = array())
@@ -44,7 +44,7 @@ class IronBackend extends Backend
     }
 
 /**
- * Connects to a BeanstalkD server
+ * Connects to a Iron server
  *
  * @return boolean True if BeanstalkD server was connected
  */

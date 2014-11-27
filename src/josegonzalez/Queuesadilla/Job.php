@@ -12,12 +12,12 @@ class Job
 
     protected $item;
 
-    protected $backend;
+    protected $engine;
 
-    public function __construct($item, $backend)
+    public function __construct($item, $engine)
     {
         $this->item = $item;
-        $this->backend = $backend;
+        $this->engine = $engine;
     }
 
     public function attempts()
@@ -44,7 +44,7 @@ class Job
 
     public function delete()
     {
-        return $this->backend->delete($this->item);
+        return $this->engine->delete($this->item);
     }
 
     public function item()
@@ -60,6 +60,6 @@ class Job
 
         $this->item['attempts'] += 1;
         $this->item['delay'] = $delay;
-        return $this->backend->release($this->item);
+        return $this->engine->release($this->item);
     }
 }

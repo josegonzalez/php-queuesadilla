@@ -14,23 +14,23 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \DateInterval;
 use \DateTime;
 use \PDO;
 use \PDOException;
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine\Base;
 
-class MysqlBackend extends Backend
+class MysqlEngine extends Base
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',
         'expires_in' => null,
-        'login' => 'root',
-        'password' => 'password',
+        'user' => 'root',
+        'pass' => 'pass',
         'persistent' => true,
         'port' => '3306',
         'priority' => 0,
@@ -70,8 +70,8 @@ class MysqlBackend extends Backend
 
         $this->connection = new PDO(
             $dsn,
-            $config['login'],
-            $config['password'],
+            $config['user'],
+            $config['pass'],
             $flags
         );
 

@@ -10,9 +10,9 @@ class SequentialWorker extends Worker
     {
         $max_iterations = $this->max_iterations ? sprintf(', max iterations %s', $this->max_iterations) : '';
         $this->log(sprintf('Starting worker%s', $max_iterations));
-        $jobClass = $this->backend->getJobClass();
+        $jobClass = $this->engine->getJobClass();
         $iterations = 0;
-        if (!$this->backend->watch($this->queue)) {
+        if (!$this->engine->watch($this->queue)) {
             $this->log(sprintf('Worker unable to watch queue %s, exiting', $this->queue));
             return;
         }
@@ -25,7 +25,7 @@ class SequentialWorker extends Worker
 
             $iterations++;
 
-            $item = $this->backend->pop($this->queue);
+            $item = $this->engine->pop($this->queue);
             if (empty($item)) {
                 sleep(1);
                 $this->log('No job!');
@@ -34,7 +34,7 @@ class SequentialWorker extends Worker
 
             $success = false;
             if (is_callable($item['class'])) {
-                $job = new $jobClass($item, $this->backend);
+                $job = new $jobClass($item, $this->engine);
                 try {
                     if (is_array($item['class']) && count($item['class']) == 2) {
                         $item['class'][0] = new $item['class'][0];
@@ -49,7 +49,7 @@ class SequentialWorker extends Worker
                 }
             } else {
                 $this->log('Invalid callable for job. Deleting job from queue.');
-                $this->backend->delete($item);
+                $this->engine->delete($item);
                 continue;
             }
 

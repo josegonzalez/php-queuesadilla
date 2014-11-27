@@ -1,19 +1,19 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \Socket_Beanstalk;
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine;
 
-class BeanstalkBackend extends Backend
+class BeanstalkEngine extends Engine
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',  # unsupported
         'expires_in' => null,  # unsupported
-        'login' => null,  # unsupported
-        'password' => null,  # unsupported
+        'user' => null,  # unsupported
+        'pass' => null,  # unsupported
         'persistent' => true,
         'port' => 11300,
         'priority' => 0,

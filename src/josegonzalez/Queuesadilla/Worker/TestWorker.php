@@ -8,6 +8,6 @@ class TestWorker extends Worker
 {
     public function work()
     {
-        return $this->backend->pop();
+        return $this->engine->pop();
     }
 }

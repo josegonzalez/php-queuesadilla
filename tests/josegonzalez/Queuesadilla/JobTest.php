@@ -3,7 +3,7 @@
 namespace josegonzalez\Queuesadilla;
 
 use \josegonzalez\Queuesadilla\Job;
-use \josegonzalez\Queuesadilla\Backend\TestBackend;
+use \josegonzalez\Queuesadilla\Engine\TestEngine;
 use \PHPUnit_Framework_TestCase;
 
 class JobTest extends PHPUnit_Framework_TestCase
@@ -40,17 +40,17 @@ class JobTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->Backend = new TestBackend($config);
+        $this->Engine = new TestEngine($config);
         $this->Jobs = array(
-            new Job($items[0], $this->Backend),
-            new Job($items[1], $this->Backend),
-            new Job($items[2], $this->Backend),
+            new Job($items[0], $this->Engine),
+            new Job($items[1], $this->Engine),
+            new Job($items[2], $this->Engine),
         );
     }
 
     public function tearDown()
     {
-        unset($this->Backend);
+        unset($this->Engine);
         unset($this->Jobs);
     }
 
@@ -68,7 +68,7 @@ class JobTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $job = new Job($data, $this->Backend);
+        $job = new Job($data, $this->Engine);
         $this->assertEquals($data, $job->item());
     }
 
@@ -137,10 +137,10 @@ class JobTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $this->Backend->return = true;
+        $this->Engine->return = true;
         $this->assertTrue($this->Jobs[0]->delete());
 
-        $this->Backend->return = false;
+        $this->Engine->return = false;
         $this->assertFalse($this->Jobs[0]->delete());
     }
 
@@ -149,7 +149,7 @@ class JobTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->Backend->return = true;
+        $this->Engine->return = true;
         $this->assertTrue($this->Jobs[0]->release(10));
         $this->assertEquals(array(
             'attempts' => 1,
@@ -161,7 +161,7 @@ class JobTest extends PHPUnit_Framework_TestCase
             ),
         ), $this->Jobs[0]->item());
 
-        $this->Backend->return = false;
+        $this->Engine->return = false;
         $this->assertFalse($this->Jobs[1]->release());
         $this->assertEquals(array(
             'attempts' => 1,

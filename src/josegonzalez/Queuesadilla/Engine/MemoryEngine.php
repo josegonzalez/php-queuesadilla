@@ -1,20 +1,20 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \DateInterval;
 use \DateTime;
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine\Base;
 
-class MemoryBackend extends Backend
+class MemoryEngine extends Base
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',  # unsupported
         'expires_in' => null,
-        'login' => null,  # unsupported
-        'password' => null,  # unsupported
+        'user' => null,  # unsupported
+        'pass' => null,  # unsupported
         'persistent' => true,  # unsupported
         'port' => 0,  # unsupported
         'priority' => 0,  # unsupported
@@ -118,7 +118,7 @@ class MemoryBackend extends Backend
         $expires_in = $this->setting($options, 'expires_in');
         $priority = $this->setting($options, 'priority');
         $this->requireQueue($options);
-        $id = $this->id();
+        $id = $this->jobId();
 
         if ($delay) {
             $dt = new DateTime();

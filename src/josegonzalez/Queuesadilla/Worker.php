@@ -4,23 +4,23 @@ namespace josegonzalez\Queuesadilla;
 
 abstract class Worker
 {
-    public function __construct($backend, $params = array())
+    public function __construct($engine, $params = array())
     {
         $params = array_merge(array(
             'max_iterations' => null,
             'queue' => 'default',
         ), $params);
 
-        $this->backend = $backend;
+        $this->engine = $engine;
         $this->queue = $params['queue'];
         $this->max_iterations = $params['max_iterations'];
 
-        $this->name = get_class($this->backend);
+        $this->name = get_class($this->engine);
         if (preg_match('@\\\\([\w]+)$@', $this->name, $matches)) {
             $this->name = $matches[1];
         }
 
-        $this->name = str_replace('Backend', '', $this->name) . ' Worker';
+        $this->name = str_replace('Engine', '', $this->name) . ' Worker';
     }
 
     public function log($message)

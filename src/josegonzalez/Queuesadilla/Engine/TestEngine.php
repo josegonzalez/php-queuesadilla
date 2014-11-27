@@ -1,10 +1,10 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine\Base;
 
-class TestBackend extends Backend
+class TestEngine extends Base
 {
     public $return = true;
 

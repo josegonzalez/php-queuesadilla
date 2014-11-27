@@ -8,62 +8,62 @@ TODO
 
 ## Usage:
 
-    $backend = new SynchronousBackend;
-    $queue = new Queue($backend);
+    $engine = new SynchronousEngine;
+    $queue = new Queue($engine);
 
     $queue->push('MyJob::run', array('sleep' => 3, 'message' => 'hi', 'raise' => false));
     $queue->push('raise', array('sleep' => 0, 'message' => 'hi2', 'raise' => true));
     $queue->push(array('Output', 'output'), array('sleep' => 1, 'message' => 'hi2u', 'raise' => false));
 
-    $worker = new Worker($backend, array('max_iterations' => 5));
+    $worker = new Worker($engine, array('max_iterations' => 5));
     $worker->work();
 
 Output:
 
-    [SynchronousBackend Worker] Starting worker, max iterations 1
+    [SynchronousEngine Worker] Starting worker, max iterations 1
     [MyJob] hi
     [MyJob] Sleeping for 3 seconds
-    [SynchronousBackend Worker] Success!
-    [SynchronousBackend Worker] Max iterations reached, exiting
-    [SynchronousBackend Worker] Starting worker, max iterations 1
-    [SynchronousBackend Worker] Exception! Screw you
-    [SynchronousBackend Worker] Failed!
-    [SynchronousBackend Worker] Max iterations reached, exiting
-    [SynchronousBackend Worker] Starting worker, max iterations 1
-    [SynchronousBackend Worker] Invalid callable for job!
-    [SynchronousBackend Worker] Failed!
-    [SynchronousBackend Worker] Max iterations reached, exiting
-    [SynchronousBackend Worker] Starting worker, max iterations 5
-    [SynchronousBackend Worker] No job!
-    [SynchronousBackend Worker] No job!
-    [SynchronousBackend Worker] No job!
-    [SynchronousBackend Worker] No job!
-    [SynchronousBackend Worker] No job!
-    [SynchronousBackend Worker] Max iterations reached, exiting
+    [SynchronousEngine Worker] Success!
+    [SynchronousEngine Worker] Max iterations reached, exiting
+    [SynchronousEngine Worker] Starting worker, max iterations 1
+    [SynchronousEngine Worker] Exception! Screw you
+    [SynchronousEngine Worker] Failed!
+    [SynchronousEngine Worker] Max iterations reached, exiting
+    [SynchronousEngine Worker] Starting worker, max iterations 1
+    [SynchronousEngine Worker] Invalid callable for job!
+    [SynchronousEngine Worker] Failed!
+    [SynchronousEngine Worker] Max iterations reached, exiting
+    [SynchronousEngine Worker] Starting worker, max iterations 5
+    [SynchronousEngine Worker] No job!
+    [SynchronousEngine Worker] No job!
+    [SynchronousEngine Worker] No job!
+    [SynchronousEngine Worker] No job!
+    [SynchronousEngine Worker] No job!
+    [SynchronousEngine Worker] Max iterations reached, exiting
 
 ### Available Systems
 
-Queuesadilla supports the following backend engines:
+Queuesadilla supports the following engine engines:
 
-- BeanstalkD via `BeanstalkBackend`
-- IronMQ via `IronBackend`
-- In Memory via `MemoryBackend`
-- Mysql via `MysqlBackend`
-- Redis via `RedisBackend`
-- Synchronous via `SynchronousBackend`
-- Test via `TestBackend`
+- BeanstalkD via `BeanstalkEngine`
+- IronMQ via `IronEngine`
+- In Memory via `MemoryEngine`
+- Mysql via `MysqlEngine`
+- Redis via `RedisEngine`
+- Synchronous via `SynchronousEngine`
+- Test via `TestEngine`
 
 ### Queuing jobs
 
-Before queuing a job, you should have a backend to store the jobs as well as an instance of the `Queue` class:
+Before queuing a job, you should have a engine to store the jobs as well as an instance of the `Queue` class:
 
 ```php
 <?php
-use josegonzalez\Queuesadilla\Backend\MysqlBackend;
+use josegonzalez\Queuesadilla\Engine\MysqlEngine;
 use josegonzalez\Queuesadilla\Queue;
 
-$backend = new MysqlBackend($options);
-$queue = new Queue($backend);
+$engine = new MysqlEngine($options);
+$queue = new Queue($engine);
 ?>
 ```
 
@@ -143,16 +143,16 @@ $queue->push(array('SomeClass', 'instanceMethod'), array('id' => 7, 'message' =>
 
 ### Job Options
 
-Queuing options are configured either at Backend creation or when queuing a job. Options declared when queuing a job take precedence over those at Backend instantiation. All queueing systems support the following options unless otherwise specified:
+Queuing options are configured either at Engine creation or when queuing a job. Options declared when queuing a job take precedence over those at Engine instantiation. All queueing systems support the following options unless otherwise specified:
 
 - `queue`: Name of a queue to place a job on. All queues are dynamic, and need not be declared beforehand.
 - `attempts`: Max number of attempts a job can be performed until it is marked as dead.
-- `priority`: Jobs with smaller priority values will be scheduled before jobs with larger priorities. Not available with the `MemoryBackend` or `SynchronousBackend`. Job priorities are constants, and there are 5 priorities:
+- `priority`: Jobs with smaller priority values will be scheduled before jobs with larger priorities. Not available with the `MemoryEngine` or `SynchronousEngine`. Job priorities are constants, and there are 5 priorities:
     - Job::LOW
     - Job::NORMAL
     - Job::MEDIUM
     - Job::HIGH
     - Job::CRITICAL
 - `delay`: Seconds to wait before putting the job in the ready queue. The job will be in the "delayed" state during this time.
-- `time_to_run`: Max amount of time (in seconds) a job can take to run before it is released to the general queue. Not available with the `MysqlBackend`
+- `time_to_run`: Max amount of time (in seconds) a job can take to run before it is released to the general queue. Not available with the `MysqlEngine`
 - `expires_in`: Max amount of time a job may be in the queue until it is discarded

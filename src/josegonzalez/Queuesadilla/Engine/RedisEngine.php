@@ -1,19 +1,19 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
 use \Redis;
-use \josegonzalez\Queuesadilla\Backend;
+use \josegonzalez\Queuesadilla\Engine\Base;
 
-class RedisBackend extends Backend
+class RedisEngine extends Base
 {
     protected $baseConfig = array(
         'api_version' => 1,  # unsupported
         'delay' => null,  # unsupported
         'database' => null,
         'expires_in' => null,  # unsupported
-        'login' => null,  # unsupported
-        'password' => false,
+        'user' => null,  # unsupported
+        'pass' => false,
         'persistent' => true,
         'port' => 6379,
         'priority' => 0,  # unsupported
@@ -61,8 +61,8 @@ class RedisBackend extends Backend
             $return = $this->connection->select((int)$this->settings['database']);
         }
 
-        if ($return && $this->settings['password']) {
-            $return = $this->connection->auth($this->settings['password']);
+        if ($return && $this->settings['pass']) {
+            $return = $this->connection->auth($this->settings['pass']);
         }
 
         return $return;
@@ -93,7 +93,7 @@ class RedisBackend extends Backend
         $queue = $this->setting($options, 'queue');
         $this->connection->sadd('queues', $queue);
 
-        $id = $this->id();
+        $id = $this->jobId();
         return $this->connection->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace josegonzalez\Queuesadilla\Backend;
+namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Backend\MemoryBackend;
+use \josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
 
-class SynchronousBackend extends MemoryBackend
+class SynchronousEngine extends MemoryEngine
 {
     public function push($class, $vars = array(), $options = array())
     {
