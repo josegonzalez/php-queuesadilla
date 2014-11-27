@@ -95,7 +95,7 @@ class RedisEngine extends Base
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $this->connection->sadd('queues', $queue);
+        $this->requireQueue($options);
 
         $id = $this->jobId();
         return $this->connection->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
@@ -108,7 +108,8 @@ class RedisEngine extends Base
         }
 
         $queue = $this->setting($options, 'queue');
-        $this->connection->sadd('queues', $queue);
+        $this->requireQueue($options);
+
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
 
@@ -117,4 +118,9 @@ class RedisEngine extends Base
         return $this->connection->smembers();
     }
 
+    protected function requireQueue($options)
+    {
+        $queue = $this->setting($options, 'queue');
+        $this->connection->sadd('queues', $queue);
+    }
 }
