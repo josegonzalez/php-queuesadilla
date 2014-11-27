@@ -181,6 +181,25 @@ class MysqlEngine extends Base
         return $sth->rowCount() == 1;
     }
 
+    public function queues()
+    {
+        $sql = implode(" ", [
+            'SELECT `queue` FROM `%s`',
+            'GROUP BY `queue`',
+        ]);
+        $sql = sprintf($sql, $this->settings['table']);
+        $sth = $this->connection->prepare($sql);
+        $sth->execute();
+        $results = $sth->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($results)) {
+            return [];
+        }
+        return array_map(function ($result) {
+            return $results['queue'];
+        }, $results);
+    }
+
 /**
  * Executes given SQL statement.
  *

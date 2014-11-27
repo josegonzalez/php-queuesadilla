@@ -90,6 +90,11 @@ class BeanstalkEngine extends Engine
         return $this->connection->watch($queue);
     }
 
+    public function queues()
+    {
+        return $this->connection->listTubes();
+    }
+
     public function getJobClass()
     {
         return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';

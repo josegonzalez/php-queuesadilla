@@ -29,4 +29,6 @@ interface EngineInterface
     public function push($class, $vars = [], $options = []);
 
     public function release($item, $options = []);
+
+    public function queues();
 }

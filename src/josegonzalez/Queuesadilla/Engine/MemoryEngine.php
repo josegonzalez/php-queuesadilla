@@ -145,6 +145,11 @@ class MemoryEngine extends Base
         return array_push($this->queues[$queue], $item) !== count($this->queues[$queue]);
     }
 
+    public function queues()
+    {
+        return array_keys($this->queues);
+    }
+
     protected function requireQueue($options)
     {
         $queue = $this->setting($options, 'queue');

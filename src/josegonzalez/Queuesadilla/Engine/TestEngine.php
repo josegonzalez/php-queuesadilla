@@ -35,4 +35,9 @@ class TestEngine extends Base
         $queue = $this->setting($options, 'queue');
         return $this->return;
     }
+
+    public function queues()
+    {
+        return [];
+    }
 }

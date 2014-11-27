@@ -111,4 +111,10 @@ class RedisEngine extends Base
         $this->connection->sadd('queues', $queue);
         return $this->connection->rpush('queue:' . $queue, json_encode($item));
     }
+
+    public function queues()
+    {
+        return $this->connection->smembers();
+    }
+
 }

@@ -102,4 +102,9 @@ class IronEngine extends Base
             "expires_in" => $this->settings['expires_in']
         ]);
     }
+
+    public function queues()
+    {
+        return $this->connection->getQueues();
+    }
 }
