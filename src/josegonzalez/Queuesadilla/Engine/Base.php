@@ -23,10 +23,10 @@ abstract class Base implements EngineInterface
 
     public function __construct($config = [])
     {
-        if (is_array($config) && isset($config['dsn'])) {
-            $config = array_merge($config, $this->parseDsn($config['dsn']));
+        if (is_array($config) && !empty($config['url'])) {
+            $config = array_merge($config, $this->parseDsn($config['url']));
         } elseif (is_string($config)) {
-            $config = $this->parseDsn($config['dsn']);
+            $config = $this->parseDsn($config['url']);
         }
 
         $this->settings = array_merge($this->baseConfig, $config);
