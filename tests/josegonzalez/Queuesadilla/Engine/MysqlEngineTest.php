@@ -13,6 +13,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
             'queue' => 'default',
             'user' => 'travis',
             'pass' => '',
+            'url' => getenv('MYSQL_URL'),
         ];
         $this->Engine = new MysqlEngine($this->config);
         $this->Engine->execute('TRUNCATE TABLE jobs');
