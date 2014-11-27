@@ -42,21 +42,18 @@ class RedisEngine extends Base
     public function connect()
     {
         $return = false;
+        $connectMethod = 'connect';
+        if (!empty($this->settings['persistent'])) {
+            $connectMethod = 'pconnect';
+        }
+
         try {
             $this->connection = new Redis();
-            if (empty($this->settings['persistent'])) {
-                $return = $this->connection->connect(
-                    $this->settings['host'],
-                    $this->settings['port'],
-                    (int)$this->settings['timeout']
-                );
-            } else {
-                $return = $this->connection->pconnect(
-                    $this->settings['host'],
-                    $this->settings['port'],
-                    (int)$this->settings['timeout']
-                );
-            }
+            $return = $this->connection->$connectMethod(
+                $this->settings['host'],
+                $this->settings['port'],
+                (int)$this->settings['timeout']
+            );
         } catch (RedisException $e) {
             return false;
         }

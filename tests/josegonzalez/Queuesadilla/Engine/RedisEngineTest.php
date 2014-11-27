@@ -50,6 +50,22 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function testConnect()
     {
         $this->assertTrue($this->Engine->connect());
+
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
+
+        $config = $this->config;
+        $config['pass'] = 'some_password';
+        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $this->assertFalse($Engine->connect());
+
+        $config = $this->config;
+        $config['persistent'] = false;
+        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $this->assertTrue($Engine->connect());
+
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->config]);
+        $Engine->config('host', 'unknown');
+        $this->assertFalse($Engine->connect());
     }
 
     /**
