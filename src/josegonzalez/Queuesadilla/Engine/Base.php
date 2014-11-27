@@ -4,9 +4,12 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \josegonzalez\Queuesadilla\Job;
+use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
 
 abstract class Base implements EngineInterface
 {
+
+    use DsnParserTrait;
 
     protected $baseConfig = array(array(
         'queue' => 'default',
@@ -20,6 +23,12 @@ abstract class Base implements EngineInterface
 
     public function __construct($config = array())
     {
+        if (is_array($config) && isset($config['dsn'])) {
+            $config = array_merge($config, $this->parseDsn($config['dsn']));
+        } elseif (is_string($config)) {
+            $config = $this->parseDsn($config['dsn']);
+        }
+
         $this->settings = array_merge($this->baseConfig, $config);
         return $this->connected = $this->connect();
     }
