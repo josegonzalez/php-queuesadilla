@@ -76,7 +76,7 @@ class MemoryEngine extends Base
                 break;
             }
 
-            $dt = new DateTime();
+            $dt = new DateTime;
             if (!empty($item['options']['delay_until'])) {
                 if ($dt < $item['options']['delay_until']) {
                     $this->queues[$queue][] = $item;
@@ -110,13 +110,13 @@ class MemoryEngine extends Base
         $id = $this->jobId();
 
         if ($delay !== null) {
-            $dt = new DateTime();
+            $dt = new DateTime;
             $options['delay_until'] = $dt->add(new DateInterval(sprintf('PT%sS', $delay)));
             unset($options['delay']);
         }
 
         if ($expires_in !== null) {
-            $dt = new DateTime();
+            $dt = new DateTime;
             $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
             unset($options['expires_in']);
         }

@@ -45,7 +45,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             'options' => [],
         ], $this->Engine->push(null, []));
         $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
-        $datetime = new DateTime();
+        $datetime = new DateTime;
         $this->assertEquals([
             'id' => '3',
             'class' => null,
@@ -55,7 +55,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             ],
         ], $this->Engine->push(null, [], ['delay' => 0]));
 
-        $datetime = new DateTime();
+        $datetime = new DateTime;
         $this->assertEquals([
             'id' => '4',
             'class' => 'another_function',
@@ -92,7 +92,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testGetWorker()
     {
-        $Engine = new SynchronousEngine();
+        $Engine = new SynchronousEngine;
         $this->assertInstanceOf(
             '\josegonzalez\Queuesadilla\Worker\SequentialWorker',
             $this->protectedMethodCall($Engine, 'getWorker')

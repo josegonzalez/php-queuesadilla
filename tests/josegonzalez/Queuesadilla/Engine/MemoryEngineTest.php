@@ -10,7 +10,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->Engine = new MemoryEngine();
+        $this->Engine = new MemoryEngine;
     }
 
     public function tearDown()
@@ -24,7 +24,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new MemoryEngine();
+        $Engine = new MemoryEngine;
         $this->assertTrue($Engine->connected());
     }
 

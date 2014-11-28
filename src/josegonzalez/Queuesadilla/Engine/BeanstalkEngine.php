@@ -68,7 +68,7 @@ class BeanstalkEngine extends Base
         $item['job'] = $job;
         $item['id'] = $job->getId();
 
-        $dt = new DateTime();
+        $dt = new DateTime;
         if (!empty($item['options']['expires_at']) && $dt > $item['options']['expires_at']) {
             return null;
         }
@@ -86,7 +86,7 @@ class BeanstalkEngine extends Base
 
         $options = [];
         if ($expires_in !== null) {
-            $dt = new DateTime();
+            $dt = new DateTime;
             $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
             unset($options['expires_in']);
         }
