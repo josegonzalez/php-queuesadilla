@@ -8,15 +8,19 @@ TODO
 
 ## Usage:
 
-    $engine = new SynchronousEngine;
-    $queue = new Queue($engine);
+```php
+<?php
+$engine = new SynchronousEngine;
+$queue = new Queue($engine);
 
-    $queue->push('MyJob::run', array('sleep' => 3, 'message' => 'hi', 'raise' => false));
-    $queue->push('raise', array('sleep' => 0, 'message' => 'hi2', 'raise' => true));
-    $queue->push(array('Output', 'output'), array('sleep' => 1, 'message' => 'hi2u', 'raise' => false));
+$queue->push('MyJob::run', ['sleep' => 3, 'message' => 'hi', 'raise' => false]);
+$queue->push('raise', ['sleep' => 0, 'message' => 'hi2', 'raise' => true]);
+$queue->push(['Output', 'output'], ['sleep' => 1, 'message' => 'hi2u', 'raise' => false]);
 
-    $worker = new Worker($engine, array('max_iterations' => 5));
-    $worker->work();
+$worker = new Worker($engine, ['max_iterations' => 5]);
+$worker->work();
+?>
+```
 
 Output:
 
@@ -71,7 +75,10 @@ At this point, you can use the `$queue` instance to queue up jobs:
 
 ```
 <?php
-$queue->push('some_job', array('id' => 7, 'message' => 'hi'));
+$queue->push('some_job', [
+    'id' => 7,
+    'message' => 'hi'
+]);
 ?>
 ```
 
@@ -95,7 +102,10 @@ function some_job($job) {
 }
 
 // Queue up the job
-$queue->push('some_job', array('id' => 7, 'message' => 'hi2u'));
+$queue->push('some_job', [
+    'id' => 7,
+    'message' => 'hi2u'
+]);
 ?>
 ```
 
@@ -116,7 +126,10 @@ class SomeClass {
   }
 }
 // Queue up the job
-$queue->push('SomeClass::staticMethod', array('id' => 7, 'message' => 'hi2u'));
+$queue->push('SomeClass::staticMethod', [
+    'id' => 7,
+    'message' => 'hi2u'
+]);
 ?>
 ```
 
@@ -137,7 +150,10 @@ class SomeClass {
   }
 }
 // Queue up the job
-$queue->push(array('SomeClass', 'instanceMethod'), array('id' => 7, 'message' => 'hi2u'));
+$queue->push(['SomeClass', 'instanceMethod'], [
+    'id' => 7,
+    'message' => 'hi2u',
+]);
 ?>
 ```
 
