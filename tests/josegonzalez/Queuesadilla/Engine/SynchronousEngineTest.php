@@ -8,12 +8,14 @@ use \josegonzalez\Queuesadilla\Engine\SynchronousEngine;
 use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
 use \josegonzalez\Queuesadilla\Worker\TestWorker;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 use \ReflectionClass;
 
 class SynchronousEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->Logger = new NullLogger;
         $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
         $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId']);
         $this->Engine->expects($this->any())

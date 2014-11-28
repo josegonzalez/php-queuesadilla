@@ -4,12 +4,14 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\TestEngine;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 
 class TestEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->Engine = new TestEngine([
+        $this->Logger = new NullLogger;
+        $this->Engine = new TestEngine($this->Logger, [
             'queue' => 'default',
         ]);
     }
@@ -25,10 +27,10 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new TestEngine([]);
+        $Engine = new TestEngine($this->Logger, []);
         $this->assertTrue($Engine->connected());
 
-        $Engine = new TestEngine('test://user:pass@host:port');
+        $Engine = new TestEngine($this->Logger, 'test://user:pass@host:port');
         $this->assertTrue($Engine->connected());
     }
 

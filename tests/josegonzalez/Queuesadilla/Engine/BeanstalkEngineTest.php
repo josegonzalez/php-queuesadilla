@@ -2,9 +2,10 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \Pheanstalk\Exception\ServerException;
 use \josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
+use \Pheanstalk\Exception\ServerException;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 
 class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,8 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
             'pass' => '',
             'url' => getenv('BEANSTALK_URL'),
         ];
-        $this->Engine = new BeanstalkEngine($this->config);
+        $this->Logger = new NullLogger;
+        $this->Engine = new BeanstalkEngine($this->Logger, $this->config);
     }
 
     public function tearDown()
@@ -47,7 +49,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new BeanstalkEngine($this->config);
+        $Engine = new BeanstalkEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
 
@@ -74,7 +76,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->config]);
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
 
         $this->assertFalse($Engine->delete(null));
         $this->assertFalse($Engine->delete(false));
@@ -95,7 +97,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->config]);
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
 
         $this->assertNull($Engine->pop('default'));
         $this->assertTrue($Engine->push(null, [], 'default'));

@@ -18,11 +18,14 @@
     },
     "require-dev": {
         "pda/pheanstalk": "dev-master",
-        "iron-io/iron_mq": "dev-master"
+        "iron-io/iron_mq": "dev-master",
+        "psr/log": "dev-master",
+        "monolog/monolog": "dev-master"
     },
     "suggest": {
         "pda/pheanstalk": "Adds support for Beanstalk background workers",
-        "iron-io/iron_mq": "Adds support for IronMQ background workers"
+        "iron-io/iron_mq": "Adds support for IronMQ background workers",
+        "monolog/monolog": "Adds support for logging"
     },
     "autoload": {
         "psr-0": {

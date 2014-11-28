@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\RedisEngine;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 use \RedisException;
 
 class RedisEngineTest extends PHPUnit_Framework_TestCase
@@ -17,7 +18,8 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
             'url' => getenv('REDIS_URL'),
         ];
         $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
-        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->config]);
+        $this->Logger = new NullLogger;
+        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
         $this->Engine->expects($this->any())
                 ->method('jobId')
                 ->will($this->returnValue('1'));
@@ -37,7 +39,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new RedisEngine($this->config);
+        $Engine = new RedisEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
 
@@ -53,17 +55,17 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
 
         $config = $this->config;
         $config['pass'] = 'some_password';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
         $this->assertFalse($Engine->connect());
 
         $config = $this->config;
         $config['database'] = 1;
-        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
         $this->assertTrue($Engine->connect());
 
         $config = $this->config;
         $config['persistent'] = false;
-        $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
+        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
         $this->assertTrue($Engine->connect());
     }
 
@@ -73,7 +75,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function testConnectionException()
     {
         $engineClass = '\josegonzalez\Queuesadilla\Engine\RedisEngine';
-        $Engine = $this->getMock($engineClass, ['redisInstance'], [$this->config]);
+        $Engine = $this->getMock($engineClass, ['redisInstance'], [$this->Logger, $this->config]);
         $Engine->expects($this->once())
                 ->method('redisInstance')
                 ->will($this->throwException(new RedisException));

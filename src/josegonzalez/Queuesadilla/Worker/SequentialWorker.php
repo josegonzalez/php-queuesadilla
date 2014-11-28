@@ -9,17 +9,17 @@ class SequentialWorker extends Worker
     public function work()
     {
         $max_iterations = $this->max_iterations ? sprintf(', max iterations %s', $this->max_iterations) : '';
-        $this->log(sprintf('Starting worker%s', $max_iterations));
+        $this->logger->info(sprintf('Starting worker%s', $max_iterations));
         $jobClass = $this->engine->getJobClass();
         $iterations = 0;
         if (!$this->engine->connected()) {
-            $this->log(sprintf('Worker unable to connect, exiting'));
+            $this->logger->alert(sprintf('Worker unable to connect, exiting'));
             return;
         }
 
         while (true) {
             if (is_int($this->max_iterations) && $iterations >= $this->max_iterations) {
-                $this->log('Max iterations reached, exiting');
+                $this->logger->debug('Max iterations reached, exiting');
                 break;
             }
 
@@ -28,7 +28,7 @@ class SequentialWorker extends Worker
             $item = $this->engine->pop($this->queue);
             if (empty($item)) {
                 sleep(1);
-                $this->log('No job!');
+                $this->logger->debug('No job!');
                 continue;
             }
 
@@ -45,19 +45,19 @@ class SequentialWorker extends Worker
                         $success = true;
                     }
                 } catch (\Exception $e) {
-                    $this->log(sprintf('Exception: "%s"', $e->getMessage()));
+                    $this->logger->alert(sprintf('Exception: "%s"', $e->getMessage()));
                 }
             } else {
-                $this->log('Invalid callable for job. Deleting job from queue.');
+                $this->logger->alert('Invalid callable for job. Deleting job from queue.');
                 $this->engine->delete($item);
                 continue;
             }
 
             if ($success) {
-                $this->log('Success. Deleting job from queue.');
+                $this->logger->debug('Success. Deleting job from queue.');
                 $job->delete();
             } else {
-                $this->log('Failed. Releasing job to queue');
+                $this->logger->info('Failed. Releasing job to queue');
                 $job->release();
             }
         }

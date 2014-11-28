@@ -2,9 +2,12 @@
 
 namespace josegonzalez\Queuesadilla;
 
+use \josegonzalez\Queuesadilla\Engine\EngineInterface;
+use \Psr\Log\LoggerInterface;
+
 abstract class Worker
 {
-    public function __construct($engine, $params = [])
+    public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
         $params = array_merge([
             'max_iterations' => null,
@@ -21,11 +24,7 @@ abstract class Worker
         }
 
         $this->name = str_replace('Engine', '', $this->name) . ' Worker';
-    }
-
-    public function log($message)
-    {
-        printf("[%s] %s\n", $this->name, $message);
+        $this->logger = $logger;
     }
 
     abstract public function work();

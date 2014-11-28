@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\MysqlEngine;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 
 class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -15,7 +16,8 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
             'pass' => '',
             'url' => getenv('MYSQL_URL'),
         ];
-        $this->Engine = new MysqlEngine($this->config);
+        $this->Logger = new NullLogger;
+        $this->Engine = new MysqlEngine($this->Logger, $this->config);
         $this->Engine->execute('TRUNCATE TABLE jobs');
     }
 
@@ -31,7 +33,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new MysqlEngine($this->config);
+        $Engine = new MysqlEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
 

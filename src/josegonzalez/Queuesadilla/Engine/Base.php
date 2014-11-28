@@ -5,6 +5,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \josegonzalez\Queuesadilla\Job;
 use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
+use \Psr\Log\LoggerInterface;
 
 abstract class Base implements EngineInterface
 {
@@ -17,11 +18,13 @@ abstract class Base implements EngineInterface
 
     protected $connected = false;
 
+    protected $logger = null;
+
     protected $settings = [];
 
     public $connection = null;
 
-    public function __construct($config = [])
+    public function __construct(LoggerInterface $logger = null, $config = [])
     {
         if (is_array($config) && !empty($config['url'])) {
             $config = array_merge($config, $this->parseDsn($config['url']));
@@ -29,6 +32,7 @@ abstract class Base implements EngineInterface
             $config = $this->parseDsn($config);
         }
 
+        $this->logger = $logger;
         $this->settings = $this->baseConfig;
         $this->config($config);
         return $this->connected = $this->connect();

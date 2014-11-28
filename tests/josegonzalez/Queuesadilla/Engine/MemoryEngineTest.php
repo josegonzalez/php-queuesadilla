@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use \PHPUnit_Framework_TestCase;
+use \Psr\Log\NullLogger;
 
 class MemoryEngineTest extends PHPUnit_Framework_TestCase
 {

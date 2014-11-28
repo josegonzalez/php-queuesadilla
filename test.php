@@ -2,42 +2,48 @@
 
 $_type = 'Synchronous';
 
-require 'src/Queuesadilla/Engine.php';
-require 'src/Queuesadilla/Queue.php';
-require 'src/Queuesadilla/Job.php';
-require 'src/Queuesadilla/Worker.php';
+require 'vendor/autoload.php';
 
-require 'src/Queuesadilla/Engine/' . $_type . 'Engine.php';
+use josegonzalez\Queuesadilla\Engine\SynchronousEngine;
+use josegonzalez\Queuesadilla\Queue;
+use josegonzalez\Queuesadilla\Worker\SequentialWorker;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger;
 
-function raise($job) {
-  throw new Exception("Screw you");
+function raise($job)
+{
+    $job;
+    throw new Exception("Screw you");
 }
 
-class Output {
-  public function output($job) {
-    var_dump($job->data());
-  }
-}
-
-class MyJob {
-  public static function run($job) {
-    printf("[MyJob] " . $job->data('message') . "\n");
-    $sleep = $job->data('sleep');
-    if (!empty($sleep)) {
-      printf("[MyJob] Sleeping for " . $job->data('sleep') . " seconds\n");
-      sleep($job->data('sleep'));
+class Output
+{
+    public function perform($job)
+    {
+        var_dump($job->data());
     }
-  }
+
+    public static function run($job)
+    {
+        printf("[MyJob] " . $job->data('message') . "\n");
+        $sleep = $job->data('sleep');
+        if (!empty($sleep)) {
+            printf("[MyJob] Sleeping for " . $job->data('sleep') . " seconds\n");
+            sleep($job->data('sleep'));
+        }
+    }
 }
 
-$EngineClass = "Queuesadilla\\Engine\\" . $_type . 'Engine';
+$EngineClass = "josegonzalez\\Queuesadilla\\Engine\\" . $_type . 'Engine';
 
-$engine = new $EngineClass;
-$queue = new Queuesadilla\Queue($engine);
+$logger = new Logger('test');
+$logger->pushHandler(new ErrorLogHandler);
+$engine = new $EngineClass($logger);
+$queue = new Queue($engine);
 
 $queue->push('MyJob::run', ['sleep' => 3, 'message' => 'hi', 'raise' => false]);
 $queue->push('raise', ['sleep' => 0, 'message' => 'hi2', 'raise' => true]);
-$queue->push(['Output', 'output'], ['sleep' => 1, 'message' => 'hi2u', 'raise' => false]);
+$queue->push(['MyJob', 'perform'], ['sleep' => 1, 'message' => 'hi2u', 'raise' => false]);
 
-$worker = new Queuesadilla\Worker($engine, ['max_iterations' => 5]);
+$worker = new SequentialWorker($engine, $logger, ['max_iterations' => 5]);
 $worker->work();
