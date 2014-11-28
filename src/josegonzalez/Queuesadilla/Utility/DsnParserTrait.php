@@ -15,6 +15,7 @@ trait DsnParserTrait
         if (!is_string($dsn)) {
             throw new InvalidArgumentException('Only strings can be passed to parseDsn');
         }
+        $scheme = null;
         if (preg_match("/^([\w\\\]+)/", $dsn, $matches)) {
             $scheme = $matches[1];
             $dsn = preg_replace("/^([\w\\\]+)/", 'file', $dsn);
