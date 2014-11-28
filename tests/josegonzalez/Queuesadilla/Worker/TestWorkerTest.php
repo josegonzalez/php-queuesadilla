@@ -15,6 +15,12 @@ class TestWorkerTest extends TestCase
         $this->Worker = new TestWorker($this->Engine);
     }
 
+    public function tearDown()
+    {
+        unset($this->Engine);
+        unset($this->Worker);
+    }
+
     /**
      * @covers josegonzalez\Queuesadilla\Worker\Base::__construct
      * @covers josegonzalez\Queuesadilla\Worker\TestWorker::__construct
