@@ -5,13 +5,13 @@ namespace josegonzalez\Queuesadilla\Engine;
 use DateTime;
 use DateInterval;
 use josegonzalez\Queuesadilla\Engine\SynchronousEngine;
+use josegonzalez\Queuesadilla\TestCase;
 use josegonzalez\Queuesadilla\Worker\SequentialWorker;
 use josegonzalez\Queuesadilla\Worker\TestWorker;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 use ReflectionClass;
 
-class SynchronousEngineTest extends PHPUnit_Framework_TestCase
+class SynchronousEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -97,13 +97,5 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             '\josegonzalez\Queuesadilla\Worker\SequentialWorker',
             $this->protectedMethodCall($Engine, 'getWorker')
         );
-    }
-
-    public function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 }

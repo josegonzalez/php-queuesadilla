@@ -4,10 +4,10 @@ namespace josegonzalez\Queuesadilla;
 
 use josegonzalez\Queuesadilla\Job\Base;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
-use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
 
-class BaseTest extends PHPUnit_Framework_TestCase
+class BaseTest extends TestCase
 {
     public function setUp()
     {

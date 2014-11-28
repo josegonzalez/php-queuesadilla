@@ -2,11 +2,11 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use PHPUnit_Framework_TestCase;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
 use josegonzalez\Queuesadilla\Queue;
+use josegonzalez\Queuesadilla\TestCase;
 
-class QueueTest extends PHPUnit_Framework_TestCase
+class QueueTest extends TestCase
 {
     public function setUp()
     {

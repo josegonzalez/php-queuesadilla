@@ -2,12 +2,12 @@
 
 namespace josegonzalez\Queuesadilla\Utility;
 
+use josegonzalez\Queuesadilla\TestCase;
 use josegonzalez\Queuesadilla\Utility\LoggerTraitTest;
 use Monolog\Logger;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 
-class LoggerTraitTest extends PHPUnit_Framework_TestCase
+class LoggerTraitTest extends TestCase
 {
     /**
      * @covers josegonzalez\Queuesadilla\Utility\LoggerTrait::setLogger
