@@ -6,6 +6,7 @@ use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \josegonzalez\Queuesadilla\Job;
 use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
 use \Psr\Log\LoggerInterface;
+use \Psr\Log\NullLogger;
 
 abstract class Base implements EngineInterface
 {
@@ -30,6 +31,10 @@ abstract class Base implements EngineInterface
             $config = array_merge($config, $this->parseDsn($config['url']));
         } elseif (is_string($config)) {
             $config = $this->parseDsn($config);
+        }
+
+        if ($logger === null) {
+            $logger = new NullLogger;
         }
 
         $this->logger = $logger;

@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla;
 
 use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \Psr\Log\LoggerInterface;
+use \Psr\Log\NullLogger;
 
 abstract class Worker
 {
@@ -24,6 +25,11 @@ abstract class Worker
         }
 
         $this->name = str_replace('Engine', '', $this->name) . ' Worker';
+
+        if ($logger === null) {
+            $logger = new NullLogger;
+        }
+
         $this->logger = $logger;
     }
 
