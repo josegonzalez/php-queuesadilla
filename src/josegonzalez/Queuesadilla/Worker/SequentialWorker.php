@@ -2,20 +2,19 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
-use josegonzalez\Queuesadilla\Worker;
+use josegonzalez\Queuesadilla\Worker\Base;
 
-class SequentialWorker extends Worker
+class SequentialWorker extends Base
 {
     public function work()
     {
-        $maxIterations = $this->maxIterations ? sprintf(', max iterations %s', $this->maxIterations) : '';
-        $this->logger()->info(sprintf('Starting worker%s', $maxIterations));
-        $jobClass = $this->engine->getJobClass();
-        $iterations = 0;
-        if (!$this->engine->connected()) {
+        if (!$this->connect()) {
             $this->logger()->alert(sprintf('Worker unable to connect, exiting'));
             return;
         }
+
+        $iterations = 0;
+        $jobClass = $this->engine->getJobClass();
 
         while (true) {
             if (is_int($this->maxIterations) && $iterations >= $this->maxIterations) {
@@ -36,14 +35,7 @@ class SequentialWorker extends Worker
             if (is_callable($item['class'])) {
                 $job = new $jobClass($item, $this->engine);
                 try {
-                    if (is_array($item['class']) && count($item['class']) == 2) {
-                        $item['class'][0] = new $item['class'][0];
-                    }
-
-                    $success = $item['class']($job);
-                    if ($success !== false) {
-                        $success = true;
-                    }
+                    $success = $this->perform($item, $job);
                 } catch (\Exception $e) {
                     $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
                 }
@@ -56,12 +48,41 @@ class SequentialWorker extends Worker
             if ($success) {
                 $this->logger()->debug('Success. Deleting job from queue.');
                 $job->delete();
-            } else {
-                $this->logger()->info('Failed. Releasing job to queue');
-                $job->release();
+                continue;
             }
+
+            $this->logger()->info('Failed. Releasing job to queue');
+            $job->release();
         }
 
         return true;
+    }
+
+    public function connect()
+    {
+        $maxIterations = $this->maxIterations ? sprintf(', max iterations %s', $this->maxIterations) : '';
+        $this->logger()->info(sprintf('Starting worker%s', $maxIterations));
+        return $this->engine->connected();
+    }
+
+    public function perform($item, $job)
+    {
+        if (!is_callable($item['class'])) {
+            return false;
+        }
+
+        $success = false;
+        if (is_array($item['class']) && count($item['class']) == 2) {
+            $item['class'][0] = new $item['class'][0];
+            $success = $item['class'][0]->$item['class'][1]($job);
+        } elseif (is_string($item['class'])) {
+            $success = call_user_func($item['class'], $job);
+        }
+
+        if ($success !== false) {
+            $success = true;
+        }
+
+        return $success;
     }
 }

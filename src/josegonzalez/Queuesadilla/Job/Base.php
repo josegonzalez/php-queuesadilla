@@ -1,8 +1,8 @@
 <?php
 
-namespace josegonzalez\Queuesadilla;
+namespace josegonzalez\Queuesadilla\Job;
 
-class Job
+class Base
 {
     const LOW = 4;
     const NORMAL = 3;

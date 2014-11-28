@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Job;
 
-use josegonzalez\Queuesadilla\Job;
+use josegonzalez\Queuesadilla\Job\Base;
 
-class BeanstalkJob extends Job
+class BeanstalkJob extends Base
 {
     public function attempts()
     {

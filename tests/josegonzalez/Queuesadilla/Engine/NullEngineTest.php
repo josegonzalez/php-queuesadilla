@@ -50,7 +50,7 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testGetJobClass()
     {
-        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job', $this->Engine->getJobClass());
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
     /**

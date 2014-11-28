@@ -1,13 +1,13 @@
 <?php
 
-namespace josegonzalez\Queuesadilla;
+namespace josegonzalez\Queuesadilla\Worker;
 
 use josegonzalez\Queuesadilla\Engine\EngineInterface;
 use josegonzalez\Queuesadilla\Utility\LoggerTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-abstract class Worker
+abstract class Base
 {
     use LoggerTrait;
 

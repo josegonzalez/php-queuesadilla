@@ -53,7 +53,7 @@ abstract class Base implements EngineInterface
 
     public function getJobClass()
     {
-        return '\\josegonzalez\\Queuesadilla\\Job';
+        return '\\josegonzalez\\Queuesadilla\\Job\\Base';
     }
 
     public function config($key = null, $value = null)

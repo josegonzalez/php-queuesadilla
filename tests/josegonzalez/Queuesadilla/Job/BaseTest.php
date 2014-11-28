@@ -2,12 +2,12 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use josegonzalez\Queuesadilla\Job;
+use josegonzalez\Queuesadilla\Job\Base;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 
-class JobTest extends PHPUnit_Framework_TestCase
+class BaseTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -44,9 +44,9 @@ class JobTest extends PHPUnit_Framework_TestCase
         $this->Logger = new NullLogger;
         $this->Engine = new NullEngine($this->Logger, $config);
         $this->Jobs = [
-            new Job($items[0], $this->Engine),
-            new Job($items[1], $this->Engine),
-            new Job($items[2], $this->Engine),
+            new Base($items[0], $this->Engine),
+            new Base($items[1], $this->Engine),
+            new Base($items[2], $this->Engine),
         ];
     }
 
@@ -57,7 +57,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::__construct
+     * @covers josegonzalez\Queuesadilla\Job\Base::__construct
      */
     public function testConstruct()
     {
@@ -70,12 +70,12 @@ class JobTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $job = new Job($data, $this->Engine);
+        $job = new Base($data, $this->Engine);
         $this->assertEquals($data, $job->item());
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::attempts
+     * @covers josegonzalez\Queuesadilla\Job\Base::attempts
      */
     public function testAttempts()
     {
@@ -85,7 +85,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::data
+     * @covers josegonzalez\Queuesadilla\Job\Base::data
      */
     public function testData()
     {
@@ -100,7 +100,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::item
+     * @covers josegonzalez\Queuesadilla\Job\Base::item
      */
     public function testItem()
     {
@@ -135,7 +135,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::delete
+     * @covers josegonzalez\Queuesadilla\Job\Base::delete
      */
     public function testDelete()
     {
@@ -147,7 +147,7 @@ class JobTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job::release
+     * @covers josegonzalez\Queuesadilla\Job\Base::release
      */
     public function testRelease()
     {

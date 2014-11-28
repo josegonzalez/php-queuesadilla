@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
-use josegonzalez\Queuesadilla\Worker;
+use josegonzalez\Queuesadilla\Worker\Base;
 
-class TestWorker extends Worker
+class TestWorker extends Base
 {
     public function work()
     {
