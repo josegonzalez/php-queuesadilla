@@ -42,7 +42,10 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
         $Engine = $this->getMock($engineClass, ['jobId']);
-        $Engine->expects($this->any())
+        $Engine->expects($this->at(0))
+                ->method('jobId')
+                ->will($this->returnValue('2'));
+        $Engine->expects($this->at(1))
                 ->method('jobId')
                 ->will($this->returnValue('1'));
 
@@ -54,6 +57,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($Engine->delete(['id' => '1']));
 
         $this->assertTrue($Engine->push('some_function'));
+        $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
         $this->assertTrue($Engine->delete(['id' => '1']));
     }
 

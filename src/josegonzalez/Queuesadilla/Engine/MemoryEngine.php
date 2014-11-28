@@ -39,28 +39,17 @@ class MemoryEngine extends Base
             return false;
         }
 
-        $deleteFromQueue = false;
+        $deleted = false;
         foreach ($this->queues as $name => $queue) {
-            foreach ($queue as $queueItem) {
+            foreach ($queue as $i => $queueItem) {
                 if ($queueItem['id'] === $item['id']) {
-                    $deleteFromQueue = $name;
+                    unset($this->queues[$name][$i]);
+                    $deleted = true;
                     break 2;
                 }
             }
         }
-
-        if (!$deleteFromQueue) {
-            return false;
-        }
-
-        $queue = [];
-        foreach ($this->queues[$deleteFromQueue] as $queueItem) {
-            if ($queueItem['id'] !== $item['id']) {
-                array_push($queue, $queueItem);
-            }
-        }
-        $this->queues[$deleteFromQueue] = $queue;
-        return true;
+        return $deleted;
     }
 
     public function pop($options = [])
