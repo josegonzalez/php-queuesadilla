@@ -16,7 +16,7 @@ function raise($job)
     throw new Exception("Screw you");
 }
 
-class Output
+class MyJob
 {
     public function perform($job)
     {
