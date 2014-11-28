@@ -21,7 +21,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
                 ->will($this->returnValue(new TestWorker($this->Engine)));
         $this->Engine->expects($this->any())
                 ->method('jobId')
-                ->will($this->onConsecutiveCalls('1', '2', '3', '4'));
+                ->will($this->onConsecutiveCalls('1', '2', '3', '4', '5', '6'));
     }
 
     public function tearDown()
@@ -43,10 +43,19 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             'options' => [],
         ], $this->Engine->push(null, []));
         $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
-
         $datetime = new DateTime();
         $this->assertEquals([
             'id' => '3',
+            'class' => null,
+            'vars' => [],
+            'options' => [
+              'delay_until' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
+            ],
+        ], $this->Engine->push(null, [], ['delay' => 0]));
+
+        $datetime = new DateTime();
+        $this->assertEquals([
+            'id' => '4',
             'class' => 'another_function',
             'vars' => [],
             'options' => [
@@ -54,11 +63,19 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
             ],
         ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
         $this->assertEquals([
-            'id' => '4',
+            'id' => '5',
             'class' => 'yet_another_function',
             'vars' => [],
             'options' => [],
         ], $this->Engine->push('yet_another_function', []));
+        $this->assertEquals([
+            'id' => '6',
+            'class' => 'another_function',
+            'vars' => [],
+            'options' => [
+              'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
+            ],
+        ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
 
         sleep(2);
 

@@ -109,13 +109,13 @@ class MemoryEngine extends Base
         $this->requireQueue($options);
         $id = $this->jobId();
 
-        if ($delay) {
+        if ($delay !== null) {
             $dt = new DateTime();
             $options['delay_until'] = $dt->add(new DateInterval(sprintf('PT%sS', $delay)));
             unset($options['delay']);
         }
 
-        if ($expires_in) {
+        if ($expires_in !== null) {
             $dt = new DateTime();
             $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
             unset($options['expires_in']);
