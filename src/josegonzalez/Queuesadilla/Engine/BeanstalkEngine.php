@@ -52,7 +52,7 @@ class BeanstalkEngine extends Base
         }
 
         $response = $this->connection->deleteJob($item['job']);
-        return $response->getResponseName() == 'DELETED';
+        return $response->getResponseName() == Response::RESPONSE_DELETED;
     }
 
     public function pop($options = [])
@@ -79,10 +79,10 @@ class BeanstalkEngine extends Base
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $delay = $this->setting($options, 'delay');
         $expires_in = $this->setting($options, 'expires_in');
-        $priority = $this->setting($options, 'priority');
-        $time_to_run = $this->setting($options, 'time_to_run');
+        $delay = $this->setting($options, 'delay', PheanstalkInterface::DEFAULT_DELAY);
+        $priority = $this->setting($options, 'priority', PheanstalkInterface::DEFAULT_PRIORITY);
+        $time_to_run = $this->setting($options, 'time_to_run', PheanstalkInterface::DEFAULT_TTR);
 
         $options = [];
         if ($expires_in !== null) {
