@@ -8,7 +8,7 @@ class BeanstalkJob extends Base
 {
     public function attempts()
     {
-        $stats = $this->engine->connection->statsJob($this->item['id']);
+        $stats = $this->engine->connection()->statsJob($this->item['id']);
         if ($stats !== null) {
             return (int)$stats['reserves'];
         }

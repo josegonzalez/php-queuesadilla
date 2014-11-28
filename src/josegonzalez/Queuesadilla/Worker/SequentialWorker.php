@@ -10,7 +10,7 @@ class SequentialWorker extends Base
     {
         if (!$this->connect()) {
             $this->logger()->alert(sprintf('Worker unable to connect, exiting'));
-            return;
+            return false;
         }
 
         $iterations = 0;

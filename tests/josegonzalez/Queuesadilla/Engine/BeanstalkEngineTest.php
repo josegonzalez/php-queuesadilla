@@ -24,17 +24,17 @@ class BeanstalkEngineTest extends TestCase
     public function tearDown()
     {
         foreach ($this->Engine->queues() as $queue) {
-            $this->Engine->connection->useTube($queue);
+            $this->Engine->connection()->useTube($queue);
             try {
-                $job = $this->Engine->connection->peekReady();
+                $job = $this->Engine->connection()->peekReady();
             } catch (ServerException $e) {
                 continue;
             }
 
             while (!empty($job)) {
-                $this->Engine->connection->deleteJob($job);
+                $this->Engine->connection()->deleteJob($job);
                 try {
-                    $job = $this->Engine->connection->peekReady();
+                    $job = $this->Engine->connection()->peekReady();
                 } catch (ServerException $e) {
                     break;
                 }

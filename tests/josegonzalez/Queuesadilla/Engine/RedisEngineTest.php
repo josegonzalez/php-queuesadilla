@@ -24,12 +24,12 @@ class RedisEngineTest extends TestCase
                 ->method('jobId')
                 ->will($this->returnValue('1'));
 
-        $this->Engine->connection->flushdb();
+        $this->Engine->connection()->flushdb();
     }
 
     public function tearDown()
     {
-        $this->Engine->connection->flushdb();
+        $this->Engine->connection()->flushdb();
         unset($this->Engine);
     }
 

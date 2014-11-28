@@ -10,7 +10,7 @@ class NullEngine extends Base
 
     public function connect()
     {
-        return $this->return;
+        return $this->connected = $this->return;
     }
 
     public function delete($item)

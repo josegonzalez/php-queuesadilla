@@ -20,7 +20,7 @@ abstract class Base implements EngineInterface
         'queue' => 'default',
     ];
 
-    protected $connected = false;
+    protected $connected = null;
 
     protected $settings = [];
 
@@ -37,7 +37,6 @@ abstract class Base implements EngineInterface
         $this->setLogger($logger);
         $this->settings = $this->baseConfig;
         $this->config($config);
-        $this->connected = $this->connect();
         return $this;
     }
 
@@ -96,8 +95,17 @@ abstract class Base implements EngineInterface
         return $value;
     }
 
+    public function connection()
+    {
+        if ($this->connected === null || $this->connection === null) {
+            $this->connected = $this->connect();
+        }
+        return $this->connection;
+    }
+
     public function connected()
     {
+        $this->connection();
         return $this->connected;
     }
 

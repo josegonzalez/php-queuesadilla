@@ -24,6 +24,7 @@ class NullEngineTest extends TestCase
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::__construct
      * @covers josegonzalez\Queuesadilla\Engine\Base::connected
+     * @covers josegonzalez\Queuesadilla\Engine\Base::connection
      */
     public function testConstruct()
     {

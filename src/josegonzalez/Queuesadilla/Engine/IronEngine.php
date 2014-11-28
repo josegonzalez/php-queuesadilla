@@ -53,13 +53,13 @@ class IronEngine extends Base
     public function delete($item)
     {
         $queue = $this->setting($options, 'queue');
-        return $this->connection->deleteMessage($queue, $item['id']);
+        return $this->connection()->deleteMessage($queue, $item['id']);
     }
 
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $item = $this->connection->getMessage($queue);
+        $item = $this->connection()->getMessage($queue);
         if (!$item) {
             return null;
         }
@@ -77,7 +77,7 @@ class IronEngine extends Base
         $queue = $this->setting($options, 'queue');
 
         $item = json_encode(compact('class', 'vars'));
-        return $this->connection->postMessage($queue, $item, [
+        return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
@@ -87,7 +87,7 @@ class IronEngine extends Base
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        return $this->connection->postMessage($queue, $item, [
+        return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
@@ -96,6 +96,6 @@ class IronEngine extends Base
 
     public function queues()
     {
-        return $this->connection->getQueues();
+        return $this->connection()->getQueues();
     }
 }

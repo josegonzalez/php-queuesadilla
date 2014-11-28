@@ -16,6 +16,8 @@ interface EngineInterface
 
     public function connected();
 
+    public function connection();
+
     public function jobId();
 
     public function connect();

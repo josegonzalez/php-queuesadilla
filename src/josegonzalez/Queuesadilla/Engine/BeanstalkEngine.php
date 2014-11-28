@@ -51,15 +51,15 @@ class BeanstalkEngine extends Base
             return false;
         }
 
-        $response = $this->connection->deleteJob($item['job']);
+        $response = $this->connection()->deleteJob($item['job']);
         return $response->getResponseName() == Response::RESPONSE_DELETED;
     }
 
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $this->connection->useTube($queue);
-        $job = $this->connection->reserve(0);
+        $this->connection()->useTube($queue);
+        $job = $this->connection()->reserve(0);
         if (!$job) {
             return null;
         }
@@ -92,9 +92,9 @@ class BeanstalkEngine extends Base
         }
 
         unset($options['queue']);
-        $this->connection->useTube($queue);
+        $this->connection()->useTube($queue);
         try {
-            $this->connection->put(
+            $this->connection()->put(
                 json_encode(compact('class', 'vars', 'options')),
                 $priority,
                 $delay,
@@ -114,14 +114,14 @@ class BeanstalkEngine extends Base
         $delay = $this->setting($options, 'delay', PheanstalkInterface::DEFAULT_DELAY);
         $priority = $this->setting($options, 'priority', PheanstalkInterface::DEFAULT_PRIORITY);
 
-        $this->connection->useTube($queue);
-        $response = $this->connection->releaseJob($item['job'], $priority, $delay);
+        $this->connection()->useTube($queue);
+        $response = $this->connection()->releaseJob($item['job'], $priority, $delay);
         return $response->getResponseName() == Response::RESPONSE_RELEASED;
     }
 
     public function queues()
     {
-        return $this->connection->listTubes();
+        return $this->connection()->listTubes();
     }
 
     public function getJobClass()

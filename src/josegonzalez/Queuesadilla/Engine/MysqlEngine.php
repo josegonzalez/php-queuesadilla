@@ -81,7 +81,7 @@ class MysqlEngine extends Base
         }
 
         $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
+        $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
         return $sth->rowCount() == 1;
@@ -104,20 +104,20 @@ class MysqlEngine extends Base
         $dtFormatted = $dt->format('Y-m-d H:i:s');
 
         try {
-            $sth = $this->connection->prepare($selectSql);
+            $sth = $this->connection()->prepare($selectSql);
             $sth->bindParam(1, $queue, PDO::PARAM_STR);
             $sth->bindParam(2, $dtFormatted, PDO::PARAM_STR);
             $sth->bindParam(3, $dtFormatted, PDO::PARAM_STR);
 
-            $this->connection->beginTransaction();
+            $this->connection()->beginTransaction();
             $sth->execute();
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
             if (!empty($result)) {
-                $sth = $this->connection->prepare($updateSql);
+                $sth = $this->connection()->prepare($updateSql);
                 $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
                 $sth->execute();
-                $this->connection->commit();
+                $this->connection()->commit();
                 if ($sth->rowCount() == 1) {
                     $data = json_decode($result['data'], true);
                     return [
@@ -127,9 +127,9 @@ class MysqlEngine extends Base
                     ];
                 }
             }
-            $this->connection->commit();
+            $this->connection()->commit();
         } catch (PDOException $e) {
-            $this->connection->rollBack();
+            $this->connection()->rollBack();
         }
 
         return null;
@@ -158,7 +158,7 @@ class MysqlEngine extends Base
 
         $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';
         $sql = sprintf($sql, $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
+        $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
         $sth->bindParam(3, $priority, PDO::PARAM_INT);
@@ -172,7 +172,7 @@ class MysqlEngine extends Base
     {
         $queue = $this->setting($options, 'queue');
         $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
+        $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
         return $sth->rowCount() == 1;
@@ -185,7 +185,7 @@ class MysqlEngine extends Base
             'GROUP BY `queue`',
         ]);
         $sql = sprintf($sql, $this->settings['table']);
-        $sth = $this->connection->prepare($sql);
+        $sth = $this->connection()->prepare($sql);
         $sth->execute();
         $results = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -211,7 +211,7 @@ class MysqlEngine extends Base
     {
         $sql = trim($sql);
         try {
-            $query = $this->connection->prepare($sql, $prepareOptions);
+            $query = $this->connection()->prepare($sql, $prepareOptions);
             $query->setFetchMode(PDO::FETCH_LAZY);
             if (!$query->execute($params)) {
                 $query->closeCursor();

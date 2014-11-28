@@ -75,7 +75,7 @@ class RedisEngine extends Base
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $item = $this->connection->lpop('queue:' . $queue);
+        $item = $this->connection()->lpop('queue:' . $queue);
         if (!$item) {
             return null;
         }
@@ -89,7 +89,7 @@ class RedisEngine extends Base
         $this->requireQueue($options);
 
         $id = $this->jobId();
-        return $this->connection->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
+        return $this->connection()->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
     }
 
     public function release($item, $options = [])
@@ -101,12 +101,12 @@ class RedisEngine extends Base
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
 
-        return $this->connection->rpush('queue:' . $queue, json_encode($item));
+        return $this->connection()->rpush('queue:' . $queue, json_encode($item));
     }
 
     public function queues()
     {
-        return $this->connection->smembers('queues');
+        return $this->connection()->smembers('queues');
     }
 
     protected function redisInstance()
@@ -117,6 +117,6 @@ class RedisEngine extends Base
     protected function requireQueue($options)
     {
         $queue = $this->setting($options, 'queue');
-        $this->connection->sadd('queues', $queue);
+        $this->connection()->sadd('queues', $queue);
     }
 }
