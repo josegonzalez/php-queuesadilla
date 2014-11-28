@@ -10,14 +10,14 @@ class Base
     const HIGH = 1;
     const CRITICAL = 0;
 
-    protected $item;
-
     protected $engine;
+
+    protected $item;
 
     public function __construct($item, $engine)
     {
-        $this->item = $item;
         $this->engine = $engine;
+        $this->item = $item;
         return $this;
     }
 

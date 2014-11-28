@@ -6,6 +6,8 @@ use josegonzalez\Queuesadilla\Worker\Base;
 
 class SequentialWorker extends Base
 {
+    protected $stats = null;
+
     public function work()
     {
         if (!$this->connect()) {
@@ -23,36 +25,41 @@ class SequentialWorker extends Base
             }
 
             $iterations++;
-
             $item = $this->engine->pop($this->queue);
+            $this->stats['seen']++;
             if (empty($item)) {
-                sleep(1);
                 $this->logger()->debug('No job!');
+                $this->stats['empty']++;
+                sleep(1);
                 continue;
             }
 
             $success = false;
+            $job = new $jobClass($item, $this->engine);
             if (is_callable($item['class'])) {
-                $job = new $jobClass($item, $this->engine);
                 try {
                     $success = $this->perform($item, $job);
                 } catch (\Exception $e) {
                     $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
+                    $this->stats['exception']++;
                 }
             } else {
                 $this->logger()->alert('Invalid callable for job. Deleting job from queue.');
                 $this->engine->delete($item);
+                $this->stats['invalid']++;
                 continue;
             }
 
             if ($success) {
                 $this->logger()->debug('Success. Deleting job from queue.');
                 $job->delete();
+                $this->stats['success']++;
                 continue;
             }
 
             $this->logger()->info('Failed. Releasing job to queue');
             $job->release();
+            $this->stats['failure']++;
         }
 
         return true;

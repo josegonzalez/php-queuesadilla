@@ -11,11 +11,13 @@ abstract class Base
 {
     use LoggerTrait;
 
-    protected $engine = null;
+    protected $engine;
 
-    protected $queue = 'default';
+    protected $maxIterations;
 
-    protected $maxIterations = null;
+    protected $queue;
+
+    protected $stats;
 
     public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
@@ -28,8 +30,21 @@ abstract class Base
         $this->queue = $params['queue'];
         $this->maxIterations = $params['maxIterations'];
         $this->name = get_class($this->engine) . ' Worker';
+        $this->stats = [
+            'seen' => 0,
+            'empty' => 0,
+            'exception' => 0,
+            'invalid' => 0,
+            'success' => 0,
+            'failure' => 0,
+        ];
         $this->setLogger($logger);
         return $this;
+    }
+
+    public function stats()
+    {
+        return $this->stats;
     }
 
     abstract public function work();

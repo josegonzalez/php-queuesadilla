@@ -27,12 +27,10 @@ class TestWorkerTest extends TestCase
      */
     public function testConstruct()
     {
-        $Worker = new TestWorker($this->Engine);
-        $this->assertInstanceOf('\josegonzalez\Queuesadilla\Worker\Base', $Worker);
-        $this->assertInstanceOf('\Psr\Log\LoggerInterface', $Worker->logger());
-        $this->assertInstanceOf('\Psr\Log\NullLogger', $Worker->logger());
+        $this->assertInstanceOf('\josegonzalez\Queuesadilla\Worker\Base', $this->Worker);
+        $this->assertInstanceOf('\Psr\Log\LoggerInterface', $this->Worker->logger());
+        $this->assertInstanceOf('\Psr\Log\NullLogger', $this->Worker->logger());
     }
-
 
     /**
      * @covers josegonzalez\Queuesadilla\Worker\Base::work
@@ -40,9 +38,22 @@ class TestWorkerTest extends TestCase
      */
     public function testWork()
     {
-        $Worker = new TestWorker($this->Engine);
-        $this->assertTrue($Worker->work());
-        $this->assertTrue($Worker->work());
-        $this->assertTrue($Worker->work());
+        $this->assertTrue($this->Worker->work());
+        $this->assertTrue($this->Worker->work());
+        $this->assertTrue($this->Worker->work());
+    }
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\Base::stats
+     */
+    public function testStats()
+    {
+        $this->assertEquals([
+            'seen' => 0,
+            'empty' => 0,
+            'exception' => 0,
+            'invalid' => 0,
+            'success' => 0,
+            'failure' => 0,
+        ], $this->Worker->stats());
     }
 }
