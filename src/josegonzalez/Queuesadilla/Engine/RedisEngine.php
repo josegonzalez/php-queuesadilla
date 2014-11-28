@@ -25,15 +25,6 @@ class RedisEngine extends Base
         'timeout' => 0,
     ];
 
-    public function __construct($config = [])
-    {
-        if (!class_exists('Redis')) {
-            return false;
-        }
-
-        return parent::__construct($config);
-    }
-
 /**
  * Connects to a Redis server
  *

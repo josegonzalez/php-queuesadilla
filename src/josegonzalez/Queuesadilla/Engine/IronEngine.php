@@ -34,15 +34,6 @@ class IronEngine extends Base
         'pass' => 'token',
     ];
 
-    public function __construct($config = [])
-    {
-        if (!class_exists('IronMQ')) {
-            return false;
-        }
-
-        return parent::__construct($config);
-    }
-
 /**
  * Connects to a Iron server
  *

@@ -25,15 +25,6 @@ class BeanstalkEngine extends Engine
         'timeout' => 0,  # unsupported
     ];
 
-    public function __construct($config = [])
-    {
-        if (!class_exists('Socket_Beanstalk')) {
-            return false;
-        }
-
-        return parent::__construct($config);
-    }
-
 /**
  * Connects to a BeanstalkD server
  *
