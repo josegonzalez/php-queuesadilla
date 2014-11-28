@@ -2,8 +2,8 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\MemoryEngine;
-use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
+use josegonzalez\Queuesadilla\Engine\MemoryEngine;
+use josegonzalez\Queuesadilla\Worker\SequentialWorker;
 
 class SynchronousEngine extends MemoryEngine
 {

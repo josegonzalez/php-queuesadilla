@@ -2,10 +2,10 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use \josegonzalez\Queuesadilla\Engine\EngineInterface;
-use \josegonzalez\Queuesadilla\Utility\LoggerTrait;
-use \Psr\Log\LoggerInterface;
-use \Psr\Log\NullLogger;
+use josegonzalez\Queuesadilla\Engine\EngineInterface;
+use josegonzalez\Queuesadilla\Utility\LoggerTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 abstract class Worker
 {

@@ -2,7 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\Base;
+use josegonzalez\Queuesadilla\Engine\Base;
 
 class NullEngine extends Base
 {

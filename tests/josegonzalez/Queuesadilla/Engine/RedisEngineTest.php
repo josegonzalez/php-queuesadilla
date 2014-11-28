@@ -2,10 +2,10 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\RedisEngine;
-use \PHPUnit_Framework_TestCase;
-use \Psr\Log\NullLogger;
-use \RedisException;
+use josegonzalez\Queuesadilla\Engine\RedisEngine;
+use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
+use RedisException;
 
 class RedisEngineTest extends PHPUnit_Framework_TestCase
 {

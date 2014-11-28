@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\NullEngine;
-use \PHPUnit_Framework_TestCase;
-use \Psr\Log\NullLogger;
+use josegonzalez\Queuesadilla\Engine\NullEngine;
+use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
 
 class NullEngineTest extends PHPUnit_Framework_TestCase
 {

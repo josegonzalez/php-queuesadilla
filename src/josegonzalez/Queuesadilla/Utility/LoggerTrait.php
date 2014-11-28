@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Utility;
 
-use \InvalidArgumentException;
-use \Psr\Log\LoggerInterface;
-use \Psr\Log\NullLogger;
+use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 trait LoggerTrait
 {

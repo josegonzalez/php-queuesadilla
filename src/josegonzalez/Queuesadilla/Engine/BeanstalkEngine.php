@@ -2,13 +2,13 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \DateInterval;
-use \DateTime;
-use \josegonzalez\Queuesadilla\Utility\Pheanstalk;
-use \josegonzalez\Queuesadilla\Engine;
-use \Pheanstalk\Command\DeleteCommand;
-use \Pheanstalk\PheanstalkInterface;
-use \Pheanstalk\Response;
+use DateInterval;
+use DateTime;
+use josegonzalez\Queuesadilla\Utility\Pheanstalk;
+use josegonzalez\Queuesadilla\Engine;
+use Pheanstalk\Command\DeleteCommand;
+use Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Response;
 
 class BeanstalkEngine extends Base
 {

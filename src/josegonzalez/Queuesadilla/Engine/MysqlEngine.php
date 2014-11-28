@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \DateInterval;
-use \DateTime;
-use \PDO;
-use \PDOException;
-use \josegonzalez\Queuesadilla\Engine\Base;
+use DateInterval;
+use DateTime;
+use PDO;
+use PDOException;
+use josegonzalez\Queuesadilla\Engine\Base;
 
 class MysqlEngine extends Base
 {

@@ -2,10 +2,10 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use \josegonzalez\Queuesadilla\Job;
-use \josegonzalez\Queuesadilla\Engine\NullEngine;
-use \PHPUnit_Framework_TestCase;
-use \Psr\Log\NullLogger;
+use josegonzalez\Queuesadilla\Job;
+use josegonzalez\Queuesadilla\Engine\NullEngine;
+use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
 
 class JobTest extends PHPUnit_Framework_TestCase
 {

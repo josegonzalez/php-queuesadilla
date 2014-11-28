@@ -2,7 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
-use \josegonzalez\Queuesadilla\Worker;
+use josegonzalez\Queuesadilla\Worker;
 
 class SequentialWorker extends Worker
 {

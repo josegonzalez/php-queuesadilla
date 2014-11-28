@@ -2,8 +2,8 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \IronMQ;
-use \josegonzalez\Queuesadilla\Engine\Base;
+use IronMQ;
+use josegonzalez\Queuesadilla\Engine\Base;
 
 class IronEngine extends Base
 {

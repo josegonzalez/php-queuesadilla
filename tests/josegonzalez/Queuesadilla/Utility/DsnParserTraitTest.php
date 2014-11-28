@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Utility;
 
-use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
-use \InvalidArgumentException;
-use \PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\Utility\DsnParserTrait;
+use InvalidArgumentException;
+use PHPUnit_Framework_TestCase;
 
 class DsnParserTraitTest extends PHPUnit_Framework_TestCase
 {

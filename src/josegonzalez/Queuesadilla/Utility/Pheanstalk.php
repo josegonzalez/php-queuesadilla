@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Utility;
 
-use \Pheanstalk\Command\DeleteCommand;
-use \Pheanstalk\Command\ReleaseCommand;
-use \Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Command\DeleteCommand;
+use Pheanstalk\Command\ReleaseCommand;
+use Pheanstalk\PheanstalkInterface;
 
 class Pheanstalk extends \Pheanstalk\Pheanstalk
 {

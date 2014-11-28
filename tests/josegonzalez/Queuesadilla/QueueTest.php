@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use \PHPUnit_Framework_TestCase;
-use \josegonzalez\Queuesadilla\Engine\NullEngine;
-use \josegonzalez\Queuesadilla\Queue;
+use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\Engine\NullEngine;
+use josegonzalez\Queuesadilla\Queue;
 
 class QueueTest extends PHPUnit_Framework_TestCase
 {

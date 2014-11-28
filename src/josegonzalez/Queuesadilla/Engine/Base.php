@@ -2,12 +2,12 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\EngineInterface;
-use \josegonzalez\Queuesadilla\Job;
-use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
-use \josegonzalez\Queuesadilla\Utility\LoggerTrait;
-use \Psr\Log\LoggerInterface;
-use \Psr\Log\NullLogger;
+use josegonzalez\Queuesadilla\Engine\EngineInterface;
+use josegonzalez\Queuesadilla\Job;
+use josegonzalez\Queuesadilla\Utility\DsnParserTrait;
+use josegonzalez\Queuesadilla\Utility\LoggerTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 abstract class Base implements EngineInterface
 {

@@ -2,14 +2,14 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \DateTime;
-use \DateInterval;
-use \josegonzalez\Queuesadilla\Engine\SynchronousEngine;
-use \josegonzalez\Queuesadilla\Worker\SequentialWorker;
-use \josegonzalez\Queuesadilla\Worker\TestWorker;
-use \PHPUnit_Framework_TestCase;
-use \Psr\Log\NullLogger;
-use \ReflectionClass;
+use DateTime;
+use DateInterval;
+use josegonzalez\Queuesadilla\Engine\SynchronousEngine;
+use josegonzalez\Queuesadilla\Worker\SequentialWorker;
+use josegonzalez\Queuesadilla\Worker\TestWorker;
+use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class SynchronousEngineTest extends PHPUnit_Framework_TestCase
 {

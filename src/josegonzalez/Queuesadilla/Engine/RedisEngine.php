@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\Base;
-use \Redis;
-use \RedisException;
+use josegonzalez\Queuesadilla\Engine\Base;
+use Redis;
+use RedisException;
 
 class RedisEngine extends Base
 {

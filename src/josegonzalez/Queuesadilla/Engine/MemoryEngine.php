@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \DateInterval;
-use \DateTime;
-use \josegonzalez\Queuesadilla\Engine\Base;
+use DateInterval;
+use DateTime;
+use josegonzalez\Queuesadilla\Engine\Base;
 
 class MemoryEngine extends Base
 {

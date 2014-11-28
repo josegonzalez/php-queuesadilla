@@ -2,10 +2,10 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
-use \Pheanstalk\Exception\ServerException;
-use \PHPUnit_Framework_TestCase;
-use \Psr\Log\NullLogger;
+use josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
+use Pheanstalk\Exception\ServerException;
+use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
 
 class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 {

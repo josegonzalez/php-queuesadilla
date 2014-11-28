@@ -2,7 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Job;
 
-use \josegonzalez\Queuesadilla\Job;
+use josegonzalez\Queuesadilla\Job;
 
 class BeanstalkJob extends Job
 {
