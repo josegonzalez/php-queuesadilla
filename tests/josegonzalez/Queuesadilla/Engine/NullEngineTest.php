@@ -2,16 +2,16 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \josegonzalez\Queuesadilla\Engine\TestEngine;
+use \josegonzalez\Queuesadilla\Engine\NullEngine;
 use \PHPUnit_Framework_TestCase;
 use \Psr\Log\NullLogger;
 
-class TestEngineTest extends PHPUnit_Framework_TestCase
+class NullEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->Logger = new NullLogger;
-        $this->Engine = new TestEngine($this->Logger, [
+        $this->Engine = new NullEngine($this->Logger, [
             'queue' => 'default',
         ]);
     }
@@ -27,10 +27,10 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new TestEngine($this->Logger, []);
+        $Engine = new NullEngine($this->Logger, []);
         $this->assertTrue($Engine->connected());
 
-        $Engine = new TestEngine($this->Logger, 'test://user:pass@host:port');
+        $Engine = new NullEngine($this->Logger, 'test://user:pass@host:port');
         $this->assertTrue($Engine->connected());
     }
 
@@ -78,7 +78,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::connect
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connect
      */
     public function testConnect()
     {
@@ -90,7 +90,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::delete
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::delete
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::delete
      */
     public function testDelete()
     {
@@ -102,7 +102,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::pop
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::pop
      */
     public function testPop()
     {
@@ -114,7 +114,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::push
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::push
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::push
      */
     public function testPush()
     {
@@ -126,7 +126,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::release
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::release
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::release
      */
     public function testRelease()
     {
@@ -148,7 +148,7 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::queues
-     * @covers josegonzalez\Queuesadilla\Engine\TestEngine::queues
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::queues
      */
     public function testQueues()
     {

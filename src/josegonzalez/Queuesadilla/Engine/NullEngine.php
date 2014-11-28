@@ -4,7 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\Base;
 
-class TestEngine extends Base
+class NullEngine extends Base
 {
     public $return = true;
 

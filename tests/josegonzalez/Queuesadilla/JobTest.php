@@ -3,7 +3,7 @@
 namespace josegonzalez\Queuesadilla;
 
 use \josegonzalez\Queuesadilla\Job;
-use \josegonzalez\Queuesadilla\Engine\TestEngine;
+use \josegonzalez\Queuesadilla\Engine\NullEngine;
 use \PHPUnit_Framework_TestCase;
 use \Psr\Log\NullLogger;
 
@@ -42,7 +42,7 @@ class JobTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->Logger = new NullLogger;
-        $this->Engine = new TestEngine($this->Logger, $config);
+        $this->Engine = new NullEngine($this->Logger, $config);
         $this->Jobs = [
             new Job($items[0], $this->Engine),
             new Job($items[1], $this->Engine),

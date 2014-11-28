@@ -3,14 +3,14 @@
 namespace josegonzalez\Queuesadilla;
 
 use \PHPUnit_Framework_TestCase;
-use \josegonzalez\Queuesadilla\Engine\TestEngine;
+use \josegonzalez\Queuesadilla\Engine\NullEngine;
 use \josegonzalez\Queuesadilla\Queue;
 
 class QueueTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->Engine = new TestEngine;
+        $this->Engine = new NullEngine;
         $this->Queue = new Queue($this->Engine);
     }
 
