@@ -7,6 +7,8 @@ use \DateTime;
 use \josegonzalez\Queuesadilla\Utility\Pheanstalk;
 use \josegonzalez\Queuesadilla\Engine;
 use \Pheanstalk\Command\DeleteCommand;
+use \Pheanstalk\PheanstalkInterface;
+use \Pheanstalk\Response;
 
 class BeanstalkEngine extends Base
 {
@@ -109,8 +111,8 @@ class BeanstalkEngine extends Base
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        return $this->connection->bury($item['id']);
-    }
+        $delay = $this->setting($options, 'delay', PheanstalkInterface::DEFAULT_DELAY);
+        $priority = $this->setting($options, 'priority', PheanstalkInterface::DEFAULT_PRIORITY);
 
         $this->connection->useTube($queue);
         $response = $this->connection->releaseJob($item['job'], $priority, $delay);

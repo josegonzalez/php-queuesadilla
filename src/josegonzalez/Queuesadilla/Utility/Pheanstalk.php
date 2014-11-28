@@ -3,9 +3,19 @@
 namespace josegonzalez\Queuesadilla\Utility;
 
 use \Pheanstalk\Command\DeleteCommand;
+use \Pheanstalk\Command\ReleaseCommand;
+use \Pheanstalk\PheanstalkInterface;
 
 class Pheanstalk extends \Pheanstalk\Pheanstalk
 {
+    public function releaseJob(
+        $job,
+        $priority = PheanstalkInterface::DEFAULT_PRIORITY,
+        $delay = PheanstalkInterface::DEFAULT_DELAY
+    ) {
+        return $this->dispatchCommand(new ReleaseCommand($job, $priority, $delay));
+    }
+
     public function deleteJob($job)
     {
         return $this->dispatchCommand(new DeleteCommand($job));

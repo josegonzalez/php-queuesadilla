@@ -136,13 +136,17 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $this->assertNull($pop4);
     }
 
-    // /**
-    //  * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::release
-    //  */
-    // public function testRelease()
-    // {
-    //     $this->assertFalse($this->Engine->release(null, 'default'));
-    // }
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::release
+     */
+    public function testRelease()
+    {
+        $this->assertTrue($this->Engine->push(null, [], 'default'));
+
+        $item = $this->Engine->pop('default');
+        $this->assertInstanceOf('\Pheanstalk\Job', $item['job']);
+        $this->assertTrue($this->Engine->release($item, 'default'));
+    }
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::queues
