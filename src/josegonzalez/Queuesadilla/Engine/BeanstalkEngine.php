@@ -128,9 +128,4 @@ class BeanstalkEngine extends Base
     {
         return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';
     }
-
-    public function statsJob($item)
-    {
-        return $this->connection->statsJob($item['id']);
-    }
 }

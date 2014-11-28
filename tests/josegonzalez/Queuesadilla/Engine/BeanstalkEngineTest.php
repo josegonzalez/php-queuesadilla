@@ -60,6 +60,13 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob', $this->Engine->getJobClass());
+    }
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::delete
      */
     public function testDelete()
@@ -137,24 +144,24 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     //     $this->assertFalse($this->Engine->release(null, 'default'));
     // }
 
-    // /**
-    //  * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::queues
-    //  */
-    // public function testQueues()
-    // {
-    //     $this->assertEquals([], $this->Engine->queues());
-    //     $this->Engine->push('some_function');
-    //     $this->assertEquals(['default'], $this->Engine->queues());
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::queues
+     */
+    public function testQueues()
+    {
+        $this->assertEquals(['default'], $this->Engine->queues());
+        $this->Engine->push('some_function');
+        $this->assertEquals(['default'], $this->Engine->queues());
 
-    //     $this->Engine->push('some_function', [], ['queue' => 'other']);
-    //     $queues = $this->Engine->queues();
-    //     sort($queues);
-    //     $this->assertEquals(['default', 'other'], $queues);
+        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $queues = $this->Engine->queues();
+        sort($queues);
+        $this->assertEquals(['default', 'other'], $queues);
 
-    //     $this->Engine->pop();
-    //     $this->Engine->pop();
-    //     $queues = $this->Engine->queues();
-    //     sort($queues);
-    //     $this->assertEquals(['default', 'other'], $queues);
-    // }
+        $this->Engine->pop();
+        $this->Engine->pop();
+        $queues = $this->Engine->queues();
+        sort($queues);
+        $this->assertEquals(['default', 'other'], $queues);
+    }
 }
