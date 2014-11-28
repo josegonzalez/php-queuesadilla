@@ -68,6 +68,8 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     }
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::delete
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::dispatchCommand
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::deleteJob
      */
     public function testDelete()
     {
@@ -138,6 +140,8 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::release
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::dispatchCommand
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::releaseJob
      */
     public function testRelease()
     {
