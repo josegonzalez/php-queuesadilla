@@ -70,8 +70,8 @@ class BeanstalkEngineTest extends TestCase
     }
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::delete
-     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::dispatchCommand
      * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::deleteJob
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::protectedMethodCall
      */
     public function testDelete()
     {
@@ -142,7 +142,7 @@ class BeanstalkEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::release
-     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::dispatchCommand
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::protectedMethodCall
      * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::releaseJob
      */
     public function testRelease()
