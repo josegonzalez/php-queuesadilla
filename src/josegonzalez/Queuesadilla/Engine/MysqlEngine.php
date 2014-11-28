@@ -62,11 +62,7 @@ class MysqlEngine extends Base
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ] + $config['flags'];
 
-        if (empty($config['unix_socket'])) {
-            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
-        } else {
-            $dsn = "mysql:unix_socket={$config['unix_socket']};dbname={$config['database']}";
-        }
+        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
 
         $this->connection = new PDO(
             $dsn,

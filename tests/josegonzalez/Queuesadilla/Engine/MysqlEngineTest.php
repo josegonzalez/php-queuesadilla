@@ -36,19 +36,6 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::connected
-     * @expectedException PDOException
-     */
-    public function testConstructException()
-    {
-        $config = $this->config;
-        $config['unix_socket'] = '/tmp/missing/mysql.sock';
-        $SocketEngine = new MysqlEngine($config);
-        $SocketEngine;
-    }
-
-    /**
      * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::connect
      */
     public function testConnect()
