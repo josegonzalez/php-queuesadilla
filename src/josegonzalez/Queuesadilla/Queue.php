@@ -7,6 +7,7 @@ class Queue
     public function __construct($engine)
     {
         $this->engine = $engine;
+        return $this;
     }
 
     public function bulk($jobs, $vars = [], $options = [])

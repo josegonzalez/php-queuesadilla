@@ -18,6 +18,7 @@ class Base
     {
         $this->item = $item;
         $this->engine = $engine;
+        return $this;
     }
 
     public function attempts()

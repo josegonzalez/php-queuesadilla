@@ -37,7 +37,8 @@ abstract class Base implements EngineInterface
         $this->setLogger($logger);
         $this->settings = $this->baseConfig;
         $this->config($config);
-        return $this->connected = $this->connect();
+        $this->connected = $this->connect();
+        return $this;
     }
 
     public function bulk($jobs, $vars = [], $options = [])

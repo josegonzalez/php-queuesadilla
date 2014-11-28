@@ -29,6 +29,7 @@ abstract class Base
         $this->maxIterations = $params['maxIterations'];
         $this->name = get_class($this->engine) . ' Worker';
         $this->setLogger($logger);
+        return $this;
     }
 
     abstract public function work();
