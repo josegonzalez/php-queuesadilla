@@ -188,8 +188,8 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->Engine->queues());
         $this->Engine->push('some_function');
         $this->assertEquals(['default'], $this->Engine->queues());
-        $this->Engine->push('some_function', [], ['queue' => 'other']);
 
+        $this->Engine->push('some_function', [], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
