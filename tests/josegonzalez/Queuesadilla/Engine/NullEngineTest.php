@@ -33,6 +33,9 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 
         $Engine = new NullEngine($this->Logger, 'test://user:pass@host:port');
         $this->assertTrue($Engine->connected());
+
+        $Engine = new NullEngine($this->Logger, ['url' => 'test://user:pass@host:port']);
+        $this->assertTrue($Engine->connected());
     }
 
     /**
