@@ -84,7 +84,7 @@ class BeanstalkEngine extends Base
         $time_to_run = $this->setting($options, 'time_to_run');
 
         $options = [];
-        if ($expires_in) {
+        if ($expires_in !== null) {
             $dt = new DateTime();
             $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
             unset($options['expires_in']);

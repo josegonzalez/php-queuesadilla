@@ -143,13 +143,13 @@ class MysqlEngine extends Base
         $priority = $this->setting($options, 'priority');
 
         $delay_until = null;
-        if ($delay) {
+        if ($delay !== null) {
             $dt = new DateTime();
             $delay_until = $dt->add(new DateInterval(sprintf('PT%sS', $delay)))->format('Y-m-d H:i:s');
         }
 
         $expires_at = null;
-        if ($expires_in) {
+        if ($expires_in !== null) {
             $dt = new DateTime();
             $expires_at = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)))->format('Y-m-d H:i:s');
         }
