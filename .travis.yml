@@ -37,4 +37,4 @@ script:
   - phpunit
 
 after_success:
-  - "composer require --dev satooshi/php-coveralls:dev-master && php vendor/bin/coveralls -v"
+  - php vendor/bin/coveralls -v
