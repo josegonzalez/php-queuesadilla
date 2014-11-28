@@ -58,22 +58,22 @@ Output:
 
 Queuesadilla supports the following engine engines:
 
-| Engine              | Stability | Notes                                   |
-|---------------------|-----------|-----------------------------------------|
-| `BeanstalkEngine`   | Stable    | BeanstalkD                              |
-| `MemoryEngine`      | Stable    | In-memory                               |
-| `MysqlEngine`       | Stable    | Backed by Mysql                         |
-| `RedisEngine`       | Stable    | Redis-based                             |
-| `SynchronousEngine` | Stable    | Synchronous, in-memory                  |
-| `NullEngine`        | Stable    | Always returns "true" for any operation |
-| `IronEngine`        | Unstable  | Needs unit tests                        |
-| `AzureEngine`       | Unstable  | Planned                                 |
-| `MemcachedEngine`   | Unstable  | Planned                                 |
-| `MongodbEngine`     | Unstable  | Planned                                 |
-| `PdoEngine`         | Unstable  | Planned                                 |
-| `PredisEngine`      | Unstable  | Planned                                 |
-| `RabbitMQEngine`    | Unstable  | Planned                                 |
-| `SqsEngine`         | Unstable  | Planned                                 |
+| Engine              | Stability   | Notes                                   |
+|---------------------|-------------|-----------------------------------------|
+| `BeanstalkEngine`   | **Stable**  | BeanstalkD                              |
+| `MemoryEngine`      | **Stable**  | In-memory                               |
+| `MysqlEngine`       | **Stable**  | Backed by Mysql                         |
+| `RedisEngine`       | **Stable**  | Redis-based                             |
+| `SynchronousEngine` | **Stable**  | Synchronous, in-memory                  |
+| `NullEngine`        | **Stable**  | Always returns "true" for any operation |
+| `IronEngine`        | *Unstable*  | Needs unit tests                        |
+| `AzureEngine`       | Planned     |                                         |
+| `MemcachedEngine`   | Planned     |                                         |
+| `MongodbEngine`     | Planned     |                                         |
+| `PdoEngine`         | Planned     |                                         |
+| `PredisEngine`      | Planned     |                                         |
+| `RabbitMQEngine`    | Planned     |                                         |
+| `SqsEngine`         | Planned     |                                         |
 
 ### Queuing jobs
 
