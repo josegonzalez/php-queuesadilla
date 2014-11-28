@@ -24,6 +24,7 @@ class TestWorkerTest extends TestCase
         $Worker = new TestWorker($this->Engine);
         $this->assertInstanceOf('\josegonzalez\Queuesadilla\Worker\Base', $Worker);
         $this->assertInstanceOf('\Psr\Log\LoggerInterface', $Worker->logger());
+        $this->assertInstanceOf('\Psr\Log\NullLogger', $Worker->logger());
     }
 
 
