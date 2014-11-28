@@ -58,13 +58,15 @@ Output:
 
 Queuesadilla supports the following engine engines:
 
-- BeanstalkD via `BeanstalkEngine`
-- IronMQ via `IronEngine`
-- In Memory via `MemoryEngine`
-- Mysql via `MysqlEngine`
-- Redis via `RedisEngine`
-- Synchronous via `SynchronousEngine`
-- Test via `TestEngine`
+| Engine              | Stability | Notes                                   |
+|---------------------|-----------|-----------------------------------------|
+| `BeanstalkEngine`   | Stable    | BeanstalkD                              |
+| `MemoryEngine`      | Stable    | In-memory                               |
+| `MysqlEngine`       | Stable    | Backed by Mysql                         |
+| `RedisEngine`       | Stable    | Redis-based                             |
+| `SynchronousEngine` | Stable    | Synchronous, in-memory                  |
+| `NullEngine`        | Stable    | Always returns "true" for any operation |
+| `IronEngine`        | Unstable  | Needs unit tests                        |
 
 ### Queuing jobs
 
