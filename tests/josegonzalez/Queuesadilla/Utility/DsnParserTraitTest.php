@@ -8,6 +8,9 @@ use \PHPUnit_Framework_TestCase;
 
 class DsnParserTraitTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers josegonzalez\Queuesadilla\Utility\DsnParserTrait::parseDsn
+     */
     public function testCustomParseDsn()
     {
         $subject = $this->getObjectForTrait('josegonzalez\Queuesadilla\Utility\DsnParserTrait');
@@ -62,6 +65,7 @@ class DsnParserTraitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Utility\DsnParserTrait::parseDsn
      * @expectedException InvalidArgumentException
      */
     public function testCustomParseDsnThrowsException()
