@@ -11,23 +11,23 @@ abstract class Worker
 {
     use LoggerTrait;
 
+    protected $engine = null;
+
+    protected $queue = 'default';
+
+    protected $maxIterations = null;
+
     public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
         $params = array_merge([
-            'max_iterations' => null,
+            'maxIterations' => null,
             'queue' => 'default',
         ], $params);
 
         $this->engine = $engine;
         $this->queue = $params['queue'];
-        $this->max_iterations = $params['max_iterations'];
-
-        $this->name = get_class($this->engine);
-        if (preg_match('@\\\\([\w]+)$@', $this->name, $matches)) {
-            $this->name = $matches[1];
-        }
-
-        $this->name = str_replace('Engine', '', $this->name) . ' Worker';
+        $this->maxIterations = $params['maxIterations'];
+        $this->name = get_class($this->engine) . ' Worker';
         $this->setLogger($logger);
     }
 

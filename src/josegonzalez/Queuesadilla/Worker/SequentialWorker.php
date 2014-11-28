@@ -8,8 +8,8 @@ class SequentialWorker extends Worker
 {
     public function work()
     {
-        $max_iterations = $this->max_iterations ? sprintf(', max iterations %s', $this->max_iterations) : '';
-        $this->logger()->info(sprintf('Starting worker%s', $max_iterations));
+        $maxIterations = $this->maxIterations ? sprintf(', max iterations %s', $this->maxIterations) : '';
+        $this->logger()->info(sprintf('Starting worker%s', $maxIterations));
         $jobClass = $this->engine->getJobClass();
         $iterations = 0;
         if (!$this->engine->connected()) {
@@ -18,7 +18,7 @@ class SequentialWorker extends Worker
         }
 
         while (true) {
-            if (is_int($this->max_iterations) && $iterations >= $this->max_iterations) {
+            if (is_int($this->maxIterations) && $iterations >= $this->maxIterations) {
                 $this->logger()->debug('Max iterations reached, exiting');
                 break;
             }

@@ -45,5 +45,5 @@ $queue->push('MyJob::run', ['sleep' => 3, 'message' => 'hi', 'raise' => false]);
 $queue->push('raise', ['sleep' => 0, 'message' => 'hi2', 'raise' => true]);
 $queue->push(['MyJob', 'perform'], ['sleep' => 1, 'message' => 'hi2u', 'raise' => false]);
 
-$worker = new SequentialWorker($engine, $logger, ['max_iterations' => 5]);
+$worker = new SequentialWorker($engine, $logger, ['maxIterations' => 5]);
 $worker->work();

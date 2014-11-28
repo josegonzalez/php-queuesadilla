@@ -16,6 +16,6 @@ class SynchronousEngine extends MemoryEngine
 
     protected function getWorker()
     {
-        return new SequentialWorker($this, $this->logger, ['max_iterations' => 1]);
+        return new SequentialWorker($this, $this->logger, ['maxIterations' => 1]);
     }
 }
