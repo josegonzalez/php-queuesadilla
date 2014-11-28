@@ -94,34 +94,35 @@ class MysqlEngine extends Base
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        try {
-            $sql = implode(" ", [
-                'SELECT `id`, `data` FROM `%s`',
-                'WHERE `queue` = ? AND `locked` != 1',
-                'AND (expires_at IS NULL OR expires_at > ?)',
-                'AND (delay_until IS NULL OR delay_until < ?)',
-                'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
-            ]);
-            $sql = sprintf($sql, $this->settings['table']);
-            $this->connection->beginTransaction();
+        $selectSql = implode(" ", [
+            'SELECT `id`, `data` FROM `%s`',
+            'WHERE `queue` = ? AND `locked` != 1',
+            'AND (expires_at IS NULL OR expires_at > ?)',
+            'AND (delay_until IS NULL OR delay_until < ?)',
+            'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
+        ]);
+        $selectSql = sprintf($selectSql, $this->settings['table']);
+        $updateSql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
 
-            $dt = new DateTime();
-            $dtFormatted = $dt->format('Y-m-d H:i:s');
-            $sth = $this->connection->prepare($sql);
+        $dt = new DateTime();
+        $dtFormatted = $dt->format('Y-m-d H:i:s');
+
+        try {
+            $sth = $this->connection->prepare($selectSql);
             $sth->bindParam(1, $queue, PDO::PARAM_STR);
             $sth->bindParam(2, $dtFormatted, PDO::PARAM_STR);
             $sth->bindParam(3, $dtFormatted, PDO::PARAM_STR);
+
+            $this->connection->beginTransaction();
             $sth->execute();
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
             if (!empty($result)) {
-                $sql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
-                $sth = $this->connection->prepare($sql);
+                $sth = $this->connection->prepare($updateSql);
                 $sth->bindParam(1, $result['id'], PDO::PARAM_INT);
                 $sth->execute();
+                $this->connection->commit();
                 if ($sth->rowCount() == 1) {
-                    $this->connection->commit();
-
                     $data = json_decode($result['data'], true);
                     return [
                         'id' => $result['id'],
@@ -190,13 +191,13 @@ class MysqlEngine extends Base
         $sql = sprintf($sql, $this->settings['table']);
         $sth = $this->connection->prepare($sql);
         $sth->execute();
-        $results = $sth->fetch(PDO::FETCH_ASSOC);
+        $results = $sth->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($results)) {
             return [];
         }
         return array_map(function ($result) {
-            return $results['queue'];
+            return $result['queue'];
         }, $results);
     }
 

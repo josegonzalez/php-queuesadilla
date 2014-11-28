@@ -124,6 +124,27 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::queues
+     */
+    public function testQueues()
+    {
+        $this->assertEquals([], $this->Engine->queues());
+        $this->Engine->push('some_function');
+        $this->assertEquals(['default'], $this->Engine->queues());
+
+        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $queues = $this->Engine->queues();
+        sort($queues);
+        $this->assertEquals(['default', 'other'], $queues);
+
+        $this->Engine->pop();
+        $this->Engine->pop();
+        $queues = $this->Engine->queues();
+        sort($queues);
+        $this->assertEquals(['default', 'other'], $queues);
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::execute
      * @expectedException PDOException
      */
