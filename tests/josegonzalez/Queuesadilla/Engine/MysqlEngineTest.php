@@ -3,10 +3,10 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
-use josegonzalez\Queuesadilla\TestCase;
+use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 
-class MysqlEngineTest extends TestCase
+class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

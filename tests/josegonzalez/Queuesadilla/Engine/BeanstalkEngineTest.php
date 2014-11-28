@@ -3,11 +3,11 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
-use josegonzalez\Queuesadilla\TestCase;
 use Pheanstalk\Exception\ServerException;
+use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 
-class BeanstalkEngineTest extends TestCase
+class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

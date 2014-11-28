@@ -3,10 +3,10 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\NullEngine;
-use josegonzalez\Queuesadilla\TestCase;
+use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 
-class NullEngineTest extends TestCase
+class NullEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

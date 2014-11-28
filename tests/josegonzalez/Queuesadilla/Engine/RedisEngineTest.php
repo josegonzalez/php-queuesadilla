@@ -3,11 +3,11 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\RedisEngine;
-use josegonzalez\Queuesadilla\TestCase;
+use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 use RedisException;
 
-class RedisEngineTest extends TestCase
+class RedisEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
