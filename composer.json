@@ -16,8 +16,12 @@
     "require": {
         "php": ">=5.3.0"
     },
+    "require-dev": {
+        "pda/pheanstalk": "dev-master",
+        "iron-io/iron_mq": "dev-master"
+    },
     "suggest": {
-        "davidpersson/beanstalk": "Adds support for Beanstalk background workers",
+        "pda/pheanstalk": "Adds support for Beanstalk background workers",
         "iron-io/iron_mq": "Adds support for IronMQ background workers"
     },
     "autoload": {

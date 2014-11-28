@@ -2,10 +2,13 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \Socket_Beanstalk;
+use \DateInterval;
+use \DateTime;
+use \josegonzalez\Queuesadilla\Utility\Pheanstalk;
 use \josegonzalez\Queuesadilla\Engine;
+use \Pheanstalk\Command\DeleteCommand;
 
-class BeanstalkEngine extends Engine
+class BeanstalkEngine extends Base
 {
     protected $baseConfig = [
         'api_version' => 1,  # unsupported
@@ -32,27 +35,42 @@ class BeanstalkEngine extends Engine
  */
     public function connect()
     {
-        $this->connection = new Socket_Beanstalk($this->settings);
-        return $this->connection->connect();
+        $this->connection = new Pheanstalk(
+            $this->settings['host'],
+            $this->settings['port'],
+            $this->settings['timeout']
+        );
+        return $this->connection->getConnection()->isServiceListening();
     }
 
     public function delete($item)
     {
-        return $this->connection->delete($item['id']);
+        if (empty($item['job'])) {
+            return false;
+        }
+
+        $response = $this->connection->deleteJob($item['job']);
+        return $response->getResponseName() == 'DELETED';
     }
 
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $item = $this->connection->reserve();
-        if (!$item) {
+        $job = $this->connection
+                     ->watch($queue)
+                     ->reserve(0);
+        if (!$job) {
             return null;
         }
 
-        $item['body'] = json_decode($item['body'], true);
-        $item['class'] = $item['body']['class'];
-        $item['vars'] = $item['vars'];
-        unset($item['body']);
+        $item = json_decode($job->getData(), true);
+        $item['job'] = $job;
+        $item['id'] = $job->getId();
+
+        $dt = new DateTime();
+        if (!empty($item['options']['expires_at']) && $dt > $item['options']['expires_at']) {
+            return null;
+        }
 
         return $item;
     }
@@ -60,13 +78,33 @@ class BeanstalkEngine extends Engine
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $this->connection->choose($queue);
-        return $this->connection->put(
-            $this->settings['priority'],
-            $this->settings['delay'],
-            $this->settings['time_to_run'],
-            json_encode(compact('class', 'vars'))
-        );
+        $delay = $this->setting($options, 'delay');
+        $expires_in = $this->setting($options, 'expires_in');
+        $priority = $this->setting($options, 'priority');
+        $time_to_run = $this->setting($options, 'time_to_run');
+
+        $options = [];
+        if ($expires_in) {
+            $dt = new DateTime();
+            $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
+            unset($options['expires_in']);
+        }
+
+        unset($options['queue']);
+        $this->connection->useTube($queue);
+        try {
+            $this->connection->put(
+                json_encode(compact('class', 'vars', 'options')),
+                $priority,
+                $delay,
+                $time_to_run
+            );
+        } catch (Exception $e) {
+            // TODO: Proper logging
+            return false;
+        }
+
+        return true;
     }
 
     public function release($item, $options = [])
