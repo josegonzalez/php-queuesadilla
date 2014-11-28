@@ -7,6 +7,11 @@ use ReflectionClass;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
+    public function testClass()
+    {
+        $this->markTestSkipped('No tests');
+    }
+
     protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
