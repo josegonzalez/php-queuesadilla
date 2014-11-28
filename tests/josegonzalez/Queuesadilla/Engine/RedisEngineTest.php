@@ -78,7 +78,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
                 ->method('redisInstance')
                 ->will($this->throwException(new RedisException));
 
-        $Engine->connect();
+        $this->assertFalse($Engine->connect());
     }
 
     /**
