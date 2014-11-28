@@ -2,8 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use \Redis;
 use \josegonzalez\Queuesadilla\Engine\Base;
+use \Redis;
+use \RedisException;
 
 class RedisEngine extends Base
 {
@@ -39,12 +40,14 @@ class RedisEngine extends Base
         }
 
         try {
-            $this->connection = new Redis();
-            $return = $this->connection->$connectMethod(
-                $this->settings['host'],
-                $this->settings['port'],
-                (int)$this->settings['timeout']
-            );
+            $this->connection = $this->redisInstance();
+            if ($this->connection) {
+                $return = $this->connection->$connectMethod(
+                    $this->settings['host'],
+                    $this->settings['port'],
+                    (int)$this->settings['timeout']
+                );
+            }
         } catch (RedisException $e) {
             return false;
         }
@@ -104,6 +107,11 @@ class RedisEngine extends Base
     public function queues()
     {
         return $this->connection->smembers('queues');
+    }
+
+    protected function redisInstance()
+    {
+        return new Redis();
     }
 
     protected function requireQueue($options)

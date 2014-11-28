@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use \josegonzalez\Queuesadilla\Engine\RedisEngine;
 use \PHPUnit_Framework_TestCase;
+use \RedisException;
 
 class RedisEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -42,6 +43,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::redisInstance
      */
     public function testConnect()
     {
@@ -63,6 +65,20 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $config['persistent'] = false;
         $Engine = $this->getMock($engineClass, ['jobId'], [$config]);
         $this->assertTrue($Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::connect
+     */
+    public function testConnectionException()
+    {
+        $engineClass = '\josegonzalez\Queuesadilla\Engine\RedisEngine';
+        $Engine = $this->getMock($engineClass, ['redisInstance'], [$this->config]);
+        $Engine->expects($this->once())
+                ->method('redisInstance')
+                ->will($this->throwException(new RedisException));
+
+        $Engine->connect();
     }
 
     /**
