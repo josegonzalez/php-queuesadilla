@@ -56,9 +56,8 @@ class BeanstalkEngine extends Base
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $job = $this->connection
-                     ->watch($queue)
-                     ->reserve(0);
+        $this->connection->useTube($queue);
+        $job = $this->connection->reserve(0);
         if (!$job) {
             return null;
         }
@@ -113,10 +112,9 @@ class BeanstalkEngine extends Base
         return $this->connection->bury($item['id']);
     }
 
-    public function watch($options = [])
-    {
-        $queue = $this->setting($options, 'queue');
-        return $this->connection->watch($queue);
+        $this->connection->useTube($queue);
+        $response = $this->connection->releaseJob($item['job'], $priority, $delay);
+        return $response->getResponseName() == Response::RESPONSE_RELEASED;
     }
 
     public function queues()

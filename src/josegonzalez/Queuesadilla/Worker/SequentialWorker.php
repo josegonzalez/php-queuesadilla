@@ -12,8 +12,8 @@ class SequentialWorker extends Worker
         $this->log(sprintf('Starting worker%s', $max_iterations));
         $jobClass = $this->engine->getJobClass();
         $iterations = 0;
-        if (!$this->engine->watch($this->queue)) {
-            $this->log(sprintf('Worker unable to watch queue %s, exiting', $this->queue));
+        if (!$this->engine->connected()) {
+            $this->log(sprintf('Worker unable to connect, exiting'));
             return;
         }
 

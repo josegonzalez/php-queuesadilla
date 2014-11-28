@@ -14,8 +14,6 @@ interface EngineInterface
 
     public function setting($settings, $key, $default = null);
 
-    public function watch($options = []);
-
     public function connected();
 
     public function jobId();

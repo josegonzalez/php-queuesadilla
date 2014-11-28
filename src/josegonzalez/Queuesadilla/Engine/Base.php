@@ -89,12 +89,6 @@ abstract class Base implements EngineInterface
         return $value;
     }
 
-    public function watch($options = [])
-    {
-        $this->setting($options, 'queue');
-        return true;
-    }
-
     public function connected()
     {
         return $this->connected;

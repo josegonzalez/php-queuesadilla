@@ -75,16 +75,6 @@ class TestEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::watch
-     */
-    public function testWatch()
-    {
-        $this->assertTrue($this->Engine->watch('non_default'));
-        $this->assertTrue($this->Engine->watch('other'));
-        $this->assertTrue($this->Engine->watch());
-    }
-
-    /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::connect
      * @covers josegonzalez\Queuesadilla\Engine\TestEngine::connect
      */
