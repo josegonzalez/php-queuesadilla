@@ -3,11 +3,14 @@
 namespace josegonzalez\Queuesadilla;
 
 use \josegonzalez\Queuesadilla\Engine\EngineInterface;
+use \josegonzalez\Queuesadilla\Utility\LoggerTrait;
 use \Psr\Log\LoggerInterface;
 use \Psr\Log\NullLogger;
 
 abstract class Worker
 {
+    use LoggerTrait;
+
     public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
         $params = array_merge([
@@ -25,12 +28,7 @@ abstract class Worker
         }
 
         $this->name = str_replace('Engine', '', $this->name) . ' Worker';
-
-        if ($logger === null) {
-            $logger = new NullLogger;
-        }
-
-        $this->logger = $logger;
+        $this->setLogger($logger);
     }
 
     abstract public function work();

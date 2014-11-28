@@ -5,6 +5,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 use \josegonzalez\Queuesadilla\Engine\EngineInterface;
 use \josegonzalez\Queuesadilla\Job;
 use \josegonzalez\Queuesadilla\Utility\DsnParserTrait;
+use \josegonzalez\Queuesadilla\Utility\LoggerTrait;
 use \Psr\Log\LoggerInterface;
 use \Psr\Log\NullLogger;
 
@@ -13,13 +14,13 @@ abstract class Base implements EngineInterface
 
     use DsnParserTrait;
 
+    use LoggerTrait;
+
     protected $baseConfig = [
         'queue' => 'default',
     ];
 
     protected $connected = false;
-
-    protected $logger = null;
 
     protected $settings = [];
 
@@ -33,11 +34,7 @@ abstract class Base implements EngineInterface
             $config = $this->parseDsn($config);
         }
 
-        if ($logger === null) {
-            $logger = new NullLogger;
-        }
-
-        $this->logger = $logger;
+        $this->setLogger($logger);
         $this->settings = $this->baseConfig;
         $this->config($config);
         return $this->connected = $this->connect();
