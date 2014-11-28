@@ -67,6 +67,13 @@ Queuesadilla supports the following engine engines:
 | `SynchronousEngine` | Stable    | Synchronous, in-memory                  |
 | `NullEngine`        | Stable    | Always returns "true" for any operation |
 | `IronEngine`        | Unstable  | Needs unit tests                        |
+| `AzureEngine`       | Unstable  | Planned                                 |
+| `MemcachedEngine`   | Unstable  | Planned                                 |
+| `MongodbEngine`     | Unstable  | Planned                                 |
+| `PdoEngine`         | Unstable  | Planned                                 |
+| `PredisEngine`      | Unstable  | Planned                                 |
+| `RabbitMQEngine`    | Unstable  | Planned                                 |
+| `SqsEngine`         | Unstable  | Planned                                 |
 
 ### Queuing jobs
 
