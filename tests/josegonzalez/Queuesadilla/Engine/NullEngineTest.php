@@ -10,6 +10,9 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->config = [
+            'url' => getenv('NULL_URL'),
+        ];
         $this->Logger = new NullLogger;
         $this->Engine = new NullEngine($this->Logger, [
             'queue' => 'default',

@@ -12,9 +12,6 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = [
-            'queue' => 'default',
-            'user' => 'travis',
-            'pass' => '',
             'url' => getenv('MYSQL_URL'),
         ];
         $this->Logger = new NullLogger;

@@ -15,6 +15,9 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->config = [
+            'url' => getenv('SYNCHRONOUS_URL'),
+        ];
         $this->Logger = new NullLogger;
         $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
         $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId']);

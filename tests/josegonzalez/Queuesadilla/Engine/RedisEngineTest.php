@@ -12,9 +12,6 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = [
-            'queue' => 'default',
-            'user' => 'travis',
-            'pass' => '',
             'url' => getenv('REDIS_URL'),
         ];
         $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';

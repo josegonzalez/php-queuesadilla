@@ -12,9 +12,6 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = [
-            'queue' => 'default',
-            'user' => 'travis',
-            'pass' => '',
             'url' => getenv('BEANSTALK_URL'),
         ];
         $this->Logger = new NullLogger;

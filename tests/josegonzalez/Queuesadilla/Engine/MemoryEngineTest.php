@@ -10,6 +10,10 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->config = [
+            'url' => getenv('MEMORY_URL'),
+        ];
+        $this->Logger = new NullLogger;
         $this->Engine = new MemoryEngine;
     }
 
