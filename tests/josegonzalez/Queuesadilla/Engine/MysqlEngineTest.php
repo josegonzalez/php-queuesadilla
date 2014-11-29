@@ -3,25 +3,31 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
+use PDO;
+use PDOException;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
-use ReflectionClass;
 
 class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('MYSQL_URL'),
-        ];
+        $this->url = getenv('MYSQL_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-        $this->Engine = new MysqlEngine($this->Logger, $this->config);
-        $this->protectedMethodCall($this->Engine, 'execute', ['TRUNCATE TABLE jobs']);
+
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';
+        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
+        $this->Engine->expects($this->any())
+                ->method('jobId')
+                ->will($this->returnValue('1'));
+
+        $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
     }
 
     public function tearDown()
     {
-        $this->protectedMethodCall($this->Engine, 'execute', ['TRUNCATE TABLE jobs']);
+        $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
         unset($this->Engine);
     }
 
@@ -31,6 +37,12 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        $Engine = new MysqlEngine($this->Logger, []);
+        $this->assertFalse($Engine->connected());
+
+        $Engine = new MysqlEngine($this->Logger, $this->url);
+        $this->assertTrue($Engine->connected());
+
         $Engine = new MysqlEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
@@ -41,6 +53,14 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testConnect()
     {
         $this->assertTrue($this->Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
     /**
@@ -131,21 +151,29 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['default', 'other'], $queues);
     }
 
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::execute
-     * @expectedException PDOException
-     */
-    public function testExecutePdoException()
+    protected function execute($connection, $sql)
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->protectedMethodCall($this->Engine, 'execute', ['derp']);
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
+        $sql = trim($sql);
+        try {
+            $query = $connection->prepare($sql, []);
+            $query->setFetchMode(PDO::FETCH_LAZY);
+            if (!$query->execute([])) {
+                $query->closeCursor();
+                return false;
+            }
+            if (!$query->columnCount()) {
+                $query->closeCursor();
+                if (!$query->rowCount()) {
+                    return true;
+                }
+            }
+            return $query;
+        } catch (PDOException $e) {
+            $e->queryString = $sql;
+            if (isset($query->queryString)) {
+                $e->queryString = $query->queryString;
+            }
+            throw $e;
+        }
     }
 }

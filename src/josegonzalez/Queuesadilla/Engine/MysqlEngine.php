@@ -57,12 +57,17 @@ class MysqlEngine extends Base
 
         $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
 
-        $this->connection = new PDO(
-            $dsn,
-            $config['user'],
-            $config['pass'],
-            $flags
-        );
+        try {
+            $this->connection = new PDO(
+                $dsn,
+                $config['user'],
+                $config['pass'],
+                $flags
+            );
+        } catch (PDOException $e) {
+            // TODO: Logging
+            $this->connection = false;
+        }
 
         return (bool)$this->connection;
     }
@@ -197,46 +202,10 @@ class MysqlEngine extends Base
      */
     public function release($item, $options = [])
     {
-        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
+        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ? LIMIT 1', $this->settings['table']);
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
         return $sth->rowCount() == 1;
-    }
-
-/**
- * Executes given SQL statement.
- *
- * @param string $sql SQL statement
- * @param array $params list of params to be bound to query
- * @param array $prepareOptions Options to be used in the prepare statement
- * @return mixed PDOStatement if query executes with no problem, true as the result of a successful, false on error
- * query returning no rows, such as a CREATE statement, false otherwise
- * @throws PDOException
- */
-    protected function execute($sql, $params = [], $prepareOptions = [])
-    {
-        $sql = trim($sql);
-        try {
-            $query = $this->connection()->prepare($sql, $prepareOptions);
-            $query->setFetchMode(PDO::FETCH_LAZY);
-            if (!$query->execute($params)) {
-                $query->closeCursor();
-                return false;
-            }
-            if (!$query->columnCount()) {
-                $query->closeCursor();
-                if (!$query->rowCount()) {
-                    return true;
-                }
-            }
-            return $query;
-        } catch (PDOException $e) {
-            $e->queryString = $sql;
-            if (isset($query->queryString)) {
-                $e->queryString = $query->queryString;
-            }
-            throw $e;
-        }
     }
 }

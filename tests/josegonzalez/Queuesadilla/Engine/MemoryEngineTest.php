@@ -41,6 +41,14 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::delete
      */
     public function testDelete()

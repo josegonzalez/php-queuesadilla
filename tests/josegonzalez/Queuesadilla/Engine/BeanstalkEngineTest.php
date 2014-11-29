@@ -11,11 +11,15 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('BEANSTALK_URL'),
-        ];
+        $this->url = getenv('BEANSTALK_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-        $this->Engine = new BeanstalkEngine($this->Logger, $this->config);
+
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
+        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
+        $this->Engine->expects($this->any())
+                ->method('jobId')
+                ->will($this->returnValue('1'));
     }
 
     public function tearDown()
@@ -46,6 +50,12 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        $Engine = new BeanstalkEngine($this->Logger, []);
+        $this->assertTrue($Engine->connected());
+
+        $Engine = new BeanstalkEngine($this->Logger, $this->url);
+        $this->assertTrue($Engine->connected());
+
         $Engine = new BeanstalkEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
@@ -65,6 +75,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob', $this->Engine->getJobClass());
     }
+
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::delete
      * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::deleteJob

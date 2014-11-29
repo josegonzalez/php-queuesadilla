@@ -27,7 +27,9 @@ abstract class Base implements EngineInterface
     public function __construct(LoggerInterface $logger = null, $config = [])
     {
         if (is_array($config) && !empty($config['url'])) {
-            $config = array_merge($config, $this->parseDsn($config['url']));
+            $url = $config['url'];
+            unset($config['url']);
+            $config = array_merge($config, $this->parseDsn($url));
         } elseif (is_string($config)) {
             $config = $this->parseDsn($config);
         }

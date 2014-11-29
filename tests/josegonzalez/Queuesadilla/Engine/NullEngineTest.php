@@ -10,13 +10,15 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('NULL_URL'),
-        ];
+        $this->url = getenv('NULL_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-        $this->Engine = new NullEngine($this->Logger, [
-            'queue' => 'default',
-        ]);
+
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\NullEngine';
+        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
+        $this->Engine->expects($this->any())
+                ->method('jobId')
+                ->will($this->returnValue(1));
     }
 
     public function tearDown()
@@ -34,10 +36,10 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
         $Engine = new NullEngine($this->Logger, []);
         $this->assertTrue($Engine->connected());
 
-        $Engine = new NullEngine($this->Logger, 'test://user:pass@host:1');
+        $Engine = new NullEngine($this->Logger, $this->url);
         $this->assertTrue($Engine->connected());
 
-        $Engine = new NullEngine($this->Logger, ['url' => 'test://user:pass@host:1']);
+        $Engine = new NullEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
 
@@ -65,8 +67,18 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConfig()
     {
-        $this->assertEquals(['queue' => 'default'], $this->Engine->config());
-        $this->assertEquals(['queue' => 'other'], $this->Engine->config(['queue' => 'other']));
+        $this->assertEquals([
+            'queue' => 'default',
+            'timeout' => '1',
+            'scheme' => 'null',
+            'database' => false,
+        ], $this->Engine->config());
+        $this->assertEquals([
+            'queue' => 'other',
+            'timeout' => '1',
+            'scheme' => 'null',
+            'database' => false,
+        ], $this->Engine->config(['queue' => 'other']));
         $this->assertEquals('other', $this->Engine->config('queue'));
         $this->assertEquals('another', $this->Engine->config('queue', 'another'));
         $this->assertEquals(null, $this->Engine->config('random'));

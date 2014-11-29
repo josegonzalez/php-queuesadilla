@@ -15,23 +15,49 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('SYNCHRONOUS_URL'),
-        ];
+        $this->url = getenv('SYNCHRONOUS_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
+
         $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
-        $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId']);
+        $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId'], [$this->Logger, $this->config]);
+        $this->Engine->expects($this->any())
+                ->method('jobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
         $this->Engine->expects($this->any())
                 ->method('getWorker')
                 ->will($this->returnValue(new TestWorker($this->Engine)));
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->onConsecutiveCalls('1', '2', '3', '4', '5', '6'));
     }
 
     public function tearDown()
     {
         unset($this->Engine);
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::__construct
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::connected
+     */
+    public function testConstruct()
+    {
+        $Engine = new SynchronousEngine($this->Logger, $this->config);
+        $this->assertTrue($Engine->connected());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::connect
+     */
+    public function testConnect()
+    {
+        $this->assertTrue($this->Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
     /**

@@ -11,15 +11,15 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('REDIS_URL'),
-        ];
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
+        $this->url = getenv('REDIS_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
+
+        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
         $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
         $this->Engine->expects($this->any())
                 ->method('jobId')
-                ->will($this->returnValue('1'));
+                ->will($this->returnValue(1));
 
         $this->Engine->connection()->flushdb();
     }
@@ -36,6 +36,12 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        $Engine = new RedisEngine($this->Logger, []);
+        $this->assertTrue($Engine->connected());
+
+        $Engine = new RedisEngine($this->Logger, $this->url);
+        $this->assertTrue($Engine->connected());
+
         $Engine = new RedisEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
@@ -64,6 +70,14 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $config['persistent'] = false;
         $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
         $this->assertTrue($Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
     /**

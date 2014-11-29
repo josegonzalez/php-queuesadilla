@@ -20,7 +20,7 @@ class BeanstalkEngine extends Base
         'queue' => 'default',
         'host' => '127.0.0.1',
         'time_to_run' => 60,
-        'timeout' => 0,
+        'timeout' => 1,
     ];
 
     /**
