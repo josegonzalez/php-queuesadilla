@@ -87,20 +87,15 @@ class MemoryEngine extends Base
                 break;
             }
 
-            $datetime = new DateTime;
-            if (!empty($item['options']['delay_until'])) {
-                if ($datetime < $item['options']['delay_until']) {
-                    $this->queues[$queue][] = $item;
-                    $item = null;
-                    continue;
-                }
+            if ($this->shouldDelay($item)) {
+                $this->queues[$queue][] = $item;
+                $item = null;
+                continue;
             }
 
-            if (!empty($item['options']['expires_at'])) {
-                if ($datetime > $item['options']['expires_at']) {
-                    $item = null;
-                    continue;
-                }
+            if ($this->shouldExpire($item)) {
+                $item = null;
+                continue;
             }
         }
 
@@ -169,5 +164,23 @@ class MemoryEngine extends Base
         if (!isset($this->queues[$queue])) {
             $this->queues[$queue] = [];
         }
+    }
+
+    protected function shouldDelay($item)
+    {
+        $datetime = new DateTime;
+        if (!empty($item['options']['delay_until']) && $datetime < $item['options']['delay_until']) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function shouldExpire($item)
+    {
+        $datetime = new DateTime;
+        if (!empty($item['options']['expires_at']) && $datetime > $item['options']['expires_at']) {
+            return true;
+        }
+        return false;
     }
 }
