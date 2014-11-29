@@ -30,6 +30,9 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
      * @covers josegonzalez\Queuesadilla\Engine\Base::__construct
      * @covers josegonzalez\Queuesadilla\Engine\Base::connected
      * @covers josegonzalez\Queuesadilla\Engine\Base::connection
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::__construct
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connected
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connection
      */
     public function testConstruct()
     {
@@ -44,7 +47,41 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::connect
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connect
+     */
+    public function testConnect()
+    {
+        $this->assertTrue($this->Engine->connect());
+
+        $this->Engine->return = false;
+        $this->assertFalse($this->Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::delete
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::delete
+     */
+    public function testDelete()
+    {
+        $this->assertTrue($this->Engine->delete(null));
+
+        $this->Engine->return = false;
+        $this->assertFalse($this->Engine->delete(null));
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::bulk
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::bulk
      */
     public function testBulk()
     {
@@ -55,15 +92,8 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
-     */
-    public function testGetJobClass()
-    {
-        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
-    }
-
-    /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::config
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::config
      */
     public function testConfig()
     {
@@ -86,6 +116,7 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::setting
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::setting
      */
     public function testSetting()
     {
@@ -93,30 +124,6 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('non_default', $this->Engine->setting(['queue' => 'non_default'], 'queue'));
         $this->assertEquals('default', $this->Engine->setting([], 'queue'));
         $this->assertEquals('other', $this->Engine->setting([], 'other', 'other'));
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::connect
-     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connect
-     */
-    public function testConnect()
-    {
-        $this->assertTrue($this->Engine->connect());
-
-        $this->Engine->return = false;
-        $this->assertFalse($this->Engine->connect());
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::delete
-     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::delete
-     */
-    public function testDelete()
-    {
-        $this->assertTrue($this->Engine->delete(null));
-
-        $this->Engine->return = false;
-        $this->assertFalse($this->Engine->delete(null));
     }
 
     /**
