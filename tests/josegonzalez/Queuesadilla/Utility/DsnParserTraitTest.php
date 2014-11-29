@@ -11,12 +11,22 @@ class DsnParserTraitTest extends PHPUnit_Framework_TestCase
     /**
      * @covers josegonzalez\Queuesadilla\Utility\DsnParserTrait::parseDsn
      */
-    public function testCustomParseDsn()
+    public function testParseDsn()
     {
         $subject = $this->getObjectForTrait('josegonzalez\Queuesadilla\Utility\DsnParserTrait');
         $this->assertEquals([], $subject->parseDsn(''));
 
-        $this->assertEquals(':', $subject->parseDsn(':'));
+        $this->assertEquals([], $subject->parseDsn(':'));
+
+        $dsn = 'test://user:pass@host:1';
+        $expected = [
+            'host' => 'host',
+            'port' => 1,
+            'scheme' => 'test',
+            'user' => 'user',
+            'pass' => 'pass'
+        ];
+        $this->assertEquals($expected, $subject->parseDsn($dsn));
 
         $dsn = 'mysql://localhost:3306/database';
         $expected = [
@@ -68,7 +78,7 @@ class DsnParserTraitTest extends PHPUnit_Framework_TestCase
      * @covers josegonzalez\Queuesadilla\Utility\DsnParserTrait::parseDsn
      * @expectedException InvalidArgumentException
      */
-    public function testCustomParseDsnThrowsException()
+    public function testParseDsnThrowsException()
     {
         $subject = $this->getObjectForTrait('josegonzalez\Queuesadilla\Utility\DsnParserTrait');
         $this->assertEquals([], $subject->parseDsn(['not-empty']));

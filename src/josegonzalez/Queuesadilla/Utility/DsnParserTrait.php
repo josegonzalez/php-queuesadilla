@@ -22,7 +22,7 @@ trait DsnParserTrait
         }
         $parsed = parse_url($dsn);
         if ($parsed === false) {
-            return $dsn;
+            return [];
         }
         $parsed['scheme'] = $scheme;
         $query = '';
