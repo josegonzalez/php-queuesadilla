@@ -21,7 +21,8 @@
         "pda/pheanstalk": "dev-master",
         "iron-io/iron_mq": "dev-master",
         "monolog/monolog": "dev-master",
-        "satooshi/php-coveralls": "dev-master"
+        "satooshi/php-coveralls": "dev-master",
+        "phpmd/phpmd": "dev-master"
     },
     "suggest": {
         "pda/pheanstalk": "Adds support for Beanstalk background workers",

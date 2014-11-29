@@ -35,6 +35,7 @@ before_script:
 script:
   - phpcs --standard=psr2 src/
   - phpunit
+  - vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode
 
 after_success:
   - php vendor/bin/coveralls -v
