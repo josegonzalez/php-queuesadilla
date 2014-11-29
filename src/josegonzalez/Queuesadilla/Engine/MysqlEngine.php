@@ -219,7 +219,7 @@ class MysqlEngine extends Base
  * query returning no rows, such as a CREATE statement, false otherwise
  * @throws PDOException
  */
-    public function execute($sql, $params = [], $prepareOptions = [])
+    protected function execute($sql, $params = [], $prepareOptions = [])
     {
         $sql = trim($sql);
         try {

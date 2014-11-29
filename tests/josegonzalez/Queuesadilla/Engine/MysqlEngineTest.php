@@ -5,6 +5,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -18,12 +19,12 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         ];
         $this->Logger = new NullLogger;
         $this->Engine = new MysqlEngine($this->Logger, $this->config);
-        $this->Engine->execute('TRUNCATE TABLE jobs');
+        $this->protectedMethodCall($this->Engine, 'execute', ['TRUNCATE TABLE jobs']);
     }
 
     public function tearDown()
     {
-        $this->Engine->execute('TRUNCATE TABLE jobs');
+        $this->protectedMethodCall($this->Engine, 'execute', ['TRUNCATE TABLE jobs']);
         unset($this->Engine);
     }
 
@@ -140,6 +141,14 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testExecutePdoException()
     {
         $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->Engine->execute('derp');
+        $this->protectedMethodCall($this->Engine, 'execute', ['derp']);
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
     }
 }
