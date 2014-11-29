@@ -26,11 +26,9 @@ class RedisEngine extends Base
         'timeout' => 0,
     ];
 
-/**
- * Connects to a Redis server
- *
- * @return boolean True if Redis server was connected
- */
+    /**
+     * {@inheritDoc}
+     */
     public function connect()
     {
         $return = false;
@@ -63,6 +61,9 @@ class RedisEngine extends Base
         return $return;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete($item)
     {
         if (!is_array($item) || !isset($item['id'])) {
@@ -72,6 +73,9 @@ class RedisEngine extends Base
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -83,6 +87,9 @@ class RedisEngine extends Base
         return json_decode($item, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -92,6 +99,17 @@ class RedisEngine extends Base
         return $this->connection()->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function queues()
+    {
+        return $this->connection()->smembers('queues');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function release($item, $options = [])
     {
         if (!is_array($item) || !isset($item['id'])) {
@@ -102,11 +120,6 @@ class RedisEngine extends Base
         $this->requireQueue($options);
 
         return $this->connection()->rpush('queue:' . $queue, json_encode($item));
-    }
-
-    public function queues()
-    {
-        return $this->connection()->smembers('queues');
     }
 
     protected function redisInstance()

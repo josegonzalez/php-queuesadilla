@@ -28,11 +28,17 @@ class MemoryEngine extends Base
 
     protected $queues = [];
 
+    /**
+     * {@inheritDoc}
+     */
     public function connect()
     {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete($item)
     {
         if (!is_array($item) || !isset($item['id'])) {
@@ -52,6 +58,9 @@ class MemoryEngine extends Base
         return $deleted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -96,6 +105,9 @@ class MemoryEngine extends Base
         return $item;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function push($class, $vars = [], $options = [])
     {
         if (!is_array($options)) {
@@ -126,17 +138,23 @@ class MemoryEngine extends Base
         return $newCount === ($oldCount + 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function queues()
+    {
+        return array_keys($this->queues);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
 
         return array_push($this->queues[$queue], $item) !== count($this->queues[$queue]);
-    }
-
-    public function queues()
-    {
-        return array_keys($this->queues);
     }
 
     protected function requireQueue($options)

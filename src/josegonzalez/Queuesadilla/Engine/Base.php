@@ -40,6 +40,15 @@ abstract class Base implements EngineInterface
         return $this;
     }
 
+    /**
+     * Bulk push an array of jobs onto the queue.
+     *
+     * @param  array $jobs    An array of callables
+     * @param  array $vars    A set of data to set for each job
+     * @param  array $options An array of options for publishing the job
+     *
+     * @return array An array of boolean values for each job
+     **/
     public function bulk($jobs, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -114,15 +123,55 @@ abstract class Base implements EngineInterface
         return rand();
     }
 
+    /**
+     * Create a connection to the backend
+     *
+     * @return boolean
+     */
     abstract public function connect();
 
+    /**
+     * Delete a message from the queue.
+     *
+     * @param  array  $item       an array of item data
+     *
+     * @return void
+     */
     abstract public function delete($item);
 
+    /**
+     * Pop the next job off of the queue.
+     *
+     * @param array  $options     an array of options for popping a job from the queue
+     *
+     * @return array an array of item data
+     */
     abstract public function pop($options = []);
 
+    /**
+     * Push a single job onto the queue.
+     *
+     * @param string $callable    a job callable
+     * @param array  $vars        an array of data to set for the job
+     * @param array  $options     an array of options for publishing the job
+     *
+     * @return boolean
+     **/
     abstract public function push($class, $vars = [], $options = []);
 
-    abstract public function release($item, $options = []);
-
+    /**
+     * Get a list of available queues
+     *
+     * @return array
+     */
     abstract public function queues();
+
+    /**
+     * Release the job back into the queue.
+     *
+     * @param  array  $item       an array of item data
+     *
+     * @return boolean
+     */
+    abstract public function release($item, $options = []);
 }

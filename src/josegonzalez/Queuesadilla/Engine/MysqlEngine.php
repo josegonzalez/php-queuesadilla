@@ -42,13 +42,10 @@ class MysqlEngine extends Base
         'timeout' => 0,  # unsupported
     ];
 
-/**
- * Connects to a PDO-compatible server
- *
- * @return boolean True if server was connected
- * @throws PDOException
- */
 
+    /**
+     * {@inheritDoc}
+     */
     public function connect()
     {
         $config = $this->settings;
@@ -74,6 +71,9 @@ class MysqlEngine extends Base
         return (bool)$this->connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete($item)
     {
         if (!is_array($item) || !isset($item['id'])) {
@@ -87,6 +87,9 @@ class MysqlEngine extends Base
         return $sth->rowCount() == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -135,6 +138,9 @@ class MysqlEngine extends Base
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function push($class, $vars = [], $options = [])
     {
         $delay = $this->setting($options, 'delay');
@@ -168,16 +174,9 @@ class MysqlEngine extends Base
         return $sth->rowCount() == 1;
     }
 
-    public function release($item, $options = [])
-    {
-        $queue = $this->setting($options, 'queue');
-        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
-        $sth = $this->connection()->prepare($sql);
-        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
-        $sth->execute();
-        return $sth->rowCount() == 1;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function queues()
     {
         $sql = implode(" ", [
@@ -195,6 +194,19 @@ class MysqlEngine extends Base
         return array_map(function ($result) {
             return $result['queue'];
         }, $results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function release($item, $options = [])
+    {
+        $queue = $this->setting($options, 'queue');
+        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
+        $sth = $this->connection()->prepare($sql);
+        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
+        $sth->execute();
+        return $sth->rowCount() == 1;
     }
 
 /**

@@ -8,6 +8,9 @@ class SequentialWorker extends Base
 {
     protected $stats = null;
 
+    /**
+     * {@inheritDoc}
+     */
     public function work()
     {
         if (!$this->connect()) {

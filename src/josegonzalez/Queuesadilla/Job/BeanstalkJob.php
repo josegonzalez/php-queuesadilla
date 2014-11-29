@@ -6,6 +6,9 @@ use josegonzalez\Queuesadilla\Job\Base;
 
 class BeanstalkJob extends Base
 {
+    /**
+     * {@inheritDoc}
+     */
     public function attempts()
     {
         $stats = $this->engine->connection()->statsJob($this->item['id']);

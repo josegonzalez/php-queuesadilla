@@ -30,11 +30,17 @@ class BeanstalkEngine extends Base
         'timeout' => 0,  # unsupported
     ];
 
-/**
- * Connects to a BeanstalkD server
- *
- * @return boolean True if BeanstalkD server was connected
- */
+    /**
+     * {@inheritDoc}
+     */
+    public function getJobClass()
+    {
+        return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function connect()
     {
         $this->connection = new Pheanstalk(
@@ -45,6 +51,9 @@ class BeanstalkEngine extends Base
         return $this->connection->getConnection()->isServiceListening();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete($item)
     {
         if (empty($item['job'])) {
@@ -55,6 +64,9 @@ class BeanstalkEngine extends Base
         return $response->getResponseName() == Response::RESPONSE_DELETED;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -76,6 +88,9 @@ class BeanstalkEngine extends Base
         return $item;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -108,6 +123,17 @@ class BeanstalkEngine extends Base
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function queues()
+    {
+        return $this->connection()->listTubes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -117,15 +143,5 @@ class BeanstalkEngine extends Base
         $this->connection()->useTube($queue);
         $response = $this->connection()->releaseJob($item['job'], $priority, $delay);
         return $response->getResponseName() == Response::RESPONSE_RELEASED;
-    }
-
-    public function queues()
-    {
-        return $this->connection()->listTubes();
-    }
-
-    public function getJobClass()
-    {
-        return '\\josegonzalez\\Queuesadilla\\Job\\BeanstalkJob';
     }
 }

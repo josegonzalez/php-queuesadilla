@@ -34,11 +34,9 @@ class IronEngine extends Base
         'pass' => 'token',
     ];
 
-/**
- * Connects to a Iron server
- *
- * @return boolean True if BeanstalkD server was connected
- */
+    /**
+     * {@inheritDoc}
+     */
     public function connect()
     {
         $settings = [];
@@ -50,12 +48,18 @@ class IronEngine extends Base
         return (bool)$this->connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete($item)
     {
         $queue = $this->setting($options, 'queue');
         return $this->connection()->deleteMessage($queue, $item['id']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -72,6 +76,9 @@ class IronEngine extends Base
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -84,6 +91,17 @@ class IronEngine extends Base
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function queues()
+    {
+        return $this->connection()->getQueues();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
@@ -92,10 +110,5 @@ class IronEngine extends Base
             "delay" => $this->settings['delay'],
             "expires_in" => $this->settings['expires_in']
         ]);
-    }
-
-    public function queues()
-    {
-        return $this->connection()->getQueues();
     }
 }
