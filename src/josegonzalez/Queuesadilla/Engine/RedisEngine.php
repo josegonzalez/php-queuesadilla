@@ -9,20 +9,12 @@ use RedisException;
 class RedisEngine extends Base
 {
     protected $baseConfig = [
-        'api_version' => 1,  # unsupported
-        'delay' => null,  # unsupported
         'database' => null,
-        'expires_in' => null,  # unsupported
-        'user' => null,  # unsupported
         'pass' => false,
         'persistent' => true,
         'port' => 6379,
-        'priority' => 0,  # unsupported
-        'protocol' => 'https',  # unsupported
         'queue' => 'default',
         'host' => '127.0.0.1',
-        'table' => null,  # unsupported
-        'time_to_run' => 60,  # unsupported
         'timeout' => 0,
     ];
 

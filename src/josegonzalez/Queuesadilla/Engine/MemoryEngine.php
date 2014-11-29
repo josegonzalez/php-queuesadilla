@@ -9,21 +9,9 @@ use josegonzalez\Queuesadilla\Engine\Base;
 class MemoryEngine extends Base
 {
     protected $baseConfig = [
-        'api_version' => 1,  # unsupported
         'delay' => null,
-        'database' => 'database_name',  # unsupported
         'expires_in' => null,
-        'user' => null,  # unsupported
-        'pass' => null,  # unsupported
-        'persistent' => true,  # unsupported
-        'port' => 0,  # unsupported
-        'priority' => 0,  # unsupported
-        'protocol' => 'https',  # unsupported
         'queue' => 'default',
-        'host' => '127.0.0.1',  # unsupported
-        'table' => null,  # unsupported
-        'time_to_run' => 60,  # unsupported
-        'timeout' => 0,  # unsupported
     ];
 
     protected $queues = [];

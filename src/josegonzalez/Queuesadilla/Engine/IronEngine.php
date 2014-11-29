@@ -10,28 +10,23 @@ class IronEngine extends Base
     protected $baseConfig = [
         'api_version' => 1,
         'delay' => null,
-        'database' => 'database_name',  # unsupported
         'expires_in' => null,
-        'user' => null,  # iron.project_id
-        'pass' => null,  # iron.token
-        'persistent' => true,  # unsupported
+        'host' => 'mq-aws-us-east-1.iron.io',
         'port' => 443,
-        'priority' => 0,  # unsupported
+        'project_id' => null,
         'protocol' => 'https',
         'queue' => 'default',
-        'host' => 'mq-aws-us-east-1.iron.io',  # iron.host
-        'table' => null,  # unsupported
-        'time_to_run' => 60,  # iron.timeout
-        'timeout' => 0,  # unsupported
+        'token' => null,
+        'time_to_run' => 60,
     ];
 
     protected $ironSettings = [
-        'protocol' => 'protocol',
-        'host' => 'host',
-        'port' => 'port',
-        'api_version' => 'api_version',
-        'user' => 'project_id',
-        'pass' => 'token',
+        'api_version',
+        'host',
+        'port',
+        'project_id',
+        'protocol',
+        'token',
     ];
 
     /**
@@ -40,8 +35,8 @@ class IronEngine extends Base
     public function connect()
     {
         $settings = [];
-        foreach ($this->ironSettings as $key => $mapping) {
-            $settings[$mapping] = $this->settings[$key];
+        foreach ($this->ironSettings as $key) {
+            $settings[$key] = $this->settings[$key];
         }
 
         $this->connection = new IronMQ($settings);

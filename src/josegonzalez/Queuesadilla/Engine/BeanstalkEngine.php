@@ -13,21 +13,14 @@ use Pheanstalk\Response;
 class BeanstalkEngine extends Base
 {
     protected $baseConfig = [
-        'api_version' => 1,  # unsupported
         'delay' => null,
-        'database' => 'database_name',  # unsupported
-        'expires_in' => null,  # unsupported
-        'user' => null,  # unsupported
-        'pass' => null,  # unsupported
-        'persistent' => true,
+        'expires_in' => null,
         'port' => 11300,
         'priority' => 0,
-        'protocol' => 'https',  # unsupported
         'queue' => 'default',
         'host' => '127.0.0.1',
-        'table' => null,  # unsupported
         'time_to_run' => 60,
-        'timeout' => 0,  # unsupported
+        'timeout' => 0,
     ];
 
     /**

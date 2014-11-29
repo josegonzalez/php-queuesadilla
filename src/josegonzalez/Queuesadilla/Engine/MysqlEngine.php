@@ -25,21 +25,17 @@ use josegonzalez\Queuesadilla\Engine\Base;
 class MysqlEngine extends Base
 {
     protected $baseConfig = [
-        'api_version' => 1,  # unsupported
         'delay' => null,
         'database' => 'database_name',
         'expires_in' => null,
-        'user' => 'root',
-        'pass' => 'pass',
+        'user' => null,
+        'pass' => null,
         'persistent' => true,
-        'port' => '3306',
+        'port' => 3306,
         'priority' => 0,
-        'protocol' => 'https',  # unsupported
         'queue' => 'default',
         'host' => '127.0.0.1',
         'table' => 'jobs',
-        'time_to_run' => 60,  # unsupported
-        'timeout' => 0,  # unsupported
     ];
 
 

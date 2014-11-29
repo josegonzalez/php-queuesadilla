@@ -16,9 +16,7 @@ abstract class Base implements EngineInterface
 
     use LoggerTrait;
 
-    protected $baseConfig = [
-        'queue' => 'default',
-    ];
+    protected $baseConfig = [];
 
     protected $connected = null;
 
