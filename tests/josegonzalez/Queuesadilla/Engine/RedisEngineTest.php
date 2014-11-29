@@ -104,10 +104,10 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(1));
         $this->assertFalse($this->Engine->delete('string'));
         $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertTrue($this->Engine->delete(['id' => '1']));
+        $this->assertFalse($this->Engine->delete(['id' => 1, 'queue' => 'default']));
 
-        $this->assertEquals(1, $this->Engine->push('some_function'));
-        $this->assertTrue($this->Engine->delete(['id' => '1']));
+        $this->assertTrue($this->Engine->push('some_function'));
+        $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
     }
 
     /**
