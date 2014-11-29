@@ -7,7 +7,7 @@ use InvalidArgumentException;
 trait DsnParserTrait
 {
 
-    public static function parseDsn($dsn)
+    public function parseDsn($dsn)
     {
         if (empty($dsn)) {
             return [];

@@ -29,7 +29,6 @@ class NullEngine extends Base
      */
     public function pop($options = [])
     {
-        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
@@ -38,7 +37,6 @@ class NullEngine extends Base
      */
     public function push($class, $vars = [], $options = [])
     {
-        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 
@@ -55,7 +53,6 @@ class NullEngine extends Base
      */
     public function release($item, $options = [])
     {
-        $queue = $this->setting($options, 'queue');
         return $this->return;
     }
 }

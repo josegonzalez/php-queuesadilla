@@ -80,8 +80,8 @@ class BeanstalkEngine extends Base
         $item['job'] = $job;
         $item['id'] = $job->getId();
 
-        $dt = new DateTime;
-        if (!empty($item['options']['expires_at']) && $dt > $item['options']['expires_at']) {
+        $datetime = new DateTime;
+        if (!empty($item['options']['expires_at']) && $datetime > $item['options']['expires_at']) {
             return null;
         }
 
@@ -94,15 +94,15 @@ class BeanstalkEngine extends Base
     public function push($class, $vars = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
-        $expires_in = $this->setting($options, 'expires_in');
+        $expiresIn = $this->setting($options, 'expires_in');
         $delay = $this->setting($options, 'delay', PheanstalkInterface::DEFAULT_DELAY);
         $priority = $this->setting($options, 'priority', PheanstalkInterface::DEFAULT_PRIORITY);
-        $time_to_run = $this->setting($options, 'time_to_run', PheanstalkInterface::DEFAULT_TTR);
+        $timeToRun = $this->setting($options, 'time_to_run', PheanstalkInterface::DEFAULT_TTR);
 
         $options = [];
-        if ($expires_in !== null) {
-            $dt = new DateTime;
-            $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
+        if ($expiresIn !== null) {
+            $datetime = new DateTime;
+            $options['expires_at'] = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)));
             unset($options['expires_in']);
         }
 
@@ -113,7 +113,7 @@ class BeanstalkEngine extends Base
                 json_encode(compact('class', 'vars', 'options')),
                 $priority,
                 $delay,
-                $time_to_run
+                $timeToRun
             );
         } catch (Exception $e) {
             // TODO: Proper logging

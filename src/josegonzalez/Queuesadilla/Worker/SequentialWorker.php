@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
+use Exception;
 use josegonzalez\Queuesadilla\Worker\Base;
 
 class SequentialWorker extends Base
@@ -39,18 +40,18 @@ class SequentialWorker extends Base
 
             $success = false;
             $job = new $jobClass($item, $this->engine);
-            if (is_callable($item['class'])) {
-                try {
-                    $success = $this->perform($item, $job);
-                } catch (\Exception $e) {
-                    $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
-                    $this->stats['exception']++;
-                }
-            } else {
+            if (!is_callable($item['class'])) {
                 $this->logger()->alert('Invalid callable for job. Deleting job from queue.');
                 $this->engine->delete($item);
                 $this->stats['invalid']++;
                 continue;
+            }
+
+            try {
+                $success = $this->perform($item, $job);
+            } catch (Exception $e) {
+                $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
+                $this->stats['exception']++;
             }
 
             if ($success) {

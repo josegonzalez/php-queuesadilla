@@ -74,20 +74,22 @@ class MemoryEngine extends Base
                 return null;
             }
 
-            if ($itemId === null) {
-                $itemId = $item['id'];
-            } elseif ($itemId === $item['id']) {
+            if ($itemId === $item['id']) {
                 array_push($this->queues[$queue], $item);
                 return null;
+            }
+
+            if ($itemId === null) {
+                $itemId = $item['id'];
             }
 
             if (empty($item['options'])) {
                 break;
             }
 
-            $dt = new DateTime;
+            $datetime = new DateTime;
             if (!empty($item['options']['delay_until'])) {
-                if ($dt < $item['options']['delay_until']) {
+                if ($datetime < $item['options']['delay_until']) {
                     $this->queues[$queue][] = $item;
                     $item = null;
                     continue;
@@ -95,7 +97,7 @@ class MemoryEngine extends Base
             }
 
             if (!empty($item['options']['expires_at'])) {
-                if ($dt > $item['options']['expires_at']) {
+                if ($datetime > $item['options']['expires_at']) {
                     $item = null;
                     continue;
                 }
@@ -116,25 +118,29 @@ class MemoryEngine extends Base
 
         $queue = $this->setting($options, 'queue');
         $delay = $this->setting($options, 'delay');
-        $expires_in = $this->setting($options, 'expires_in');
-        $priority = $this->setting($options, 'priority');
+        $expiresIn = $this->setting($options, 'expires_in');
         $this->requireQueue($options);
-        $id = $this->jobId();
+        $jobId = $this->jobId();
 
         if ($delay !== null) {
-            $dt = new DateTime;
-            $options['delay_until'] = $dt->add(new DateInterval(sprintf('PT%sS', $delay)));
+            $datetime = new DateTime;
+            $options['delay_until'] = $datetime->add(new DateInterval(sprintf('PT%sS', $delay)));
             unset($options['delay']);
         }
 
-        if ($expires_in !== null) {
-            $dt = new DateTime;
-            $options['expires_at'] = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)));
+        if ($expiresIn !== null) {
+            $datetime = new DateTime;
+            $options['expires_at'] = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)));
             unset($options['expires_in']);
         }
 
         $oldCount = count($this->queues[$queue]);
-        $newCount = array_push($this->queues[$queue], compact('id', 'class', 'vars', 'options'));
+        $newCount = array_push($this->queues[$queue], [
+            'id' => $jobId,
+            'class' => $class,
+            'vars' => $vars,
+            'options' => $options
+        ]);
         return $newCount === ($oldCount + 1);
     }
 

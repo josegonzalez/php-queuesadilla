@@ -96,12 +96,9 @@ abstract class Base implements EngineInterface
         $settings = array_merge($this->settings, $settings);
 
         if (isset($settings[$key])) {
-            $value = $settings[$key];
-        } else {
-            $value = $default;
+            return $settings[$key];
         }
-
-        return $value;
+        return $default;
     }
 
     public function connection()

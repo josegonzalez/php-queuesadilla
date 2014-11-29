@@ -103,8 +103,8 @@ class MysqlEngine extends Base
         $selectSql = sprintf($selectSql, $this->settings['table']);
         $updateSql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
 
-        $dt = new DateTime;
-        $dtFormatted = $dt->format('Y-m-d H:i:s');
+        $datetime = new DateTime;
+        $dtFormatted = $datetime->format('Y-m-d H:i:s');
 
         try {
             $sth = $this->connection()->prepare($selectSql);
@@ -144,20 +144,20 @@ class MysqlEngine extends Base
     public function push($class, $vars = [], $options = [])
     {
         $delay = $this->setting($options, 'delay');
-        $expires_in = $this->setting($options, 'expires_in');
+        $expiresIn = $this->setting($options, 'expires_in');
         $queue = $this->setting($options, 'queue');
         $priority = $this->setting($options, 'priority');
 
-        $delay_until = null;
+        $delayUntil = null;
         if ($delay !== null) {
-            $dt = new DateTime;
-            $delay_until = $dt->add(new DateInterval(sprintf('PT%sS', $delay)))->format('Y-m-d H:i:s');
+            $datetime = new DateTime;
+            $delayUntil = $datetime->add(new DateInterval(sprintf('PT%sS', $delay)))->format('Y-m-d H:i:s');
         }
 
-        $expires_at = null;
-        if ($expires_in !== null) {
-            $dt = new DateTime;
-            $expires_at = $dt->add(new DateInterval(sprintf('PT%sS', $expires_in)))->format('Y-m-d H:i:s');
+        $expiresAt = null;
+        if ($expiresIn !== null) {
+            $datetime = new DateTime;
+            $expiresAt = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)))->format('Y-m-d H:i:s');
         }
 
         $data = json_encode(compact('class', 'vars'));
@@ -168,8 +168,8 @@ class MysqlEngine extends Base
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
         $sth->bindParam(3, $priority, PDO::PARAM_INT);
-        $sth->bindParam(4, $expires_at, PDO::PARAM_STR);
-        $sth->bindParam(5, $delay_until, PDO::PARAM_STR);
+        $sth->bindParam(4, $expiresAt, PDO::PARAM_STR);
+        $sth->bindParam(5, $delayUntil, PDO::PARAM_STR);
         $sth->execute();
         return $sth->rowCount() == 1;
     }
@@ -201,7 +201,6 @@ class MysqlEngine extends Base
      */
     public function release($item, $options = [])
     {
-        $queue = $this->setting($options, 'queue');
         $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ?', $this->settings['table']);
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
@@ -237,10 +236,9 @@ class MysqlEngine extends Base
             }
             return $query;
         } catch (PDOException $e) {
+            $e->queryString = $sql;
             if (isset($query->queryString)) {
                 $e->queryString = $query->queryString;
-            } else {
-                $e->queryString = $sql;
             }
             throw $e;
         }

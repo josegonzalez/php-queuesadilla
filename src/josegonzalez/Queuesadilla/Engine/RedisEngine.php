@@ -95,8 +95,12 @@ class RedisEngine extends Base
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
 
-        $id = $this->jobId();
-        return $this->connection()->rpush('queue:' . $queue, json_encode(compact('id', 'class', 'vars')));
+        $jobId = $this->jobId();
+        return $this->connection()->rpush('queue:' . $queue, json_encode([
+            'id' => $jobId,
+            'class' => $class,
+            'vars' => $vars,
+        ]));
     }
 
     /**
