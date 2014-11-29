@@ -15,7 +15,7 @@ env:
   global:
    - BEANSTALK_URL="beanstalk://127.0.0.1:11300?queue=default&timeout=1"
    - MEMORY_URL="memory:///?queue=default&timeout=1"
-   - MYSQL_URL="mysql://travis@127.0.0.1:3306/$DATABASE_NAME?queue=default&timeout=1"
+   - MYSQL_URL="mysql://travis@127.0.0.1:3306/database_name?queue=default&timeout=1"
    - NULL_URL="null:///?queue=default&timeout=1"
    - REDIS_URL="redis://travis@127.0.0.1:6379/0?queue=default&timeout=1"
    - MEMORY_URL="synchronous:///?queue=default&timeout=1"
