@@ -89,7 +89,8 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => '1',
             'class' => null,
-            'vars' => []
+            'vars' => [],
+            'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
 

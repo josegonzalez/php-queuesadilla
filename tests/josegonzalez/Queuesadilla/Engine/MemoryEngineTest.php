@@ -10,11 +10,10 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->config = [
-            'url' => getenv('MEMORY_URL'),
-        ];
+        $this->url = getenv('MEMORY_URL');
+        $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-        $this->Engine = new MemoryEngine;
+        $this->Engine = new MemoryEngine($this->Logger, $this->config);
     }
 
     public function tearDown()
@@ -28,7 +27,13 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $Engine = new MemoryEngine;
+        $Engine = new MemoryEngine($this->Logger, []);
+        $this->assertTrue($Engine->connected());
+
+        $Engine = new MemoryEngine($this->Logger, $this->url);
+        $this->assertTrue($Engine->connected());
+
+        $Engine = new MemoryEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
 
@@ -92,6 +97,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
             'class' => null,
             'vars' => [],
             'options' => [],
+            'queue' => 'default',
         ], $Engine->pop('default'));
     }
 

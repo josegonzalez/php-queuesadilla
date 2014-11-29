@@ -103,7 +103,7 @@ class BeanstalkEngine extends Base
         $this->connection()->useTube($queue);
         try {
             $this->connection()->put(
-                json_encode(compact('class', 'vars', 'options')),
+                json_encode(compact('class', 'vars', 'options', 'queue')),
                 $priority,
                 $delay,
                 $timeToRun

@@ -123,6 +123,7 @@ class MemoryEngine extends Base
             'id' => $jobId,
             'class' => $class,
             'vars' => $vars,
+            'queue' => $queue,
             'options' => $options
         ]);
         return $newCount === ($oldCount + 1);

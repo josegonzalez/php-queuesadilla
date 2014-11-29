@@ -68,44 +68,49 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
     public function testPush()
     {
         $this->assertEquals([
-            'id' => '1',
+            'id' => 1,
             'class' => null,
             'vars' => [],
             'options' => [],
+            'queue' => 'default',
         ], $this->Engine->push(null, []));
         $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
         $datetime = new DateTime;
         $this->assertEquals([
-            'id' => '3',
+            'id' => 3,
             'class' => null,
             'vars' => [],
             'options' => [
               'delay_until' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
             ],
+            'queue' => 'default',
         ], $this->Engine->push(null, [], ['delay' => 0]));
 
         $datetime = new DateTime;
         $this->assertEquals([
-            'id' => '4',
+            'id' => 4,
             'class' => 'another_function',
             'vars' => [],
             'options' => [
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
             ],
+            'queue' => 'default',
         ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
         $this->assertEquals([
-            'id' => '5',
+            'id' => 5,
             'class' => 'yet_another_function',
             'vars' => [],
             'options' => [],
+            'queue' => 'default',
         ], $this->Engine->push('yet_another_function', []));
         $this->assertEquals([
-            'id' => '6',
+            'id' => 6,
             'class' => 'another_function',
             'vars' => [],
             'options' => [
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
             ],
+            'queue' => 'default',
         ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
 
         sleep(2);

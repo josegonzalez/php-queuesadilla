@@ -78,7 +78,7 @@ class IronEngine extends Base
     {
         $queue = $this->setting($options, 'queue');
 
-        $item = json_encode(compact('class', 'vars'));
+        $item = json_encode(compact('class', 'vars', 'queue'));
         return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->settings['time_to_run'],
             "delay" => $this->settings['delay'],

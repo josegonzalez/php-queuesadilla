@@ -128,6 +128,7 @@ class MysqlEngine extends Base
                         'id' => $result['id'],
                         'class' => $data['class'],
                         'vars' => $data['vars'],
+                        'queue' => $queue,
                     ];
                 }
             }

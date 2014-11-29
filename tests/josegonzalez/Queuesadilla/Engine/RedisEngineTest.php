@@ -118,9 +118,10 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->Engine->pop('default'));
         $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
         $this->assertEquals([
-            'id' => '1',
+            'id' => 1,
             'class' => null,
-            'vars' => []
+            'vars' => [],
+            'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
 
@@ -185,22 +186,25 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
         $this->assertEquals([
-            'id' => '1',
+            'id' => 1,
             'class' => null,
-            'vars' => []
+            'vars' => [],
+            'queue' => 'default',
         ], $this->Engine->pop('default'));
 
         $this->assertFalse($this->Engine->release(null, 'default'));
 
         $this->assertEquals(1, $this->Engine->release([
-            'id' => '2',
+            'id' => 2,
             'class' => 'some_function',
-            'vars' => []
+            'vars' => [],
+            'queue' => 'default',
         ], 'default'));
         $this->assertEquals([
-            'id' => '2',
+            'id' => 2,
             'class' => 'some_function',
-            'vars' => []
+            'vars' => [],
+            'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
 
