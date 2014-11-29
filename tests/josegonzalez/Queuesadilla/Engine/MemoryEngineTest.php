@@ -79,13 +79,15 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
             'id' => '1',
             'class' => null,
             'vars' => [],
-            'options' => ['queue' => 'default'],
+            'options' => [],
         ], $Engine->pop('default'));
     }
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::push
      * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::shouldDelay
+     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::shouldExpire
      */
     public function testPush()
     {

@@ -129,6 +129,7 @@ class MemoryEngine extends Base
             unset($options['expires_in']);
         }
 
+        unset($options['queue']);
         $oldCount = count($this->queues[$queue]);
         $newCount = array_push($this->queues[$queue], [
             'id' => $jobId,
