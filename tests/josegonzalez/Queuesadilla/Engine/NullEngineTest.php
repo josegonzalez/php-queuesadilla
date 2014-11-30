@@ -159,7 +159,7 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::jobId
+     * @covers josegonzalez\Queuesadilla\Engine\Base::createJobId
      */
     public function testJobId()
     {
