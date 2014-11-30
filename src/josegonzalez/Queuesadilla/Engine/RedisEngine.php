@@ -92,7 +92,7 @@ class RedisEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $vars = [], $options = [])
+    public function push($class, $args = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
@@ -101,7 +101,7 @@ class RedisEngine extends Base
         return (bool)$this->connection()->rpush('queue:' . $queue, json_encode([
             'id' => (int)$jobId,
             'class' => $class,
-            'vars' => $vars,
+            'args' => $args,
             'queue' => $queue,
         ]));
     }

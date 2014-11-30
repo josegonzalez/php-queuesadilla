@@ -127,7 +127,7 @@ class MysqlEngine extends Base
                     return [
                         'id' => $result['id'],
                         'class' => $data['class'],
-                        'vars' => $data['vars'],
+                        'args' => $data['args'],
                         'queue' => $queue,
                     ];
                 }
@@ -143,7 +143,7 @@ class MysqlEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $vars = [], $options = [])
+    public function push($class, $args = [], $options = [])
     {
         $delay = $this->setting($options, 'delay');
         $expiresIn = $this->setting($options, 'expires_in');
@@ -162,7 +162,7 @@ class MysqlEngine extends Base
             $expiresAt = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)))->format('Y-m-d H:i:s');
         }
 
-        $data = json_encode(compact('class', 'vars'));
+        $data = json_encode(compact('class', 'args'));
 
         $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';
         $sql = sprintf($sql, $this->config('table'));

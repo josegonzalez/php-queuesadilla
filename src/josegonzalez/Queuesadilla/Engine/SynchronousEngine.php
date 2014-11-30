@@ -10,9 +10,9 @@ class SynchronousEngine extends MemoryEngine
     /**
      * {@inheritDoc}
      */
-    public function push($class, $vars = [], $options = [])
+    public function push($class, $args = [], $options = [])
     {
-        parent::push($class, $vars, $options);
+        parent::push($class, $args, $options);
         $worker = $this->getWorker();
         return $worker->work();
     }

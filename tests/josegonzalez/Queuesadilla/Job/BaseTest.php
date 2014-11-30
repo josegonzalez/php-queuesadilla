@@ -16,7 +16,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             [
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => [
+                'args' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
                 ],
@@ -25,7 +25,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 'attempts' => 0,
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => [
+                'args' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
                 ],
@@ -34,7 +34,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 'attempts' => 1,
                 'delay' => 0,
                 'class' => 'Foo',
-                'vars' => [
+                'args' => [
                     'foo' => 'bar',
                     'baz' => 'qux',
                 ],
@@ -64,7 +64,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
         $data = [
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -107,7 +107,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -117,7 +117,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'attempts' => 0,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -127,7 +127,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -157,7 +157,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'attempts' => 1,
             'delay' => 10,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -169,7 +169,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -180,7 +180,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'attempts' => 2,
             'delay' => 0,
             'class' => 'Foo',
-            'vars' => [
+            'args' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],

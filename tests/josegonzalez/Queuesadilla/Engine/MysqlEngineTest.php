@@ -85,7 +85,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => '1',
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
@@ -113,7 +113,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($pop1['id']);
         $this->assertNull($pop1['class']);
-        $this->assertEmpty($pop1['vars']);
+        $this->assertEmpty($pop1['args']);
         $this->assertEquals('yet_another_function', $pop2['class']);
         $this->assertNull($pop3);
         $this->assertNull($pop4);

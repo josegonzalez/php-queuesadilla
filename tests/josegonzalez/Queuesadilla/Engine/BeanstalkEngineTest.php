@@ -94,7 +94,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $item = $Engine->pop('default');
         $this->assertInternalType('array', $item);
         $this->assertArrayHasKey('class', $item);
-        $this->assertArrayHasKey('vars', $item);
+        $this->assertArrayHasKey('args', $item);
         $this->assertArrayHasKey('job', $item);
         $this->assertInstanceOf('\Pheanstalk\Job', $item['job']);
     }
@@ -123,7 +123,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($pop1['id']);
         $this->assertNull($pop1['class']);
-        $this->assertEmpty($pop1['vars']);
+        $this->assertEmpty($pop1['args']);
         $this->assertNull($pop2);
         $this->assertEquals('yet_another_function', $pop3['class']);
         $this->assertNull($pop4);

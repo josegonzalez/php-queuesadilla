@@ -33,11 +33,11 @@ class Base
     public function data($key = null, $default = null)
     {
         if ($key === null) {
-            return $this->item['vars'];
+            return $this->item['args'];
         }
 
-        if (array_key_exists($key, $this->item['vars'])) {
-            return $this->item['vars'][$key];
+        if (array_key_exists($key, $this->item['args'])) {
+            return $this->item['args'][$key];
         }
 
         return $default;

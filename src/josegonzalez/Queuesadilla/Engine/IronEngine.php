@@ -70,18 +70,18 @@ class IronEngine extends Base
         return [
             'id' => $item->id,
             'class' => $data['class'],
-            'vars' => $data['vars'],
+            'args' => $data['args'],
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function push($class, $vars = [], $options = [])
+    public function push($class, $args = [], $options = [])
     {
         $queue = $this->setting($options, 'queue');
 
-        $item = json_encode(compact('class', 'vars', 'queue'));
+        $item = json_encode(compact('class', 'args', 'queue'));
         return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->config('time_to_run'),
             "delay" => $this->config('delay'),

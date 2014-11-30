@@ -96,7 +96,7 @@ class MemoryEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $vars = [], $options = [])
+    public function push($class, $args = [], $options = [])
     {
         if (!is_array($options)) {
             $options = ['queue' => $options];
@@ -125,7 +125,7 @@ class MemoryEngine extends Base
         $newCount = array_push($this->queues[$queue], [
             'id' => $jobId,
             'class' => $class,
-            'vars' => $vars,
+            'args' => $args,
             'queue' => $queue,
             'options' => $options
         ]);

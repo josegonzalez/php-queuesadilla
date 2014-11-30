@@ -105,7 +105,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => '1',
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'options' => [],
             'queue' => 'default',
         ], $Engine->pop('default'));
@@ -137,7 +137,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($pop1['id']);
         $this->assertNull($pop1['class']);
-        $this->assertEmpty($pop1['vars']);
+        $this->assertEmpty($pop1['args']);
         $this->assertEquals('yet_another_function', $pop2['class']);
         $this->assertNull($pop3);
         $this->assertNull($pop4);

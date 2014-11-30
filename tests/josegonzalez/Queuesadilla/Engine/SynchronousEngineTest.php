@@ -89,7 +89,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 1,
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'options' => [],
             'queue' => 'default',
         ], $this->Engine->push(null, []));
@@ -98,7 +98,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 3,
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'options' => [
               'delay_until' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
             ],
@@ -109,7 +109,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 4,
             'class' => 'another_function',
-            'vars' => [],
+            'args' => [],
             'options' => [
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
             ],
@@ -118,14 +118,14 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 5,
             'class' => 'yet_another_function',
-            'vars' => [],
+            'args' => [],
             'options' => [],
             'queue' => 'default',
         ], $this->Engine->push('yet_another_function', []));
         $this->assertEquals([
             'id' => 6,
             'class' => 'another_function',
-            'vars' => [],
+            'args' => [],
             'options' => [
               'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
             ],

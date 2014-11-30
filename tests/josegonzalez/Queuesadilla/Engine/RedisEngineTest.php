@@ -126,7 +126,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 1,
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
@@ -173,7 +173,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $pop4 = $this->Engine->pop();
 
         $this->assertNull($pop1['class']);
-        $this->assertEmpty($pop1['vars']);
+        $this->assertEmpty($pop1['args']);
 
         $this->markTestIncomplete(
             'RedisEngine does not yet implement delay or expires_in (tbd sorted sets)'
@@ -194,7 +194,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'id' => 1,
             'class' => null,
-            'vars' => [],
+            'args' => [],
             'queue' => 'default',
         ], $this->Engine->pop('default'));
 
@@ -203,13 +203,13 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->Engine->release([
             'id' => 2,
             'class' => 'some_function',
-            'vars' => [],
+            'args' => [],
             'queue' => 'default',
         ], 'default'));
         $this->assertEquals([
             'id' => 2,
             'class' => 'some_function',
-            'vars' => [],
+            'args' => [],
             'queue' => 'default',
         ], $this->Engine->pop('default'));
     }
