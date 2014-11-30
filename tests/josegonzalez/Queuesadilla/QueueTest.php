@@ -22,15 +22,6 @@ class QueueTest extends PHPUnit_Framework_TestCase
         $Queue = new Queue($this->Engine);
         $this->assertInstanceOf('\josegonzalez\Queuesadilla\Queue', $Queue);
     }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Queue::bulk
-     */
-    public function testBulk()
-    {
-        $this->assertEquals([], $this->Queue->bulk([]));
-    }
-
     /**
      * @covers josegonzalez\Queuesadilla\Queue::push
      */

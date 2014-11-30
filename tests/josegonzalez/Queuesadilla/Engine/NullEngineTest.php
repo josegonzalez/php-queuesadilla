@@ -76,18 +76,6 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::bulk
-     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::bulk
-     */
-    public function testBulk()
-    {
-        $this->assertEquals([true, true], $this->Engine->bulk([null, null]));
-
-        $this->Engine->return = false;
-        $this->assertEquals([false, false], $this->Engine->bulk([null, null]));
-    }
-
-    /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::config
      * @covers josegonzalez\Queuesadilla\Engine\NullEngine::config
      */

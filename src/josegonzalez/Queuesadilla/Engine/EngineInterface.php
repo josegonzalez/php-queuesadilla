@@ -20,8 +20,6 @@ interface EngineInterface
 
     public function connection();
 
-    public function bulk($jobs, $vars = [], $options = []);
-
     /**
      * Delete a message from the queue.
      *

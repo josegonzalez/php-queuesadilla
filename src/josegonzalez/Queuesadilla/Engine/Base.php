@@ -41,27 +41,6 @@ abstract class Base implements EngineInterface
         $this->config($config);
         return $this;
     }
-
-    /**
-     * Bulk push an array of jobs onto the queue.
-     *
-     * @param  array $jobs    An array of callables
-     * @param  array $vars    A set of data to set for each job
-     * @param  array $options An array of options for publishing the job
-     *
-     * @return array An array of boolean values for each job
-     **/
-    public function bulk($jobs, $vars = [], $options = [])
-    {
-        $queue = $this->setting($options, 'queue');
-        $return = [];
-        foreach ((array)$jobs as $callable) {
-            $return[] = $this->push($callable, $vars, $queue);
-        }
-
-        return $return;
-    }
-
     public function getJobClass()
     {
         return '\\josegonzalez\\Queuesadilla\\Job\\Base';
