@@ -64,8 +64,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
+        $Engine = $this->mockEngine();
 
         $this->assertFalse($Engine->delete(null));
         $this->assertFalse($Engine->delete(false));
@@ -74,9 +73,9 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($Engine->delete(['key' => 'value']));
         $this->assertFalse($Engine->delete(['id' => '1', 'queue' => 'default']));
 
-        $this->assertTrue($Engine->push('some_function'));
+        $this->assertTrue($Engine->push(['class' => 'some_function', 'args' => []]));
         $job = new \Pheanstalk\Job($Engine->lastJobId(), ['queue' => 'default']);
-        $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
+        $this->assertTrue($Engine->push(['class' => 'another_function', 'args' => []], ['queue' => 'other']));
         $this->assertTrue($Engine->delete(['id' => $job->getId(), 'queue' => 'default', 'job' => $job]));
     }
 
@@ -85,11 +84,10 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
+        $Engine = $this->mockEngine();
 
         $this->assertNull($Engine->pop('default'));
-        $this->assertTrue($Engine->push(null, [], 'default'));
+        $this->assertTrue($Engine->push(['class' => null, 'args' => []], 'default'));
 
         $item = $Engine->pop('default');
         $this->assertInternalType('array', $item);
@@ -105,14 +103,14 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertTrue($this->Engine->push('some_function', [], [
+        $this->assertTrue($this->Engine->push(['class' => null, 'args' => []], 'default'));
+        $this->assertTrue($this->Engine->push(['class' => 'some_function', 'args' => []], [
             'delay' => 30,
         ]));
-        $this->assertTrue($this->Engine->push('another_function', [], [
+        $this->assertTrue($this->Engine->push(['class' => 'another_function', 'args' => []], [
             'expires_in' => 1,
         ]));
-        $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
+        $this->assertTrue($this->Engine->push(['class' => 'yet_another_function', 'args' => []], 'default'));
 
         sleep(2);
 
@@ -136,7 +134,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
+        $this->assertTrue($this->Engine->push(['class' => null, 'args' => []], 'default'));
 
         $item = $this->Engine->pop('default');
         $this->assertInstanceOf('\Pheanstalk\Job', $item['job']);
@@ -149,10 +147,10 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals(['default'], $this->Engine->queues());
-        $this->Engine->push('some_function');
+        $this->Engine->push(['class' => 'some_function', 'args' => []]);
         $this->assertEquals(['default'], $this->Engine->queues());
 
-        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $this->Engine->push(['class' => 'some_function', 'args' => []], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
@@ -193,13 +191,9 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
         $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
         return $Engine;
     }
 }

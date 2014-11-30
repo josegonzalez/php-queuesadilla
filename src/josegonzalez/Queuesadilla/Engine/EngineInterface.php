@@ -37,13 +37,12 @@ interface EngineInterface
     /**
      * Push a single job onto the queue.
      *
-     * @param string $callable    a job callable
-     * @param array  $args        an array of data to set for the job
+     * @param array  $item        an item payload
      * @param array  $options     an array of options for publishing the job
      *
      * @return boolean
      **/
-    public function push($class, $args = [], $options = []);
+    public function push($item, $options = []);
 
     /**
      * Get a list of available queues

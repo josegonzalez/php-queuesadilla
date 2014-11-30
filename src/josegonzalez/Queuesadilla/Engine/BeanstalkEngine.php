@@ -87,7 +87,7 @@ class BeanstalkEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $args = [], $options = [])
+    public function push($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
         $expiresIn = $this->setting($options, 'expires_in');
@@ -105,8 +105,10 @@ class BeanstalkEngine extends Base
         unset($options['queue']);
         $this->connection()->useTube($queue);
         try {
+            $item['options'] = $options;
+            $item['queue'] = $queue;
             $this->lastJobId = $this->connection()->put(
-                json_encode(compact('class', 'args', 'options', 'queue')),
+                json_encode($item),
                 $priority,
                 $delay,
                 $timeToRun
