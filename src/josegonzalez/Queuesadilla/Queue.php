@@ -29,6 +29,7 @@ class Queue
             'id'    => md5(uniqid('', true)),
             'queue_time' => microtime(true),
         ];
-        return $pushed;
+        $success = $this->engine->push($item, $options);
+        return $success;
     }
 }
