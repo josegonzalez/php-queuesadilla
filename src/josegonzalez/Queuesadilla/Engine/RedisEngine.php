@@ -103,7 +103,12 @@ class RedisEngine extends Base
 
         unset($options['queue']);
         $item['options'] = $options;
-        return (bool)$this->connection()->rpush('queue:' . $queue, json_encode($item));
+        $success = (bool)$this->connection()->rpush('queue:' . $queue, json_encode($item));
+        if ($success) {
+            $this->lastJobId = $item['id'];
+        }
+
+        return $success;
     }
 
     /**
