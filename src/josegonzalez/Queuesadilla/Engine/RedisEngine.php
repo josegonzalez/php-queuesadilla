@@ -25,7 +25,7 @@ class RedisEngine extends Base
     {
         $return = false;
         $connectMethod = 'connect';
-        if (!empty($this->config('persistent'))) {
+        if ($this->config('persistent')) {
             $connectMethod = 'pconnect';
         }
 
