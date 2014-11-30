@@ -127,10 +127,10 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
+        $this->assertTrue($this->Engine->push(null, 'default'));
 
         $this->Engine->return = false;
-        $this->assertFalse($this->Engine->connect(null, [], 'default'));
+        $this->assertFalse($this->Engine->connect(null, 'default'));
     }
 
     /**
@@ -162,13 +162,11 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null, $config = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }

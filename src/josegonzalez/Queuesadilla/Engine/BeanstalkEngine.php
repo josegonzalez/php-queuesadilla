@@ -89,6 +89,10 @@ class BeanstalkEngine extends Base
      */
     public function push($item, $options = [])
     {
+        if (!is_array($options)) {
+            $options = ['queue' => $options];
+        }
+
         $queue = $this->setting($options, 'queue');
         $expiresIn = $this->setting($options, 'expires_in');
         $delay = $this->setting($options, 'delay', PheanstalkInterface::DEFAULT_DELAY);

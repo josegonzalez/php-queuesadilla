@@ -35,7 +35,7 @@ class NullEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $args = [], $options = [])
+    public function push($item, $options = [])
     {
         $this->lastJobId = $this->return;
         return $this->return;

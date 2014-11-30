@@ -92,18 +92,19 @@ class RedisEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $args = [], $options = [])
+    public function push($item, $options = [])
     {
+        if (!is_array($options)) {
+            $options = ['queue' => $options];
+        }
+
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
 
-        $this->lastJobId = $jobId = $this->createJobId();
-        return (bool)$this->connection()->rpush('queue:' . $queue, json_encode([
-            'id' => (int)$jobId,
-            'class' => $class,
-            'args' => $args,
-            'queue' => $queue,
-        ]));
+        unset($options['queue']);
+        $item['queue'] = $queue;
+        $item['options'] = $options;
+        return (bool)$this->connection()->rpush('queue:' . $queue, json_encode($item));
     }
 
     /**
@@ -127,11 +128,6 @@ class RedisEngine extends Base
         $this->requireQueue($options);
 
         return $this->connection()->rpush('queue:' . $queue, json_encode($item));
-    }
-
-    protected function createJobId()
-    {
-        return rand();
     }
 
     protected function ensureRemoveScript()

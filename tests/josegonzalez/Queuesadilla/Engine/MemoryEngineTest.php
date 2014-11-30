@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
@@ -15,6 +16,7 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
         $this->Engine = new MemoryEngine($this->Logger, $this->config);
+        $this->Fixtures = new FixtureData;
     }
 
     public function tearDown()
@@ -58,35 +60,16 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
-        $Engine->expects($this->at(0))
-                ->method('createJobId')
-                ->will($this->returnValue(1));
-        $Engine->expects($this->at(1))
-                ->method('createJobId')
-                ->will($this->returnValue(2));
+        $this->assertFalse($this->Engine->delete(null));
+        $this->assertFalse($this->Engine->delete(false));
+        $this->assertFalse($this->Engine->delete(1));
+        $this->assertFalse($this->Engine->delete('string'));
+        $this->assertFalse($this->Engine->delete(['key' => 'value']));
+        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
 
-        $this->assertFalse($Engine->delete(null));
-        $this->assertFalse($Engine->delete(false));
-        $this->assertFalse($Engine->delete(1));
-        $this->assertFalse($Engine->delete('string'));
-        $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
-
-        $this->assertTrue($Engine->push('some_function'));
-        $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
-        $this->assertTrue($Engine->delete(['id' => 1, 'queue' => 'default']));
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::createJobId
-     */
-    public function testJobId()
-    {
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
+        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
     }
 
     /**
@@ -94,21 +77,9 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, ['createJobId']);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->returnValue('1'));
-
-        $this->assertNull($Engine->pop('default'));
-        $this->assertTrue($Engine->push(null, [], 'default'));
-        $this->assertEquals([
-            'id' => '1',
-            'class' => null,
-            'args' => [],
-            'options' => [],
-            'queue' => 'default',
-        ], $Engine->pop('default'));
+        $this->assertNull($this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
     }
 
     /**
@@ -119,14 +90,14 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertTrue($this->Engine->push('some_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'delay' => 30,
         ]));
-        $this->assertTrue($this->Engine->push('another_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third'], [
             'expires_in' => 1,
         ]));
-        $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['fourth'], 'default'));
 
         sleep(2);
 
@@ -157,11 +128,11 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testQueues()
     {
-        $this->assertEquals([], $this->Engine->queues());
-        $this->Engine->push('some_function');
+        $this->assertEquals(['default'], $this->Engine->queues());
+        $this->Engine->push($this->Fixtures->default['first']);
         $this->assertEquals(['default'], $this->Engine->queues());
 
-        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $this->Engine->push($this->Fixtures->other['second'], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
@@ -181,13 +152,11 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null, $config = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }

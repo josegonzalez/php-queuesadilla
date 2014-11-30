@@ -129,6 +129,7 @@ class MysqlEngine extends Base
                         'class' => $data['class'],
                         'args' => $data['args'],
                         'queue' => $queue,
+                        'options' => $data['options'],
                     ];
                 }
             }
@@ -143,8 +144,12 @@ class MysqlEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $args = [], $options = [])
+    public function push($item, $options = [])
     {
+        if (!is_array($options)) {
+            $options = ['queue' => $options];
+        }
+
         $delay = $this->setting($options, 'delay');
         $expiresIn = $this->setting($options, 'expires_in');
         $queue = $this->setting($options, 'queue');
@@ -162,7 +167,10 @@ class MysqlEngine extends Base
             $expiresAt = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)))->format('Y-m-d H:i:s');
         }
 
-        $data = json_encode(compact('class', 'args'));
+        unset($options['queue']);
+        $item['options'] = $options;
+        $item['queue'] = $queue;
+        $data = json_encode($item);
 
         $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';
         $sql = sprintf($sql, $this->config('table'));

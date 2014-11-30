@@ -4,6 +4,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use DateTime;
 use DateInterval;
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\SynchronousEngine;
 use josegonzalez\Queuesadilla\Worker\SequentialWorker;
 use josegonzalez\Queuesadilla\Worker\TestWorker;
@@ -23,6 +24,7 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->Engine->expects($this->any())
                 ->method('getWorker')
                 ->will($this->returnValue(new TestWorker($this->Engine)));
+        $this->Fixtures = new FixtureData;
     }
 
     public function tearDown()
@@ -72,72 +74,42 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($Engine->delete(1));
         $this->assertFalse($Engine->delete('string'));
         $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
+        $this->assertFalse($Engine->delete($this->Fixtures->default['first']));
 
-        $this->assertTrue($Engine->push('some_function'));
-        $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
-        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
+        $this->assertTrue($Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($Engine->push($this->Fixtures->other['third']));
+        $this->assertFalse($Engine->delete($this->Fixtures->default['first']));
     }
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::push
-     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::push
-     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::shouldDelay
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::shouldExpire
      */
     public function testPush()
     {
-        $this->assertEquals([
-            'id' => 1,
-            'class' => null,
-            'args' => [],
-            'options' => [],
-            'queue' => 'default',
-        ], $this->Engine->push(null, []));
-        $this->assertNull($this->Engine->push('some_function', [], ['delay' => 30]));
-        $datetime = new DateTime;
-        $this->assertEquals([
-            'id' => 3,
-            'class' => null,
-            'args' => [],
-            'options' => [
-              'delay_until' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
-            ],
-            'queue' => 'default',
-        ], $this->Engine->push(null, [], ['delay' => 0]));
-
-        $datetime = new DateTime;
-        $this->assertEquals([
-            'id' => 4,
-            'class' => 'another_function',
-            'args' => [],
-            'options' => [
-              'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 1)))
-            ],
-            'queue' => 'default',
-        ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
-        $this->assertEquals([
-            'id' => 5,
-            'class' => 'yet_another_function',
-            'args' => [],
-            'options' => [],
-            'queue' => 'default',
-        ], $this->Engine->push('yet_another_function', []));
-        $this->assertEquals([
-            'id' => 6,
-            'class' => 'another_function',
-            'args' => [],
-            'options' => [
-              'expires_at' => $datetime->add(new DateInterval(sprintf('PT%sS', 0)))
-            ],
-            'queue' => 'default',
-        ], $this->Engine->push('another_function', [], ['expires_in' => 1]));
+        $Engine = $this->mockEngine();
+        $this->assertTrue($Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertTrue($Engine->push($this->Fixtures->default['second'], [
+            'delay' => 30,
+        ]));
+        $this->assertTrue($Engine->push($this->Fixtures->other['third'], [
+            'expires_in' => 1,
+        ]));
+        $this->assertTrue($Engine->push($this->Fixtures->default['fourth'], 'default'));
 
         sleep(2);
 
-        $this->assertNull($this->Engine->pop());
-        $this->assertNull($this->Engine->pop());
-        $this->assertNull($this->Engine->pop());
-        $this->assertNull($this->Engine->pop());
+        $pop1 = $this->Engine->pop();
+        $pop2 = $this->Engine->pop();
+        $pop3 = $this->Engine->pop();
+        $pop4 = $this->Engine->pop();
+
+        $this->assertNull($pop1);
+        $this->assertNull($pop2);
+        $this->assertNull($pop3);
+        $this->assertNull($pop4);
     }
 
     /**
@@ -160,13 +132,11 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null, $config = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }

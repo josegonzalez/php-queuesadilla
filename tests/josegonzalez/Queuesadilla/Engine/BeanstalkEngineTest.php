@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
 use Pheanstalk\Exception\ServerException;
 use PHPUnit_Framework_TestCase;
@@ -17,6 +18,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $this->Logger = new NullLogger;
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
         $this->Engine = $this->mockEngine();
+        $this->Fixtures = new FixtureData;
         $this->clearEngine();
     }
 
@@ -64,19 +66,21 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $Engine = $this->mockEngine();
+        $this->assertFalse($this->Engine->delete(null));
+        $this->assertFalse($this->Engine->delete(false));
+        $this->assertFalse($this->Engine->delete(1));
+        $this->assertFalse($this->Engine->delete('string'));
+        $this->assertFalse($this->Engine->delete(['key' => 'value']));
+        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
 
-        $this->assertFalse($Engine->delete(null));
-        $this->assertFalse($Engine->delete(false));
-        $this->assertFalse($Engine->delete(1));
-        $this->assertFalse($Engine->delete('string'));
-        $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete(['id' => '1', 'queue' => 'default']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $job = new \Pheanstalk\Job($this->Engine->lastJobId(), ['queue' => 'default']);
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
 
-        $this->assertTrue($Engine->push(['class' => 'some_function', 'args' => []]));
-        $job = new \Pheanstalk\Job($Engine->lastJobId(), ['queue' => 'default']);
-        $this->assertTrue($Engine->push(['class' => 'another_function', 'args' => []], ['queue' => 'other']));
-        $this->assertTrue($Engine->delete(['id' => $job->getId(), 'queue' => 'default', 'job' => $job]));
+        $data = $this->Fixtures->default['first'];
+        $data['id'] = $job->getId();
+        $data['job'] = $job;
+        $this->assertTrue($this->Engine->delete($data));
     }
 
     /**
@@ -84,12 +88,10 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
-        $Engine = $this->mockEngine();
+        $this->assertNull($this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
 
-        $this->assertNull($Engine->pop('default'));
-        $this->assertTrue($Engine->push(['class' => null, 'args' => []], 'default'));
-
-        $item = $Engine->pop('default');
+        $item = $this->Engine->pop('default');
         $this->assertInternalType('array', $item);
         $this->assertArrayHasKey('class', $item);
         $this->assertArrayHasKey('args', $item);
@@ -103,14 +105,14 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(['class' => null, 'args' => []], 'default'));
-        $this->assertTrue($this->Engine->push(['class' => 'some_function', 'args' => []], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'delay' => 30,
         ]));
-        $this->assertTrue($this->Engine->push(['class' => 'another_function', 'args' => []], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third'], [
             'expires_in' => 1,
         ]));
-        $this->assertTrue($this->Engine->push(['class' => 'yet_another_function', 'args' => []], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['fourth'], 'default'));
 
         sleep(2);
 
@@ -134,7 +136,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->assertTrue($this->Engine->push(['class' => null, 'args' => []], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
 
         $item = $this->Engine->pop('default');
         $this->assertInstanceOf('\Pheanstalk\Job', $item['job']);
@@ -147,10 +149,10 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals(['default'], $this->Engine->queues());
-        $this->Engine->push(['class' => 'some_function', 'args' => []]);
+        $this->Engine->push($this->Fixtures->default['first']);
         $this->assertEquals(['default'], $this->Engine->queues());
 
-        $this->Engine->push(['class' => 'some_function', 'args' => []], ['queue' => 'other']);
+        $this->Engine->push($this->Fixtures->other['second'], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
@@ -191,9 +193,11 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = null)
+    protected function mockEngine($methods = null, $config = null)
     {
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }

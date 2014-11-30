@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
 use PDO;
 use PDOException;
@@ -18,6 +19,7 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->Logger = new NullLogger;
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';
         $this->Engine = $this->mockEngine();
+        $this->Fixtures = new FixtureData;
         $this->clearEngine();
     }
 
@@ -68,11 +70,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(1));
         $this->assertFalse($this->Engine->delete('string'));
         $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertFalse($this->Engine->delete(['id' => '1', 'queue' => 'default']));
+        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
 
-        $this->assertTrue($this->Engine->push('some_function'));
-        $this->assertTrue($this->Engine->push('another_function', [], ['queue' => 'other']));
-        $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
+        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
     }
 
     /**
@@ -81,13 +83,8 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $this->assertNull($this->Engine->pop('default'));
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertEquals([
-            'id' => '1',
-            'class' => null,
-            'args' => [],
-            'queue' => 'default',
-        ], $this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
     }
 
     /**
@@ -95,14 +92,14 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertTrue($this->Engine->push(null, [], 'default'));
-        $this->assertTrue($this->Engine->push('some_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'delay' => 30,
         ]));
-        $this->assertTrue($this->Engine->push('another_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third'], [
             'expires_in' => 1,
         ]));
-        $this->assertTrue($this->Engine->push('yet_another_function', [], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['fourth'], 'default'));
 
         sleep(2);
 
@@ -133,10 +130,10 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals([], $this->Engine->queues());
-        $this->Engine->push('some_function');
+        $this->Engine->push($this->Fixtures->default['first']);
         $this->assertEquals(['default'], $this->Engine->queues());
 
-        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $this->Engine->push($this->Fixtures->other['second'], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
@@ -187,13 +184,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null, $config = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }

@@ -14,7 +14,9 @@ class MemoryEngine extends Base
         'queue' => 'default',
     ];
 
-    protected $queues = [];
+    protected $queues = [
+        'default' => [],
+    ];
 
     /**
      * {@inheritDoc}
@@ -96,7 +98,7 @@ class MemoryEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function push($class, $args = [], $options = [])
+    public function push($item, $options = [])
     {
         if (!is_array($options)) {
             $options = ['queue' => $options];
@@ -106,7 +108,6 @@ class MemoryEngine extends Base
         $delay = $this->setting($options, 'delay');
         $expiresIn = $this->setting($options, 'expires_in');
         $this->requireQueue($options);
-        $jobId = $this->createJobId();
 
         if ($delay !== null) {
             $datetime = new DateTime;
@@ -122,16 +123,12 @@ class MemoryEngine extends Base
 
         unset($options['queue']);
         $oldCount = count($this->queues[$queue]);
-        $newCount = array_push($this->queues[$queue], [
-            'id' => $jobId,
-            'class' => $class,
-            'args' => $args,
-            'queue' => $queue,
-            'options' => $options
-        ]);
+        $item['options'] = $options;
+        $item['queue'] = $queue;
+        $newCount = array_push($this->queues[$queue], $item);
 
         if ($newCount === ($oldCount + 1)) {
-            $this->lastJobId = $jobId;
+            $this->lastJobId = $item['id'];
         }
         return $newCount === ($oldCount + 1);
     }
@@ -153,11 +150,6 @@ class MemoryEngine extends Base
         $this->requireQueue($options);
 
         return array_push($this->queues[$queue], $item) !== count($this->queues[$queue]);
-    }
-
-    protected function createJobId()
-    {
-        return rand();
     }
 
     protected function requireQueue($options)

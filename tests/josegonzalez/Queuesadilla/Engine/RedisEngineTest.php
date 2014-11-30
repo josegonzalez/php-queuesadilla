@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\RedisEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
@@ -17,6 +18,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->Logger = new NullLogger;
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
         $this->Engine = $this->mockEngine();
+        $this->Fixtures = new FixtureData;
         $this->clearEngine();
     }
 
@@ -49,21 +51,19 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->Engine->connect());
 
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
-
         $config = $this->config;
         $config['pass'] = 'some_password';
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
+        $Engine = $this->mockEngine(null, $config);
         $this->assertFalse($Engine->connect());
 
         $config = $this->config;
         $config['database'] = 1;
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
+        $Engine = $this->mockEngine(null, $config);
         $this->assertTrue($Engine->connect());
 
         $config = $this->config;
         $config['persistent'] = false;
-        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
+        $Engine = $this->mockEngine(null, $config);
         $this->assertTrue($Engine->connect());
     }
 
@@ -72,8 +72,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConnectionException()
     {
-        $engineClass = '\josegonzalez\Queuesadilla\Engine\RedisEngine';
-        $Engine = $this->getMock($engineClass, ['redisInstance'], [$this->Logger, $this->config]);
+        $Engine = $this->mockEngine(['redisInstance']);
         $Engine->expects($this->once())
                 ->method('redisInstance')
                 ->will($this->throwException(new RedisException));
@@ -99,21 +98,11 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(1));
         $this->assertFalse($this->Engine->delete('string'));
         $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertFalse($this->Engine->delete(['id' => 1, 'queue' => 'default']));
+        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
 
-        $this->assertTrue($this->Engine->push('some_function'));
-        $this->assertTrue($this->Engine->push('another_function', [], ['queue' => 'other']));
-        $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::createJobId
-     */
-    public function testJobId()
-    {
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
-        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
+        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
     }
 
     /**
@@ -122,13 +111,8 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $this->assertNull($this->Engine->pop('default'));
-        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
-        $this->assertEquals([
-            'id' => 1,
-            'class' => null,
-            'args' => [],
-            'queue' => 'default',
-        ], $this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
     }
 
     /**
@@ -136,34 +120,14 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
-        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
-        $this->assertEquals(2, $this->Engine->push('1', [], 'default'));
-        $this->assertEquals(3, $this->Engine->push('2', [], 'default'));
-        $this->assertEquals(4, $this->Engine->push('3', [], 'default'));
-
-        $pop1 = $this->Engine->pop();
-        $pop2 = $this->Engine->pop();
-        $pop3 = $this->Engine->pop();
-        $pop4 = $this->Engine->pop();
-
-        $this->assertNull($pop1['class']);
-        $this->assertEquals('1', $pop2['class']);
-        $this->assertEquals('2', $pop3['class']);
-        $this->assertEquals('3', $pop4['class']);
-    }
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::push
-     */
-    public function testPushWithOptions()
-    {
-        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
-        $this->assertEquals(2, $this->Engine->push('some_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'delay' => 30,
         ]));
-        $this->assertEquals(3, $this->Engine->push('another_function', [], [
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third'], [
             'expires_in' => 1,
         ]));
-        $this->assertEquals(4, $this->Engine->push('yet_another_function', [], 'default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['fourth'], 'default'));
 
         sleep(2);
 
@@ -190,28 +154,13 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
-        $this->assertEquals(1, $this->Engine->push(null, [], 'default'));
-        $this->assertEquals([
-            'id' => 1,
-            'class' => null,
-            'args' => [],
-            'queue' => 'default',
-        ], $this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
+        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
 
         $this->assertFalse($this->Engine->release(null, 'default'));
 
-        $this->assertEquals(1, $this->Engine->release([
-            'id' => 2,
-            'class' => 'some_function',
-            'args' => [],
-            'queue' => 'default',
-        ], 'default'));
-        $this->assertEquals([
-            'id' => 2,
-            'class' => 'some_function',
-            'args' => [],
-            'queue' => 'default',
-        ], $this->Engine->pop('default'));
+        $this->assertEquals(1, $this->Engine->release($this->Fixtures->default['second'], 'default'));
+        $this->assertEquals($this->Fixtures->default['second'], $this->Engine->pop('default'));
     }
 
     /**
@@ -221,10 +170,10 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals([], $this->Engine->queues());
-        $this->Engine->push('some_function');
+        $this->Engine->push($this->Fixtures->default['first']);
         $this->assertEquals(['default'], $this->Engine->queues());
 
-        $this->Engine->push('some_function', [], ['queue' => 'other']);
+        $this->Engine->push($this->Fixtures->other['second'], ['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
@@ -250,13 +199,11 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function mockEngine($methods = [])
+    protected function mockEngine($methods = null, $config = null)
     {
-        $methods = array_merge(['createJobId'], $methods);
-        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
-        $Engine->expects($this->any())
-                ->method('createJobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
-        return $Engine;
+        if ($config === null) {
+            $config = $this->config;
+        }
+        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
     }
 }
