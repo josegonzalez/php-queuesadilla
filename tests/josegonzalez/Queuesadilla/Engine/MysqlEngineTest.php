@@ -7,6 +7,7 @@ use PDO;
 use PDOException;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class MysqlEngineTest extends PHPUnit_Framework_TestCase
 {
