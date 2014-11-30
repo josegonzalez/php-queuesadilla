@@ -21,11 +21,14 @@ class Queue
      **/
     public function push($callable, $args = [], $options = [])
     {
-        return $this->engine->push([
+        $queue = $this->engine->setting($options, 'queue');
+        $item = [
+            'queue' => $queue,
             'class' => $callable,
             'args'  => array($args),
             'id'    => md5(uniqid('', true)),
             'queue_time' => microtime(true),
-        ], $options);
+        ];
+        return $pushed;
     }
 }

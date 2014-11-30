@@ -56,15 +56,15 @@ class SequentialWorkerTest extends PHPUnit_Framework_TestCase
         $this->Worker = new SequentialWorker($this->Engine);
         $this->Item = [
             'class' => ['josegonzalez\Queuesadilla\MyJob', 'perform'],
-            'args' => ['return' => true],
+            'args' => [['return' => true]],
         ];
         $this->ItemFail = [
             'class' => ['josegonzalez\Queuesadilla\MyJob', 'performFail'],
-            'args' => ['return' => true],
+            'args' => [['return' => true]],
         ];
         $this->ItemException = [
             'class' => ['josegonzalez\Queuesadilla\MyJob', 'performException'],
-            'args' => ['return' => true],
+            'args' => [['return' => true]],
         ];
         $this->Job = new BaseJob($this->Item, $this->Engine);
     }

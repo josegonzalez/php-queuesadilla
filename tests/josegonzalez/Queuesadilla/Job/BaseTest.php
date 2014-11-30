@@ -17,8 +17,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 'delay' => 0,
                 'class' => 'Foo',
                 'args' => [
-                    'foo' => 'bar',
-                    'baz' => 'qux',
+                    [
+                        'foo' => 'bar',
+                        'baz' => 'qux',
+                    ]
                 ],
             ],
             [
@@ -26,8 +28,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 'delay' => 0,
                 'class' => 'Foo',
                 'args' => [
-                    'foo' => 'bar',
-                    'baz' => 'qux',
+                    [
+                        'foo' => 'bar',
+                        'baz' => 'qux',
+                    ]
                 ],
             ],
             [
@@ -35,8 +39,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 'delay' => 0,
                 'class' => 'Foo',
                 'args' => [
-                    'foo' => 'bar',
-                    'baz' => 'qux',
+                    [
+                        'foo' => 'bar',
+                        'baz' => 'qux',
+                    ]
                 ],
             ],
         ];
@@ -65,8 +71,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ];
 
@@ -108,8 +116,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[0]->item());
 
@@ -118,8 +128,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[1]->item());
 
@@ -128,8 +140,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[2]->item());
     }
@@ -158,8 +172,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 10,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[0]->item());
 
@@ -170,8 +186,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[1]->item());
 
@@ -181,8 +199,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
             'delay' => 0,
             'class' => 'Foo',
             'args' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                [
+                    'foo' => 'bar',
+                    'baz' => 'qux',
+                ]
             ],
         ], $this->Jobs[2]->item());
     }
