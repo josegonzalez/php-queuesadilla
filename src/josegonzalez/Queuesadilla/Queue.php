@@ -2,8 +2,12 @@
 
 namespace josegonzalez\Queuesadilla;
 
+use josegonzalez\Queuesadilla\Event\EventManagerTrait;
+
 class Queue
 {
+    use EventManagerTrait;
+
     public function __construct($engine)
     {
         $this->engine = $engine;
@@ -30,6 +34,13 @@ class Queue
             'queue_time' => microtime(true),
         ];
         $success = $this->engine->push($item, $options);
+
+        $item['args'] = $args;
+        $this->dispatchEvent('Queue.afterEnqueue', [
+            'item' => $item,
+            'success' => $success,
+        ]);
+
         return $success;
     }
 }
