@@ -169,7 +169,6 @@ class MysqlEngine extends Base
 
         unset($options['queue']);
         $item['options'] = $options;
-        $item['queue'] = $queue;
         $data = json_encode($item);
 
         $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';

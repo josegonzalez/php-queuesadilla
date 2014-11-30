@@ -110,7 +110,6 @@ class BeanstalkEngine extends Base
         $this->connection()->useTube($queue);
         try {
             $item['options'] = $options;
-            $item['queue'] = $queue;
             $this->lastJobId = $this->connection()->put(
                 json_encode($item),
                 $priority,

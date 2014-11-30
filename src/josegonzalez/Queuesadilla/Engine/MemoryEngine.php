@@ -124,7 +124,6 @@ class MemoryEngine extends Base
         unset($options['queue']);
         $oldCount = count($this->queues[$queue]);
         $item['options'] = $options;
-        $item['queue'] = $queue;
         $newCount = array_push($this->queues[$queue], $item);
 
         if ($newCount === ($oldCount + 1)) {

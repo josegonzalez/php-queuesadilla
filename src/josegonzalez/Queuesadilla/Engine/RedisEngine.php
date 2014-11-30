@@ -102,7 +102,6 @@ class RedisEngine extends Base
         $this->requireQueue($options);
 
         unset($options['queue']);
-        $item['queue'] = $queue;
         $item['options'] = $options;
         return (bool)$this->connection()->rpush('queue:' . $queue, json_encode($item));
     }
