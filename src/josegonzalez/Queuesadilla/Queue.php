@@ -35,6 +35,11 @@ class Queue
         ];
         $success = $this->engine->push($item, $options);
 
+        unset($item['id']);
+        if ($success) {
+            $item['id'] = $this->engine->lastJobId();
+        }
+
         $item['args'] = $args;
         $this->dispatchEvent('Queue.afterEnqueue', [
             'item' => $item,
