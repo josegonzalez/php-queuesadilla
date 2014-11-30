@@ -37,9 +37,9 @@ class BeanstalkEngine extends Base
     public function connect()
     {
         $this->connection = new Pheanstalk(
-            $this->settings['host'],
-            $this->settings['port'],
-            $this->settings['timeout']
+            $this->config('host'),
+            $this->config('port'),
+            $this->config('timeout')
         );
         return $this->connection->getConnection()->isServiceListening();
     }

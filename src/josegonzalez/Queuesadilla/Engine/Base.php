@@ -37,7 +37,7 @@ abstract class Base implements EngineInterface
         }
 
         $this->setLogger($logger);
-        $this->settings = $this->baseConfig;
+        $this->config($this->baseConfig);
         $this->config($config);
         return $this;
     }

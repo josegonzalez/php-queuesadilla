@@ -36,7 +36,7 @@ class IronEngine extends Base
     {
         $settings = [];
         foreach ($this->ironSettings as $key) {
-            $settings[$key] = $this->settings[$key];
+            $settings[$key] = $this->config($key);
         }
 
         $this->connection = new IronMQ($settings);
@@ -83,9 +83,9 @@ class IronEngine extends Base
 
         $item = json_encode(compact('class', 'vars', 'queue'));
         return $this->connection()->postMessage($queue, $item, [
-            "timeout" => $this->settings['time_to_run'],
-            "delay" => $this->settings['delay'],
-            "expires_in" => $this->settings['expires_in']
+            "timeout" => $this->config('time_to_run'),
+            "delay" => $this->config('delay'),
+            "expires_in" => $this->config('expires_in'),
         ]);
     }
 
@@ -104,9 +104,9 @@ class IronEngine extends Base
     {
         $queue = $this->setting($options, 'queue');
         return $this->connection()->postMessage($queue, $item, [
-            "timeout" => $this->settings['time_to_run'],
-            "delay" => $this->settings['delay'],
-            "expires_in" => $this->settings['expires_in']
+            "timeout" => $this->config('time_to_run'),
+            "delay" => $this->config('delay'),
+            "expires_in" => $this->config('expires_in'),
         ]);
     }
 }

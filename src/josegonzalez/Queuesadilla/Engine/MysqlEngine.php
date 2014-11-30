@@ -81,7 +81,7 @@ class MysqlEngine extends Base
             return false;
         }
 
-        $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->settings['table']);
+        $sql = sprintf('DELETE FROM `%s` WHERE id = ?', $this->config('table'));
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
@@ -101,8 +101,8 @@ class MysqlEngine extends Base
             'AND (delay_until IS NULL OR delay_until < ?)',
             'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
         ]);
-        $selectSql = sprintf($selectSql, $this->settings['table']);
-        $updateSql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->settings['table']);
+        $selectSql = sprintf($selectSql, $this->config('table'));
+        $updateSql = sprintf('UPDATE `%s` SET locked = 1 WHERE id = ?', $this->config('table'));
 
         $datetime = new DateTime;
         $dtFormatted = $datetime->format('Y-m-d H:i:s');
@@ -165,7 +165,7 @@ class MysqlEngine extends Base
         $data = json_encode(compact('class', 'vars'));
 
         $sql = 'INSERT INTO `%s` (`data`, `queue`, `priority`, `expires_at`, `delay_until`) VALUES (?, ?, ?, ?, ?)';
-        $sql = sprintf($sql, $this->settings['table']);
+        $sql = sprintf($sql, $this->config('table'));
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
         $sth->bindParam(2, $queue, PDO::PARAM_STR);
@@ -189,7 +189,7 @@ class MysqlEngine extends Base
             'SELECT `queue` FROM `%s`',
             'GROUP BY `queue`',
         ]);
-        $sql = sprintf($sql, $this->settings['table']);
+        $sql = sprintf($sql, $this->config('table'));
         $sth = $this->connection()->prepare($sql);
         $sth->execute();
         $results = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -207,7 +207,7 @@ class MysqlEngine extends Base
      */
     public function release($item, $options = [])
     {
-        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ? LIMIT 1', $this->settings['table']);
+        $sql = sprintf('UPDATE `%s` SET locked = 0 WHERE id = ? LIMIT 1', $this->config('table'));
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();

@@ -25,7 +25,7 @@ class RedisEngine extends Base
     {
         $return = false;
         $connectMethod = 'connect';
-        if (!empty($this->settings['persistent'])) {
+        if (!empty($this->config('persistent'))) {
             $connectMethod = 'pconnect';
         }
 
@@ -33,21 +33,21 @@ class RedisEngine extends Base
             $this->connection = $this->redisInstance();
             if ($this->connection) {
                 $return = $this->connection->$connectMethod(
-                    $this->settings['host'],
-                    $this->settings['port'],
-                    (int)$this->settings['timeout']
+                    $this->config('host'),
+                    $this->config('port'),
+                    (int)$this->config('timeout')
                 );
             }
         } catch (RedisException $e) {
             return false;
         }
 
-        if ($return && $this->settings['database'] !== null) {
-            $return = $this->connection->select((int)$this->settings['database']);
+        if ($return && $this->config('database') !== null) {
+            $return = $this->connection->select((int)$this->config('database'));
         }
 
-        if ($return && $this->settings['pass']) {
-            $return = $this->connection->auth($this->settings['pass']);
+        if ($return && $this->config('pass')) {
+            $return = $this->connection->auth($this->config('pass'));
         }
 
         return $return;
