@@ -48,8 +48,11 @@ class IronEngine extends Base
      */
     public function delete($item)
     {
-        $queue = $this->setting([], 'queue');
-        return $this->connection()->deleteMessage($queue, $item['id']);
+        if (!parent::delete($item)) {
+            return false;
+        }
+
+        return $this->connection()->deleteMessage($item['queue'], $item['id']);
     }
 
     /**

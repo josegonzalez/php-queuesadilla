@@ -18,12 +18,8 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $this->url = getenv('SYNCHRONOUS_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
-        $this->Engine = $this->getMock($engineClass, ['getWorker', 'jobId'], [$this->Logger, $this->config]);
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\SynchronousEngine';
+        $this->Engine = $this->mockEngine(['getWorker']);
         $this->Engine->expects($this->any())
                 ->method('getWorker')
                 ->will($this->returnValue(new TestWorker($this->Engine)));
@@ -40,6 +36,12 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        $Engine = new SynchronousEngine($this->Logger, []);
+        $this->assertTrue($Engine->connected());
+
+        $Engine = new SynchronousEngine($this->Logger, $this->url);
+        $this->assertTrue($Engine->connected());
+
         $Engine = new SynchronousEngine($this->Logger, $this->config);
         $this->assertTrue($Engine->connected());
     }
@@ -58,6 +60,24 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
     public function testGetJobClass()
     {
         $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::delete
+     */
+    public function testDelete()
+    {
+        $Engine = $this->mockEngine();
+        $this->assertFalse($Engine->delete(null));
+        $this->assertFalse($Engine->delete(false));
+        $this->assertFalse($Engine->delete(1));
+        $this->assertFalse($Engine->delete('string'));
+        $this->assertFalse($Engine->delete(['key' => 'value']));
+        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
+
+        $this->assertTrue($Engine->push('some_function'));
+        $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
+        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
     }
 
     /**
@@ -139,5 +159,15 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
         return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }

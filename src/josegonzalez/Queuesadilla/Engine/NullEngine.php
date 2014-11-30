@@ -37,6 +37,7 @@ class NullEngine extends Base
      */
     public function push($class, $vars = [], $options = [])
     {
+        $this->lastJobId = $this->return;
         return $this->return;
     }
 

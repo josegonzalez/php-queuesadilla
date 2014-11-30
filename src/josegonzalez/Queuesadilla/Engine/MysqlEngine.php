@@ -77,7 +77,7 @@ class MysqlEngine extends Base
      */
     public function delete($item)
     {
-        if (!is_array($item) || !isset($item['id'])) {
+        if (!parent::delete($item)) {
             return false;
         }
 
@@ -173,6 +173,10 @@ class MysqlEngine extends Base
         $sth->bindParam(4, $expiresAt, PDO::PARAM_STR);
         $sth->bindParam(5, $delayUntil, PDO::PARAM_STR);
         $sth->execute();
+
+        if ($sth->rowCount() == 1) {
+            $this->lastJobId = $this->connection()->lastInsertId();
+        }
         return $sth->rowCount() == 1;
     }
 

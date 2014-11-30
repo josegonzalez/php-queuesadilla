@@ -20,9 +20,11 @@ abstract class Base implements EngineInterface
 
     protected $connected = null;
 
+    protected $connection = null;
+
     protected $settings = [];
 
-    public $connection = null;
+    public $lastJobId = null;
 
     public function __construct(LoggerInterface $logger = null, $config = [])
     {
@@ -115,8 +117,21 @@ abstract class Base implements EngineInterface
         return $this->connected;
     }
 
-    public function jobId()
+    public function createJobId()
     {
         return rand();
+    }
+
+    public function lastJobId()
+    {
+        return $this->lastJobId;
+    }
+
+    public function delete($item)
+    {
+        if (!is_array($item)) {
+            return false;
+        }
+        return !empty($item['id']) && !empty($item['queue']);
     }
 }

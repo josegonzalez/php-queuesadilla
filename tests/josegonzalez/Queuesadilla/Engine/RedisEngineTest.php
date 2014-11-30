@@ -14,19 +14,14 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->url = getenv('REDIS_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
-        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->returnValue(1));
-
-        $this->Engine->connection()->flushdb();
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
+        $this->Engine = $this->mockEngine();
+        $this->clearEngine();
     }
 
     public function tearDown()
     {
-        $this->Engine->connection()->flushdb();
+        $this->clearEngine();
         unset($this->Engine);
     }
 
@@ -58,26 +53,18 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
 
         $config = $this->config;
         $config['pass'] = 'some_password';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
         $this->assertFalse($Engine->connect());
 
         $config = $this->config;
         $config['database'] = 1;
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
         $this->assertTrue($Engine->connect());
 
         $config = $this->config;
         $config['persistent'] = false;
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $config]);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $config]);
         $this->assertTrue($Engine->connect());
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
-     */
-    public function testGetJobClass()
-    {
-        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
     /**
@@ -95,6 +82,14 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     */
+    public function testGetJobClass()
+    {
+        $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::delete
      */
     public function testDelete()
@@ -107,6 +102,7 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(['id' => 1, 'queue' => 'default']));
 
         $this->assertTrue($this->Engine->push('some_function'));
+        $this->assertTrue($this->Engine->push('another_function', [], ['queue' => 'other']));
         $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
     }
 
@@ -228,5 +224,29 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
+    }
+
+    protected function clearEngine()
+    {
+        $this->Engine->connection()->flushdb();
+        $this->Engine->connection()->script('flush');
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }

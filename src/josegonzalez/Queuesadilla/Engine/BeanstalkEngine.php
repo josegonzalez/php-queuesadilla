@@ -49,6 +49,9 @@ class BeanstalkEngine extends Base
      */
     public function delete($item)
     {
+        if (!parent::delete($item)) {
+            return false;
+        }
         if (empty($item['job'])) {
             return false;
         }
@@ -102,7 +105,7 @@ class BeanstalkEngine extends Base
         unset($options['queue']);
         $this->connection()->useTube($queue);
         try {
-            $this->connection()->put(
+            $this->lastJobId = $this->connection()->put(
                 json_encode(compact('class', 'vars', 'options', 'queue')),
                 $priority,
                 $delay,

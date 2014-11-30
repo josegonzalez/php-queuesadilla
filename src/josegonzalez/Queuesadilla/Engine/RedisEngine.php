@@ -58,7 +58,7 @@ class RedisEngine extends Base
      */
     public function delete($item)
     {
-        if (!is_array($item) || !isset($item['id'])) {
+        if (!parent::delete($item)) {
             return false;
         }
 
@@ -97,7 +97,7 @@ class RedisEngine extends Base
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
 
-        $jobId = $this->jobId();
+        $this->lastJobId = $jobId = $this->createJobId();
         return (bool)$this->connection()->rpush('queue:' . $queue, json_encode([
             'id' => (int)$jobId,
             'class' => $class,
@@ -149,7 +149,7 @@ local originalQueue = 'queue:'..KEYS[1]
 local tempQueue = originalQueue..':temp:'..KEYS[2]
 local requeueQueue = tempQueue..':requeue'
 local deleted = false
-local itemId = tonumber(KEYS[3])
+local itemId = KEYS[3]
 while true do
     local str = redis.pcall('rpoplpush', originalQueue, tempQueue)
     if str == nil or str == '' or str == false then
@@ -157,7 +157,7 @@ while true do
     end
 
     local item = cjson.decode(str)
-    if item["id"] == itemId then
+    if tostring(item["id"]) == itemId then
         deleted = true
         break
     else

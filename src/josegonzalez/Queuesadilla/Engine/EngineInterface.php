@@ -10,7 +10,7 @@ interface EngineInterface
 
     public function getJobClass();
 
-    public function jobId();
+    public function createJobId();
 
     public function setting($settings, $key, $default = null);
 

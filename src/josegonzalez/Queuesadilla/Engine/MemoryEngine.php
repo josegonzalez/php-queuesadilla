@@ -29,18 +29,21 @@ class MemoryEngine extends Base
      */
     public function delete($item)
     {
-        if (!is_array($item) || !isset($item['id'])) {
+        if (!parent::delete($item)) {
+            return false;
+        }
+
+        $queue = $item['queue'];
+        if (!isset($this->queues[$queue])) {
             return false;
         }
 
         $deleted = false;
-        foreach ($this->queues as $name => $queue) {
-            foreach ($queue as $i => $queueItem) {
-                if ($queueItem['id'] === $item['id']) {
-                    unset($this->queues[$name][$i]);
-                    $deleted = true;
-                    break 2;
-                }
+        foreach ($this->queues[$queue] as $i => $queueItem) {
+            if ($queueItem['id'] === $item['id']) {
+                unset($this->queues[$queue][$i]);
+                $deleted = true;
+                break;
             }
         }
         return $deleted;
@@ -103,7 +106,7 @@ class MemoryEngine extends Base
         $delay = $this->setting($options, 'delay');
         $expiresIn = $this->setting($options, 'expires_in');
         $this->requireQueue($options);
-        $jobId = $this->jobId();
+        $jobId = $this->createJobId();
 
         if ($delay !== null) {
             $datetime = new DateTime;
@@ -126,6 +129,10 @@ class MemoryEngine extends Base
             'queue' => $queue,
             'options' => $options
         ]);
+
+        if ($newCount === ($oldCount + 1)) {
+            $this->lastJobId = $jobId;
+        }
         return $newCount === ($oldCount + 1);
     }
 

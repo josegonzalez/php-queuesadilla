@@ -15,19 +15,14 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->url = getenv('MYSQL_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';
-        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->returnValue('1'));
-
-        $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';
+        $this->Engine = $this->mockEngine();
+        $this->clearEngine();
     }
 
     public function tearDown()
     {
-        $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
+        $this->clearEngine();
         unset($this->Engine);
     }
 
@@ -73,10 +68,11 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->Engine->delete(1));
         $this->assertFalse($this->Engine->delete('string'));
         $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertFalse($this->Engine->delete(['id' => '1']));
+        $this->assertFalse($this->Engine->delete(['id' => '1', 'queue' => 'default']));
 
         $this->assertTrue($this->Engine->push('some_function'));
-        $this->assertTrue($this->Engine->delete(['id' => '1']));
+        $this->assertTrue($this->Engine->push('another_function', [], ['queue' => 'other']));
+        $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
     }
 
     /**
@@ -176,5 +172,28 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
             }
             throw $e;
         }
+    }
+
+    protected function clearEngine()
+    {
+        $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }

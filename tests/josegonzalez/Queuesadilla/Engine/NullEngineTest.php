@@ -13,12 +13,8 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
         $this->url = getenv('NULL_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\NullEngine';
-        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->returnValue(1));
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\NullEngine';
+        $this->Engine = $this->mockEngine();
     }
 
     public function tearDown()
@@ -167,9 +163,9 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testJobId()
     {
-        $this->assertInternalType('int', $this->Engine->jobId());
-        $this->assertInternalType('int', $this->Engine->jobId());
-        $this->assertInternalType('int', $this->Engine->jobId());
+        $this->assertInternalType('int', $this->Engine->createJobId());
+        $this->assertInternalType('int', $this->Engine->createJobId());
+        $this->assertInternalType('int', $this->Engine->createJobId());
     }
 
     /**
@@ -179,5 +175,23 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals([], $this->Engine->queues());
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }

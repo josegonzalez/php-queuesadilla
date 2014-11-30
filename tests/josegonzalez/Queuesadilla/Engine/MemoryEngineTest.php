@@ -59,24 +59,24 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, ['jobId']);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
         $Engine->expects($this->at(0))
-                ->method('jobId')
-                ->will($this->returnValue('2'));
+                ->method('createJobId')
+                ->will($this->returnValue(1));
         $Engine->expects($this->at(1))
-                ->method('jobId')
-                ->will($this->returnValue('1'));
+                ->method('createJobId')
+                ->will($this->returnValue(2));
 
         $this->assertFalse($Engine->delete(null));
         $this->assertFalse($Engine->delete(false));
         $this->assertFalse($Engine->delete(1));
         $this->assertFalse($Engine->delete('string'));
         $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete(['id' => '1']));
+        $this->assertFalse($Engine->delete(['id' => 1, 'queue' => 'default']));
 
         $this->assertTrue($Engine->push('some_function'));
         $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
-        $this->assertTrue($Engine->delete(['id' => '1']));
+        $this->assertTrue($Engine->delete(['id' => 1, 'queue' => 'default']));
     }
 
     /**
@@ -85,9 +85,9 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\MemoryEngine';
-        $Engine = $this->getMock($engineClass, ['jobId']);
+        $Engine = $this->getMock($engineClass, ['createJobId']);
         $Engine->expects($this->any())
-                ->method('jobId')
+                ->method('createJobId')
                 ->will($this->returnValue('1'));
 
         $this->assertNull($Engine->pop('default'));
@@ -161,5 +161,23 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }

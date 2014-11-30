@@ -14,33 +14,14 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $this->url = getenv('BEANSTALK_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-
-        $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $this->Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
-        $this->Engine->expects($this->any())
-                ->method('jobId')
-                ->will($this->returnValue('1'));
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
+        $this->Engine = $this->mockEngine();
+        $this->clearEngine();
     }
 
     public function tearDown()
     {
-        foreach ($this->Engine->queues() as $queue) {
-            $this->Engine->connection()->useTube($queue);
-            try {
-                $job = $this->Engine->connection()->peekReady();
-            } catch (ServerException $e) {
-                continue;
-            }
-
-            while (!empty($job)) {
-                $this->Engine->connection()->deleteJob($job);
-                try {
-                    $job = $this->Engine->connection()->peekReady();
-                } catch (ServerException $e) {
-                    break;
-                }
-            }
-        }
+        $this->clearEngine();
         unset($this->Engine);
     }
 
@@ -84,19 +65,19 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
 
         $this->assertFalse($Engine->delete(null));
         $this->assertFalse($Engine->delete(false));
         $this->assertFalse($Engine->delete(1));
         $this->assertFalse($Engine->delete('string'));
         $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete(['id' => '1']));
+        $this->assertFalse($Engine->delete(['id' => '1', 'queue' => 'default']));
 
         $this->assertTrue($Engine->push('some_function'));
+        $job = new \Pheanstalk\Job($Engine->lastJobId(), ['queue' => 'default']);
         $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
-        $item = $Engine->pop();
-        $this->assertTrue($Engine->delete($item));
+        $this->assertTrue($Engine->delete(['id' => $job->getId(), 'queue' => 'default', 'job' => $job]));
     }
 
     /**
@@ -105,7 +86,7 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     public function testPop()
     {
         $engineClass = 'josegonzalez\Queuesadilla\Engine\BeanstalkEngine';
-        $Engine = $this->getMock($engineClass, ['jobId'], [$this->Logger, $this->config]);
+        $Engine = $this->getMock($engineClass, ['createJobId'], [$this->Logger, $this->config]);
 
         $this->assertNull($Engine->pop('default'));
         $this->assertTrue($Engine->push(null, [], 'default'));
@@ -181,5 +162,44 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
+    }
+
+    protected function clearEngine()
+    {
+        foreach ($this->Engine->queues() as $queue) {
+            $this->Engine->connection()->useTube($queue);
+            try {
+                $job = $this->Engine->connection()->peekReady($queue);
+            } catch (ServerException $e) {
+                continue;
+            }
+
+            while (!empty($job)) {
+                $this->Engine->connection()->deleteJob($job);
+                try {
+                    $job = $this->Engine->connection()->peekReady($queue);
+                } catch (ServerException $e) {
+                    break;
+                }
+            }
+        }
+    }
+
+    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function mockEngine($methods = [])
+    {
+        $methods = array_merge(['createJobId'], $methods);
+        $Engine = $this->getMock($this->engineClass, $methods, [$this->Logger, $this->config]);
+        $Engine->expects($this->any())
+                ->method('createJobId')
+                ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6));
+        return $Engine;
     }
 }
