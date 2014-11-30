@@ -14,8 +14,6 @@ interface EngineInterface
 
     public function connect();
 
-    public function connected();
-
     public function connection();
 
     /**

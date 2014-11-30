@@ -28,18 +28,17 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::connected
      */
     public function testConstruct()
     {
         $Engine = new BeanstalkEngine($this->Logger, []);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new BeanstalkEngine($this->Logger, $this->url);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new BeanstalkEngine($this->Logger, $this->config);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
     }
 
     /**

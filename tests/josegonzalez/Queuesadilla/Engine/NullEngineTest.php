@@ -25,22 +25,20 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\Base::connected
      * @covers josegonzalez\Queuesadilla\Engine\Base::connection
      * @covers josegonzalez\Queuesadilla\Engine\NullEngine::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connected
      * @covers josegonzalez\Queuesadilla\Engine\NullEngine::connection
      */
     public function testConstruct()
     {
         $Engine = new NullEngine($this->Logger, []);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new NullEngine($this->Logger, $this->url);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new NullEngine($this->Logger, $this->config);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
     }
 
     /**

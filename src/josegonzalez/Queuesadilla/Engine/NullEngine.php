@@ -13,7 +13,7 @@ class NullEngine extends Base
      */
     public function connect()
     {
-        return $this->connected = $this->return;
+        return $this->connection = $this->return;
     }
 
     /**

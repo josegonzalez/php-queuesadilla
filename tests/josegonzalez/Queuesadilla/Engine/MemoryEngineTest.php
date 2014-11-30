@@ -24,18 +24,17 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::connected
      */
     public function testConstruct()
     {
         $Engine = new MemoryEngine($this->Logger, []);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new MemoryEngine($this->Logger, $this->url);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new MemoryEngine($this->Logger, $this->config);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
     }
 
     /**

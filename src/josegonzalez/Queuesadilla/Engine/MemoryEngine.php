@@ -21,7 +21,7 @@ class MemoryEngine extends Base
      */
     public function connect()
     {
-        return true;
+        return $this->connection = true;
     }
 
     /**

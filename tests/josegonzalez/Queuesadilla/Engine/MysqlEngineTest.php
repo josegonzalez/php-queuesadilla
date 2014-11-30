@@ -29,18 +29,17 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::__construct
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::connected
      */
     public function testConstruct()
     {
         $Engine = new MysqlEngine($this->Logger, []);
-        $this->assertFalse($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new MysqlEngine($this->Logger, $this->url);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
 
         $Engine = new MysqlEngine($this->Logger, $this->config);
-        $this->assertTrue($Engine->connected());
+        $this->assertNotNull($Engine->connection());
     }
 
     /**

@@ -21,8 +21,6 @@ abstract class Base implements EngineInterface
 
     protected $baseConfig = [];
 
-    protected $connected = null;
-
     protected $connection = null;
 
     public $lastJobId = null;
@@ -49,16 +47,10 @@ abstract class Base implements EngineInterface
 
     public function connection()
     {
-        if ($this->connected === null || $this->connection === null) {
-            $this->connected = $this->connect();
+        if ($this->connection === null) {
+            $this->connect();
         }
         return $this->connection;
-    }
-
-    public function connected()
-    {
-        $this->connection();
-        return $this->connected;
     }
 
     public function lastJobId()

@@ -73,7 +73,7 @@ class SequentialWorker extends Base
     {
         $maxIterations = $this->maxIterations ? sprintf(', max iterations %s', $this->maxIterations) : '';
         $this->logger()->info(sprintf('Starting worker%s', $maxIterations));
-        return $this->engine->connected();
+        return (bool)$this->engine->connection();
     }
 
     public function perform($item, $job)
