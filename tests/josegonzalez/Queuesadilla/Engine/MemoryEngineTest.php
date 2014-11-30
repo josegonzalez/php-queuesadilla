@@ -5,6 +5,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 use josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class MemoryEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -77,6 +78,16 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($Engine->push('some_function'));
         $this->assertTrue($Engine->push('another_function', [], ['queue' => 'other']));
         $this->assertTrue($Engine->delete(['id' => 1, 'queue' => 'default']));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\MemoryEngine::createJobId
+     */
+    public function testJobId()
+    {
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
     }
 
     /**

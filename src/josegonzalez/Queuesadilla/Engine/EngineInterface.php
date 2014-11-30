@@ -10,8 +10,6 @@ interface EngineInterface
 
     public function getJobClass();
 
-    public function createJobId();
-
     public function setting($settings, $key, $default = null);
 
     public function connect();

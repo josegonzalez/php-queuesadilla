@@ -6,6 +6,7 @@ use josegonzalez\Queuesadilla\Engine\RedisEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 use RedisException;
+use ReflectionClass;
 
 class RedisEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -104,6 +105,16 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Engine->push('some_function'));
         $this->assertTrue($this->Engine->push('another_function', [], ['queue' => 'other']));
         $this->assertTrue($this->Engine->delete(['id' => 1, 'queue' => 'default']));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::createJobId
+     */
+    public function testJobId()
+    {
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
+        $this->assertInternalType('int', $this->protectedMethodCall($this->Engine, 'createJobId'));
     }
 
     /**

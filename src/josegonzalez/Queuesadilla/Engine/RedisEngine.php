@@ -129,6 +129,11 @@ class RedisEngine extends Base
         return $this->connection()->rpush('queue:' . $queue, json_encode($item));
     }
 
+    protected function createJobId()
+    {
+        return rand();
+    }
+
     protected function ensureRemoveScript()
     {
         $script = $this->getRemoveScript();

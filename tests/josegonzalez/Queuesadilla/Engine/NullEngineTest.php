@@ -5,6 +5,7 @@ namespace josegonzalez\Queuesadilla\Engine;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class NullEngineTest extends PHPUnit_Framework_TestCase
 {
@@ -144,16 +145,6 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
 
         $this->Engine->return = false;
         $this->assertFalse($this->Engine->release(null, 'default'));
-    }
-
-    /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::createJobId
-     */
-    public function testJobId()
-    {
-        $this->assertInternalType('int', $this->Engine->createJobId());
-        $this->assertInternalType('int', $this->Engine->createJobId());
-        $this->assertInternalType('int', $this->Engine->createJobId());
     }
 
     /**

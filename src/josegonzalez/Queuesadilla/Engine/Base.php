@@ -61,11 +61,6 @@ abstract class Base implements EngineInterface
         return $this->connected;
     }
 
-    public function createJobId()
-    {
-        return rand();
-    }
-
     public function lastJobId()
     {
         return $this->lastJobId;
