@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
@@ -16,6 +17,7 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
         $this->Logger = new NullLogger;
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\NullEngine';
         $this->Engine = $this->mockEngine();
+        $this->Fixtures = new FixtureData;
     }
 
     public function tearDown()
@@ -63,13 +65,29 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::lastJobId
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::lastJobId
+     */
+    public function testLastJobId()
+    {
+        $this->assertNull($this->Engine->lastJobId());
+        $this->assertTrue($this->Engine->push(null, 'default'));
+        $this->assertTrue($this->Engine->lastJobId());
+    }
+
+    /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::delete
      * @covers josegonzalez\Queuesadilla\Engine\NullEngine::delete
      */
     public function testDelete()
     {
-        $this->assertTrue($this->Engine->delete(null));
+        $this->assertFalse($this->Engine->delete(null));
+        $this->assertFalse($this->Engine->delete(false));
+        $this->assertFalse($this->Engine->delete(1));
+        $this->assertFalse($this->Engine->delete('string'));
+        $this->assertFalse($this->Engine->delete(['key' => 'value']));
 
+        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
         $this->Engine->return = false;
         $this->assertFalse($this->Engine->delete(null));
     }
