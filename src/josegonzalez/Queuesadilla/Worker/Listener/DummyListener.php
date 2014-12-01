@@ -2,9 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Worker\Listener;
 
-use josegonzalez\Queuesadilla\Event\Event;
 use josegonzalez\Queuesadilla\Event\MultiEventListener;
 use josegonzalez\Queuesadilla\Utility\LoggerTrait;
+use League\Event\AbstractEvent;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -31,7 +31,7 @@ class DummyListener extends MultiEventListener
         ];
     }
 
-    public function perform(Event $event)
+    public function perform(AbstractEvent $event)
     {
         $data = $event->data();
         $job = '';
