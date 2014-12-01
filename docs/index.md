@@ -2,25 +2,7 @@
 
 A job/worker system built to support various queuing systems.
 
-## Requirements
-
-- PHP 5.4+
-
-## Installation
-
-_[Using [Composer](http://getcomposer.org/)]_
-
-Add the plugin to your project's `composer.json` - something like this:
-
-```composer
-{
-  "require": {
-    "josegonzalez/queuesadilla": "dev-master"
-  }
-}
-```
-
-## Usage
+## Table Of Contents
 
 - [Installation](/php-queuesadilla/installation)
 - [Supported Systems](/php-queuesadilla/supported-systems)
