@@ -30,7 +30,7 @@ class SequentialWorker extends Base
 
             $iterations++;
             $item = $this->engine->pop($this->queue);
-            $this->dispatchEvent('Worker.job.seen');
+            $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
             if (empty($item)) {
                 $this->logger()->debug('No job!');
                 $this->dispatchEvent('Worker.job.empty');
@@ -51,7 +51,10 @@ class SequentialWorker extends Base
                 $success = $this->perform($item, $job);
             } catch (Exception $e) {
                 $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
-                $this->dispatchEvent('Worker.job.exception', ['job' => $job]);
+                $this->dispatchEvent('Worker.job.exception', [
+                    'job' => $job,
+                    'exception' => $e,
+                ]);
             }
 
             if ($success) {

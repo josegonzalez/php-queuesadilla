@@ -43,7 +43,7 @@ abstract class Base
 
     public function stats()
     {
-        return $this->StatsListener->stats();
+        return $this->StatsListener->stats;
     }
 
     abstract public function work();
