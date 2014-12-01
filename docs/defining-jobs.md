@@ -9,6 +9,8 @@ Job callables receive a `Job` instance (not to be confused with your own own job
 
 ### Bare Functions
 
+> Note: When queuing up a function-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
+
 You can create global functions for job workers:
 
 ```php
@@ -30,9 +32,9 @@ $queue->push('\some_job', [
 ?>
 ```
 
-> Note: When queuing up a function-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
-
 ### Static Functions
+
+> Note: When queuing up a class-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
 
 Static functions are also an option. State may or may not be cleared, so keep this in mind:
 
@@ -56,9 +58,9 @@ $queue->push('\SomeClass::staticMethod', [
 ?>
 ```
 
-> Note: When queuing up a class-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
-
 ### Object Instances
+
+> Note: When queuing up a object-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
 
 We can also create completely new instances of a class that will execute a job.
 
@@ -81,5 +83,3 @@ $queue->push(['SomeClass', 'instanceMethod'], [
 ]);
 ?>
 ```
-
-> Note: When queuing up a object-based job, the job must be available in the namespace that you instantiate the Worker class in. If you are unsure, include a fully-qualified namespace.
