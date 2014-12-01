@@ -206,4 +206,24 @@ class BaseTest extends PHPUnit_Framework_TestCase
             ],
         ], $this->Jobs[2]->item());
     }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Job\Base::__toString
+     */
+    public function testToString()
+    {
+        $this->assertEquals('{"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[0]);
+        $this->assertEquals('{"attempts":0,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[1]);
+        $this->assertEquals('{"attempts":1,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[2]);
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Job\Base::jsonSerialize
+     */
+    public function testJsonSerialize()
+    {
+        $this->assertEquals('{"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[0]));
+        $this->assertEquals('{"attempts":0,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[1]));
+        $this->assertEquals('{"attempts":1,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[2]));
+    }
 }

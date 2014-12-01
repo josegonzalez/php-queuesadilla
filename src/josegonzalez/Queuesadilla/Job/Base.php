@@ -68,7 +68,7 @@ class Base implements JsonSerializable
 
     public function __toString()
     {
-        return $this->item;
+        return json_encode($this);
     }
 
     public function jsonSerialize()
