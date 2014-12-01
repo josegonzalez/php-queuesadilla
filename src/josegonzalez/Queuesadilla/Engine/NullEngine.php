@@ -21,6 +21,9 @@ class NullEngine extends Base
      */
     public function delete($item)
     {
+        if (!parent::delete($item)) {
+            return false;
+        }
         return $this->return;
     }
 
