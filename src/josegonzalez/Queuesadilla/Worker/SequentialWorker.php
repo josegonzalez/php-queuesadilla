@@ -7,8 +7,6 @@ use josegonzalez\Queuesadilla\Worker\Base;
 
 class SequentialWorker extends Base
 {
-    protected $stats = null;
-
     /**
      * {@inheritDoc}
      */
@@ -16,6 +14,7 @@ class SequentialWorker extends Base
     {
         if (!$this->connect()) {
             $this->logger()->alert(sprintf('Worker unable to connect, exiting'));
+            $this->dispatchEvent('Worker.job.connectionFailed');
             return false;
         }
 
@@ -25,15 +24,16 @@ class SequentialWorker extends Base
         while (true) {
             if (is_int($this->maxIterations) && $iterations >= $this->maxIterations) {
                 $this->logger()->debug('Max iterations reached, exiting');
+                $this->dispatchEvent('Worker.maxIterations');
                 break;
             }
 
             $iterations++;
             $item = $this->engine->pop($this->queue);
-            $this->stats['seen']++;
+            $this->dispatchEvent('Worker.job.seen');
             if (empty($item)) {
                 $this->logger()->debug('No job!');
-                $this->stats['empty']++;
+                $this->dispatchEvent('Worker.job.empty');
                 sleep(1);
                 continue;
             }
@@ -43,7 +43,7 @@ class SequentialWorker extends Base
             if (!is_callable($item['class'])) {
                 $this->logger()->alert('Invalid callable for job. Deleting job from queue.');
                 $this->engine->delete($item);
-                $this->stats['invalid']++;
+                $this->dispatchEvent('Worker.job.invalid', ['job' => $job]);
                 continue;
             }
 
@@ -51,19 +51,19 @@ class SequentialWorker extends Base
                 $success = $this->perform($item, $job);
             } catch (Exception $e) {
                 $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
-                $this->stats['exception']++;
+                $this->dispatchEvent('Worker.job.exception', ['job' => $job]);
             }
 
             if ($success) {
                 $this->logger()->debug('Success. Deleting job from queue.');
                 $job->delete();
-                $this->stats['success']++;
+                $this->dispatchEvent('Worker.job.success', ['job' => $job]);
                 continue;
             }
 
             $this->logger()->info('Failed. Releasing job to queue');
             $job->release();
-            $this->stats['failure']++;
+            $this->dispatchEvent('Worker.job.failure', ['job' => $job]);
         }
 
         return true;
