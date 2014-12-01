@@ -2,7 +2,9 @@
 
 namespace josegonzalez\Queuesadilla\Job;
 
-class Base
+use JsonSerializable;
+
+class Base implements JsonSerializable
 {
     const LOW = 4;
     const NORMAL = 3;
@@ -62,5 +64,15 @@ class Base
         $this->item['attempts'] += 1;
         $this->item['delay'] = $delay;
         return $this->engine->release($this->item);
+    }
+
+    public function __toString()
+    {
+        return $this->item;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->item;
     }
 }
