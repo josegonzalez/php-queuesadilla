@@ -54,6 +54,8 @@ class TestWorkerTest extends PHPUnit_Framework_TestCase
             'invalid' => 0,
             'success' => 0,
             'failure' => 0,
+            'connectionFailed' => 0,
+            'maxIterations' => 0,
         ], $this->Worker->stats());
     }
 }

@@ -123,6 +123,8 @@ class SequentialWorkerTest extends PHPUnit_Framework_TestCase
             'invalid' => 1,
             'success' => 1,
             'failure' => 2,
+            'connectionFailed' => 0,
+            'maxIterations' => 1,
         ], $Worker->stats());
     }
 
