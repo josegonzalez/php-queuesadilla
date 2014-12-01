@@ -79,9 +79,8 @@ trait EventManagerTrait
                     $this->attachListener($event, $name, $options);
                 }
                 return;
-            } else {
-                throw new \InvalidArgumentException('Invalid listener for event');
             }
+            throw new \InvalidArgumentException('Invalid listener for event');
         }
         $options += ['priority' => 0];
         $this->eventManager()->addListener($name, $listener, $options['priority']);

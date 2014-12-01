@@ -6,7 +6,7 @@ use josegonzalez\Queuesadilla\Event\MultiEventListener;
 
 class StatsListener extends MultiEventListener
 {
-    protected $stats = null;
+    public $stats = null;
 
     public function __construct()
     {
@@ -20,11 +20,6 @@ class StatsListener extends MultiEventListener
             'success' => 0,
             'failure' => 0,
         ];
-    }
-
-    public function stats()
-    {
-        return $this->stats;
     }
 
     public function implementedEvents()
