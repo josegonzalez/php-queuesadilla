@@ -53,4 +53,4 @@ $worker->work();
 ?>
 ```
 
-For a more complete example, please see `https://github.com/josegonzalez/php-queuesadilla/blob/master/example.php`.
+For a more complete example, please see the [example](https://github.com/josegonzalez/php-queuesadilla/blob/master/example.php).
