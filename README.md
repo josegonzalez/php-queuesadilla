@@ -22,9 +22,9 @@ Add the plugin to your project's `composer.json` - something like this:
 
 ## Usage
 
-- [Installation](/php-queuesadilla/installation)
-- [Supported Systems](/php-queuesadilla/supported-systems)
-- [Simple Usage](/php-queuesadilla/simple-usage)
-- [Defining Jobs](/php-queuesadilla/defining-jobs)
-- [Job Options](/php-queuesadilla/job-options)
-- [Available Callbacks](/php-queuesadilla/callbacks)
+- [Installation](/docs/php-queuesadilla/installation)
+- [Supported Systems](/docs/php-queuesadilla/supported-systems)
+- [Simple Usage](/docs/php-queuesadilla/simple-usage)
+- [Defining Jobs](/docs/php-queuesadilla/defining-jobs)
+- [Job Options](/docs/php-queuesadilla/job-options)
+- [Available Callbacks](/docs/php-queuesadilla/callbacks)
