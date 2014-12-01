@@ -12,10 +12,11 @@ use josegonzalez\Queuesadilla\Queue;
 $engine = new MysqlEngine($options);
 $queue = new Queue($engine);
 ?>
+```
 
 Next, you will want to create a dummy job:
 
-```
+```php
 <?php
 function some_job($job)
 {
@@ -23,11 +24,10 @@ function some_job($job)
 }
 ?>
 ```
-```
 
 At this point, you can use the `$queue` instance to queue up jobs:
 
-```
+```php
 <?php
 $queue->push('some_job', [
     'id' => 7,
