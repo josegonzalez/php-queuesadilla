@@ -14,8 +14,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
         $config = [];
         $items = [
             [
+                'id' => 1,
                 'delay' => 0,
                 'class' => 'Foo',
+                'queue' => 'default',
                 'args' => [
                     [
                         'foo' => 'bar',
@@ -24,9 +26,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             [
+                'id' => 2,
                 'attempts' => 0,
                 'delay' => 0,
                 'class' => 'Foo',
+                'queue' => 'default',
                 'args' => [
                     [
                         'foo' => 'bar',
@@ -35,9 +39,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             [
+                'id' => 3,
                 'attempts' => 1,
                 'delay' => 0,
                 'class' => 'Foo',
+                'queue' => 'default',
                 'args' => [
                     [
                         'foo' => 'bar',
@@ -113,8 +119,10 @@ class BaseTest extends PHPUnit_Framework_TestCase
     public function testItem()
     {
         $this->assertEquals([
+            'id' => 1,
             'delay' => 0,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -124,9 +132,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
         ], $this->Jobs[0]->item());
 
         $this->assertEquals([
+            'id' => 2,
             'attempts' => 0,
             'delay' => 0,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -136,9 +146,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
         ], $this->Jobs[1]->item());
 
         $this->assertEquals([
+            'id' => 3,
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -168,9 +180,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
         $this->Engine->return = true;
         $this->assertTrue($this->Jobs[0]->release(10));
         $this->assertEquals([
+            'id' => 1,
             'attempts' => 1,
             'delay' => 10,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -182,9 +196,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
         $this->Engine->return = false;
         $this->assertFalse($this->Jobs[1]->release());
         $this->assertEquals([
+            'id' => 2,
             'attempts' => 1,
             'delay' => 0,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -195,9 +211,11 @@ class BaseTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->Jobs[2]->release());
         $this->assertEquals([
+            'id' => 3,
             'attempts' => 2,
             'delay' => 0,
             'class' => 'Foo',
+            'queue' => 'default',
             'args' => [
                 [
                     'foo' => 'bar',
@@ -212,9 +230,9 @@ class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $this->assertEquals('{"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[0]);
-        $this->assertEquals('{"attempts":0,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[1]);
-        $this->assertEquals('{"attempts":1,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[2]);
+        $this->assertEquals('{"id":1,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[0]);
+        $this->assertEquals('{"id":2,"attempts":0,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[1]);
+        $this->assertEquals('{"id":3,"attempts":1,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', (string)$this->Jobs[2]);
     }
 
     /**
@@ -222,8 +240,8 @@ class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testJsonSerialize()
     {
-        $this->assertEquals('{"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[0]));
-        $this->assertEquals('{"attempts":0,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[1]));
-        $this->assertEquals('{"attempts":1,"delay":0,"class":"Foo","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[2]));
+        $this->assertEquals('{"id":1,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[0]));
+        $this->assertEquals('{"id":2,"attempts":0,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[1]));
+        $this->assertEquals('{"id":3,"attempts":1,"delay":0,"class":"Foo","queue":"default","args":[{"foo":"bar","baz":"qux"}]}', json_encode($this->Jobs[2]));
     }
 }
