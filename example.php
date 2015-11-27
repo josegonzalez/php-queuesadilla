@@ -1,13 +1,9 @@
 <?php
 
-$_type = 'Memory';
-
 require 'vendor/autoload.php';
 
 use League\Event\AbstractEvent;
-use josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use josegonzalez\Queuesadilla\Queue;
-use josegonzalez\Queuesadilla\Worker\SequentialWorker;
 use josegonzalez\Queuesadilla\Worker\Listener\DummyListener;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
@@ -22,6 +18,16 @@ function debug($var)
 
 TEXT;
     printf($template, print_r($var, true));
+}
+
+function envDefault($key, $default = null)
+{
+    $value = getenv($key);
+    if ($value === false) {
+        $value = $default;
+    }
+
+    return $value;
 }
 
 function raise($job)
@@ -49,7 +55,11 @@ class MyJob
     }
 }
 
+$_type = envDefault('ENGINE_CLASS', 'Memory');
+$_worker = envDefault('WORKER_CLASS', 'Sequential');
+
 $EngineClass = "josegonzalez\\Queuesadilla\\Engine\\" . $_type . 'Engine';
+$WorkerClass = "josegonzalez\\Queuesadilla\\Worker\\" . $_worker . "Worker";
 
 // Setup a few loggers
 $logger = new Logger('Test', [new ErrorLogHandler]);
@@ -59,7 +69,7 @@ $dummyLogger = new Logger('Worker.DummyListener', [new ErrorLogHandler]);
 // Instantiate necessary classes
 $engine = new $EngineClass($logger);
 $queue = new Queue($engine);
-$worker = new SequentialWorker($engine, $logger, ['maxIterations' => 5]);
+$worker = new $WorkerClass($engine, $logger, ['maxIterations' => 5]);
 
 // Add some callbacks
 $queue->attachListener('Queue.afterEnqueue', function (AbstractEvent $event) use ($callbackLogger) {
@@ -77,7 +87,7 @@ $worker->attachListener(new DummyListener($dummyLogger));
 // Push some jobs onto the queue
 $queue->push('MyJob::run', ['sleep' => 3, 'message' => 'hi', 'raise' => false]);
 $queue->push('raise', ['sleep' => 0, 'message' => 'hi2', 'raise' => true]);
-$queue->push(['MyJob', 'perform'], ['sleep' => 1, 'message' => 'hi2u', 'raise' => false]);
+$queue->push(['MyJob', 'perform'], ['sleep' => 1, 'message' => 'hi2u2', 'raise' => false]);
 
 // Work
 $worker->work();
