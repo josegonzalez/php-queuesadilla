@@ -28,7 +28,7 @@ RUN \
     chmod +x /usr/local/bin/composer /usr/local/bin/phpunit && \
     phpunit --version
 
-ADD . /app
+ADD composer.json /app/composer.json
 WORKDIR /app
 
 RUN \
@@ -41,5 +41,7 @@ ENV BEANSTALK_URL="beanstalk://127.0.0.1:11300?queue=default&timeout=1" \
     NULL_URL="null:///?queue=default&timeout=1" \
     REDIS_URL="redis://127.0.0.1:6379/0?queue=default&timeout=1" \
     MEMORY_URL="synchronous:///?queue=default&timeout=1"
+
+ADD . /app
 
 RUN make test-docker
