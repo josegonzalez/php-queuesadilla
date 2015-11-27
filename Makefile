@@ -10,4 +10,5 @@ test-docker:
 	mysql -u root -e "DELETE FROM mysql.user WHERE User=''; FLUSH PRIVILEGES;" && \
 	mysqladmin -u root password password && \
 	phpcs --standard=psr2 src/ && \
+	vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode && \
 	phpunit
