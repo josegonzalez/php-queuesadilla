@@ -13,6 +13,8 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->skipIf(!class_exists('Redis'), 'Redis extension is not installed or configured properly.');
+
         $this->url = getenv('REDIS_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
