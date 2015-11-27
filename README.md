@@ -34,3 +34,11 @@ Add the plugin to your project's `composer.json` - something like this:
 - [Defining Jobs](/docs/defining-jobs.md)
 - [Job Options](/docs/job-options.md)
 - [Available Callbacks](/docs/callbacks.md)
+
+## Tests
+
+Tests are run via `phpunit` and depend upon multiple datastores. You may also run tests using the included `Dockerfile`:
+
+```shell
+docker build .
+```
