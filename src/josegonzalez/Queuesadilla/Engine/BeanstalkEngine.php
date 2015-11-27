@@ -47,9 +47,9 @@ class BeanstalkEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function delete($item, $acknowledge = true)
+    public function acknowledge($item)
     {
-        if (!parent::delete($item, $acknowledge)) {
+        if (!parent::acknowledge($item)) {
             return false;
         }
         if (empty($item['job'])) {
@@ -58,6 +58,14 @@ class BeanstalkEngine extends Base
 
         $response = $this->connection()->deleteJob($item['job']);
         return $response->getResponseName() == Response::RESPONSE_DELETED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reject($item)
+    {
+        return $this->acknowledge($item);
     }
 
     /**

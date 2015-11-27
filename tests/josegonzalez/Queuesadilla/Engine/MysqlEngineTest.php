@@ -70,23 +70,43 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::delete
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::acknowledge
      */
-    public function testDelete()
+    public function testAcknowledge()
     {
         if ($this->Engine->connection() === null) {
             $this->markTestSkipped('No connection to mysql available');
         }
-        $this->assertFalse($this->Engine->delete(null));
-        $this->assertFalse($this->Engine->delete(false));
-        $this->assertFalse($this->Engine->delete(1));
-        $this->assertFalse($this->Engine->delete('string'));
-        $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
+        $this->assertFalse($this->Engine->acknowledge(null));
+        $this->assertFalse($this->Engine->acknowledge(false));
+        $this->assertFalse($this->Engine->acknowledge(1));
+        $this->assertFalse($this->Engine->acknowledge('string'));
+        $this->assertFalse($this->Engine->acknowledge(['key' => 'value']));
+        $this->assertFalse($this->Engine->acknowledge($this->Fixtures->default['first']));
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
         $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
-        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->acknowledge($this->Fixtures->default['first']));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::reject
+     */
+    public function testReject()
+    {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
+        $this->assertFalse($this->Engine->reject(null));
+        $this->assertFalse($this->Engine->reject(false));
+        $this->assertFalse($this->Engine->reject(1));
+        $this->assertFalse($this->Engine->reject('string'));
+        $this->assertFalse($this->Engine->reject(['key' => 'value']));
+        $this->assertFalse($this->Engine->reject($this->Fixtures->default['first']));
+
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
+        $this->assertTrue($this->Engine->reject($this->Fixtures->default['first']));
     }
 
     /**

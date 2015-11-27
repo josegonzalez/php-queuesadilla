@@ -60,18 +60,18 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::delete
+     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::acknowledge
      * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::deleteJob
      * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::protectedMethodCall
      */
-    public function testDelete()
+    public function testAcknowledge()
     {
-        $this->assertFalse($this->Engine->delete(null));
-        $this->assertFalse($this->Engine->delete(false));
-        $this->assertFalse($this->Engine->delete(1));
-        $this->assertFalse($this->Engine->delete('string'));
-        $this->assertFalse($this->Engine->delete(['key' => 'value']));
-        $this->assertFalse($this->Engine->delete($this->Fixtures->default['first']));
+        $this->assertFalse($this->Engine->acknowledge(null));
+        $this->assertFalse($this->Engine->acknowledge(false));
+        $this->assertFalse($this->Engine->acknowledge(1));
+        $this->assertFalse($this->Engine->acknowledge('string'));
+        $this->assertFalse($this->Engine->acknowledge(['key' => 'value']));
+        $this->assertFalse($this->Engine->acknowledge($this->Fixtures->default['first']));
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
         $job = new \Pheanstalk\Job($this->Engine->lastJobId(), ['queue' => 'default']);
@@ -80,7 +80,31 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
         $data = $this->Fixtures->default['first'];
         $data['id'] = $job->getId();
         $data['job'] = $job;
-        $this->assertTrue($this->Engine->delete($data));
+        $this->assertTrue($this->Engine->acknowledge($data));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\BeanstalkEngine::reject
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::deleteJob
+     * @covers josegonzalez\Queuesadilla\Utility\Pheanstalk::protectedMethodCall
+     */
+    public function testReject()
+    {
+        $this->assertFalse($this->Engine->reject(null));
+        $this->assertFalse($this->Engine->reject(false));
+        $this->assertFalse($this->Engine->reject(1));
+        $this->assertFalse($this->Engine->reject('string'));
+        $this->assertFalse($this->Engine->reject(['key' => 'value']));
+        $this->assertFalse($this->Engine->reject($this->Fixtures->default['first']));
+
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
+        $job = new \Pheanstalk\Job($this->Engine->lastJobId(), ['queue' => 'default']);
+        $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
+
+        $data = $this->Fixtures->default['first'];
+        $data['id'] = $job->getId();
+        $data['job'] = $job;
+        $this->assertTrue($this->Engine->reject($data));
     }
 
     /**

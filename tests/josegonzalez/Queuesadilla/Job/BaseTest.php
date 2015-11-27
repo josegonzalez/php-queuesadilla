@@ -161,15 +161,27 @@ class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Job\Base::delete
+     * @covers josegonzalez\Queuesadilla\Job\Base::acknowledge
      */
-    public function testDelete()
+    public function testAcknowledge()
     {
         $this->Engine->return = true;
-        $this->assertTrue($this->Jobs[0]->delete());
+        $this->assertTrue($this->Jobs[0]->acknowledge());
 
         $this->Engine->return = false;
-        $this->assertFalse($this->Jobs[0]->delete());
+        $this->assertFalse($this->Jobs[0]->acknowledge());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Job\Base::reject
+     */
+    public function testReject()
+    {
+        $this->Engine->return = true;
+        $this->assertTrue($this->Jobs[0]->reject());
+
+        $this->Engine->return = false;
+        $this->assertFalse($this->Jobs[0]->reject());
     }
 
     /**

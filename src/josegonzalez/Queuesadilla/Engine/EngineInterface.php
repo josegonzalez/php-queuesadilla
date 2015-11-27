@@ -17,14 +17,22 @@ interface EngineInterface
     public function connection();
 
     /**
-     * Delete a message from the queue.
+     * Acknowledges a message on the queue.
      *
      * @param  array  $item       an array of item data
-     * @param  boole  $success    whether the message should be ackd or rejected based on it's success
      *
      * @return void
      */
-    public function delete($item, $acknowledge = true);
+    public function acknowledge($item);
+
+    /**
+     * Rejects a message from the queue.
+     *
+     * @param  array  $item       an array of item data
+     *
+     * @return void
+     */
+    public function reject($item);
 
     /**
      * Pop the next job off of the queue.

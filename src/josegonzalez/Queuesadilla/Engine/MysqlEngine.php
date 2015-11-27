@@ -75,9 +75,9 @@ class MysqlEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function delete($item, $acknowledge = true)
+    public function acknowledge($item)
     {
-        if (!parent::delete($item, $acknowledge)) {
+        if (!parent::acknowledge($item)) {
             return false;
         }
 
@@ -86,6 +86,14 @@ class MysqlEngine extends Base
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
         return $sth->rowCount() == 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reject($item)
+    {
+        return $this->acknowledge($item);
     }
 
     /**

@@ -76,20 +76,37 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\Base::delete
-     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::delete
+     * @covers josegonzalez\Queuesadilla\Engine\Base::acknowledge
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::acknowledge
      */
-    public function testDelete()
+    public function testAcknowledge()
     {
-        $this->assertFalse($this->Engine->delete(null));
-        $this->assertFalse($this->Engine->delete(false));
-        $this->assertFalse($this->Engine->delete(1));
-        $this->assertFalse($this->Engine->delete('string'));
-        $this->assertFalse($this->Engine->delete(['key' => 'value']));
+        $this->assertFalse($this->Engine->acknowledge(null));
+        $this->assertFalse($this->Engine->acknowledge(false));
+        $this->assertFalse($this->Engine->acknowledge(1));
+        $this->assertFalse($this->Engine->acknowledge('string'));
+        $this->assertFalse($this->Engine->acknowledge(['key' => 'value']));
 
-        $this->assertTrue($this->Engine->delete($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->acknowledge($this->Fixtures->default['first']));
         $this->Engine->return = false;
-        $this->assertFalse($this->Engine->delete(null));
+        $this->assertFalse($this->Engine->acknowledge(null));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::reject
+     * @covers josegonzalez\Queuesadilla\Engine\NullEngine::reject
+     */
+    public function testReject()
+    {
+        $this->assertFalse($this->Engine->reject(null));
+        $this->assertFalse($this->Engine->reject(false));
+        $this->assertFalse($this->Engine->reject(1));
+        $this->assertFalse($this->Engine->reject('string'));
+        $this->assertFalse($this->Engine->reject(['key' => 'value']));
+
+        $this->assertTrue($this->Engine->reject($this->Fixtures->default['first']));
+        $this->Engine->return = false;
+        $this->assertFalse($this->Engine->reject(null));
     }
 
     /**

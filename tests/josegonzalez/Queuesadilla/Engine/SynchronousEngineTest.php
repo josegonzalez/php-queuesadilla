@@ -64,21 +64,39 @@ class SynchronousEngineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::delete
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::acknowledge
      */
-    public function testDelete()
+    public function testAcknowledge()
     {
         $Engine = $this->mockEngine();
-        $this->assertFalse($Engine->delete(null));
-        $this->assertFalse($Engine->delete(false));
-        $this->assertFalse($Engine->delete(1));
-        $this->assertFalse($Engine->delete('string'));
-        $this->assertFalse($Engine->delete(['key' => 'value']));
-        $this->assertFalse($Engine->delete($this->Fixtures->default['first']));
+        $this->assertFalse($Engine->acknowledge(null));
+        $this->assertFalse($Engine->acknowledge(false));
+        $this->assertFalse($Engine->acknowledge(1));
+        $this->assertFalse($Engine->acknowledge('string'));
+        $this->assertFalse($Engine->acknowledge(['key' => 'value']));
+        $this->assertFalse($Engine->acknowledge($this->Fixtures->default['first']));
 
         $this->assertTrue($Engine->push($this->Fixtures->default['first']));
         $this->assertTrue($Engine->push($this->Fixtures->other['third']));
-        $this->assertFalse($Engine->delete($this->Fixtures->default['first']));
+        $this->assertFalse($Engine->acknowledge($this->Fixtures->default['first']));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\SynchronousEngine::reject
+     */
+    public function testReject()
+    {
+        $Engine = $this->mockEngine();
+        $this->assertFalse($Engine->reject(null));
+        $this->assertFalse($Engine->reject(false));
+        $this->assertFalse($Engine->reject(1));
+        $this->assertFalse($Engine->reject('string'));
+        $this->assertFalse($Engine->reject(['key' => 'value']));
+        $this->assertFalse($Engine->reject($this->Fixtures->default['first']));
+
+        $this->assertTrue($Engine->push($this->Fixtures->default['first']));
+        $this->assertTrue($Engine->push($this->Fixtures->other['third']));
+        $this->assertFalse($Engine->reject($this->Fixtures->default['first']));
     }
 
     /**

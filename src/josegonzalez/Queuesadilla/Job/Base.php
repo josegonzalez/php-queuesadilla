@@ -45,9 +45,14 @@ class Base implements JsonSerializable
         return $default;
     }
 
-    public function delete($success = true)
+    public function acknowledge()
     {
-        return $this->engine->delete($this->item, $success);
+        return $this->engine->acknowledge($this->item);
+    }
+
+    public function reject()
+    {
+        return $this->engine->reject($this->item);
     }
 
     public function item()

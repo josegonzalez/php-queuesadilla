@@ -19,12 +19,20 @@ class NullEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function delete($item, $acknowledge = true)
+    public function acknowledge($item)
     {
-        if (!parent::delete($item, $acknowledge)) {
+        if (!parent::acknowledge($item)) {
             return false;
         }
         return $this->return;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reject($item)
+    {
+        return $this->acknowledge($item);
     }
 
     /**

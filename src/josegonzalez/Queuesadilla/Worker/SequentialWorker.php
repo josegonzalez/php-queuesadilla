@@ -39,8 +39,8 @@ class SequentialWorker extends Base
             $success = false;
             $job = new $jobClass($item, $this->engine);
             if (!is_callable($item['class'])) {
-                $this->logger()->alert('Invalid callable for job. Deleting job from queue.');
-                $job->delete(false);
+                $this->logger()->alert('Invalid callable for job. Rejecting job from queue.');
+                $job->reject();
                 $this->dispatchEvent('Worker.job.invalid', ['job' => $job]);
                 continue;
             }
@@ -56,8 +56,8 @@ class SequentialWorker extends Base
             }
 
             if ($success) {
-                $this->logger()->debug('Success. Deleting job from queue.');
-                $job->delete();
+                $this->logger()->debug('Success. Acknowledging job on queue.');
+                $job->acknowledge();
                 $this->dispatchEvent('Worker.job.success', ['job' => $job]);
                 continue;
             }
