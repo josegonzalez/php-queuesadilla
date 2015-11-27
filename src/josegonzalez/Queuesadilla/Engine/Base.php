@@ -58,7 +58,7 @@ abstract class Base implements EngineInterface
         return $this->lastJobId;
     }
 
-    public function delete($item)
+    public function delete($item, $success = true)
     {
         if (!is_array($item)) {
             return false;

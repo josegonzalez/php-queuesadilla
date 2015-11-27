@@ -47,9 +47,9 @@ class BeanstalkEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function delete($item)
+    public function delete($item, $success = true)
     {
-        if (!parent::delete($item)) {
+        if (!parent::delete($item, $success)) {
             return false;
         }
         if (empty($item['job'])) {

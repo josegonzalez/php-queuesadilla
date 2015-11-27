@@ -20,10 +20,11 @@ interface EngineInterface
      * Delete a message from the queue.
      *
      * @param  array  $item       an array of item data
+     * @param  boole  $success    whether the message should be ackd or rejected based on it's success
      *
      * @return void
      */
-    public function delete($item);
+    public function delete($item, $success = true);
 
     /**
      * Pop the next job off of the queue.

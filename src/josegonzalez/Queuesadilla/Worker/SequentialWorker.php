@@ -42,7 +42,7 @@ class SequentialWorker extends Base
             $job = new $jobClass($item, $this->engine);
             if (!is_callable($item['class'])) {
                 $this->logger()->alert('Invalid callable for job. Deleting job from queue.');
-                $this->engine->delete($item);
+                $job->delete(false);
                 $this->dispatchEvent('Worker.job.invalid', ['job' => $job]);
                 continue;
             }
