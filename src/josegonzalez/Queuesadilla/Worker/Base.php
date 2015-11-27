@@ -74,7 +74,6 @@ abstract class Base
         if ($signo === null) {
             $signo = 0;
         }
-        die($signo);
     }
 
     abstract protected function disconnect();
