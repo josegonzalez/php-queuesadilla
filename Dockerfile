@@ -10,6 +10,7 @@ RUN apt-get -qq update
 RUN apt-get -qq install -qq -y beanstalkd
 RUN apt-get -qq install -qq -y redis-server
 RUN apt-get -qq install -qq -y mysql-server
+RUN apt-get -qq install -qq -y make
 
 # `language-pack-en-base` is necessary to properly install the key for ppa:ondrej/php5-5.6
 RUN \
@@ -41,15 +42,4 @@ ENV BEANSTALK_URL="beanstalk://127.0.0.1:11300?queue=default&timeout=1" \
     REDIS_URL="redis://127.0.0.1:6379/0?queue=default&timeout=1" \
     MEMORY_URL="synchronous:///?queue=default&timeout=1"
 
-RUN \
-    service beanstalkd start > /dev/null && \
-    service mysql start > /dev/null && \
-    service redis-server start > /dev/null && \
-    mysql -u root -e 'CREATE DATABASE database_name;' && \
-    mysql -u root database_name < config/schema-mysql.sql && \
-    mysql -u root -e "CREATE USER 'travis'@'127.0.0.1' IDENTIFIED BY '';" && \
-    mysql -u root -e "GRANT ALL PRIVILEGES ON database_name.* TO 'travis'@'127.0.0.1' WITH GRANT OPTION;" && \
-    mysql -u root -e "DELETE FROM mysql.user WHERE User=''; FLUSH PRIVILEGES;" && \
-    mysqladmin -u root password password && \
-    phpcs --standard=psr2 src/ && \
-    phpunit
+RUN make test-docker
