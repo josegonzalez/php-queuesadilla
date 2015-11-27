@@ -56,9 +56,9 @@ class RedisEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function delete($item, $success = true)
+    public function delete($item, $acknowledge = true)
     {
-        if (!parent::delete($item, $success)) {
+        if (!parent::delete($item, $acknowledge)) {
             return false;
         }
 

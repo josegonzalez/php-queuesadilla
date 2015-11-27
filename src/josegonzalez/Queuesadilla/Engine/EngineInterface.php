@@ -24,7 +24,7 @@ interface EngineInterface
      *
      * @return void
      */
-    public function delete($item, $success = true);
+    public function delete($item, $acknowledge = true);
 
     /**
      * Pop the next job off of the queue.
