@@ -2,8 +2,8 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
+use josegonzalez\Queuesadilla\FixtureData;
 use Pheanstalk\Exception\ServerException;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;

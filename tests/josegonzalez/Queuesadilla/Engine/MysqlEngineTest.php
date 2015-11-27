@@ -2,8 +2,8 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
+use josegonzalez\Queuesadilla\FixtureData;
 use PDO;
 use PDOException;
 use PHPUnit_Framework_TestCase;
@@ -37,7 +37,6 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
         if ($this->Engine->connection() === null) {
             $this->markTestSkipped('No connection to mysql available');
         }
-
         $Engine = new MysqlEngine($this->Logger, []);
         $this->assertNotNull($Engine->connection());
 

@@ -2,8 +2,8 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\MemoryEngine;
+use josegonzalez\Queuesadilla\FixtureData;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
 use ReflectionClass;
