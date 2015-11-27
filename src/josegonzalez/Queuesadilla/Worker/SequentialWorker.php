@@ -18,17 +18,15 @@ class SequentialWorker extends Base
             return false;
         }
 
-        $iterations = 0;
         $jobClass = $this->engine->getJobClass();
-
         while (true) {
-            if (is_int($this->maxIterations) && $iterations >= $this->maxIterations) {
+            if (is_int($this->maxIterations) && $this->iterations >= $this->maxIterations) {
                 $this->logger()->debug('Max iterations reached, exiting');
                 $this->dispatchEvent('Worker.maxIterations');
                 break;
             }
 
-            $iterations++;
+            $this->iterations++;
             $item = $this->engine->pop($this->queue);
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
             if (empty($item)) {
@@ -100,5 +98,9 @@ class SequentialWorker extends Base
         }
 
         return $success;
+    }
+
+    protected function disconnect()
+    {
     }
 }

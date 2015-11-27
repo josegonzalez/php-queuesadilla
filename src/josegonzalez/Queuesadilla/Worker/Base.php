@@ -33,11 +33,14 @@ abstract class Base
         $this->engine = $engine;
         $this->queue = $params['queue'];
         $this->maxIterations = $params['maxIterations'];
+        $this->iterations = 0;
         $this->name = get_class($this->engine) . ' Worker';
         $this->setLogger($logger);
 
         $this->StatsListener = new StatsListener;
         $this->attachListener($this->StatsListener);
+        register_shutdown_function(array(&$this, 'shutdownHandler'));
+
         return $this;
     }
 
@@ -47,4 +50,32 @@ abstract class Base
     }
 
     abstract public function work();
+
+    public function shutdownHandler($signo = null)
+    {
+        $this->logger->info("Shutting down");
+
+        $signals = array(
+            SIGQUIT => "SIGQUIT",
+            SIGTERM => "SIGTERM",
+            SIGINT  => "SIGINT",
+            SIGUSR1 => "SIGUSR1",
+        );
+
+        if ($signo !== null) {
+            $signal = $signals[$signo];
+            $this->logger->info(sprintf("Received received %s... Shutting down", $signal));
+        }
+
+        $this->disconnect();
+
+        $this->logger->info(sprintf("Worker shutting down after running %d iterations", $this->iterations));
+
+        if ($signo === null) {
+            $signo = 0;
+        }
+        die($signo);
+    }
+
+    abstract protected function disconnect();
 }
