@@ -66,7 +66,7 @@ class MysqlEngine extends Base
             );
         } catch (PDOException $e) {
             // TODO: Logging
-            $this->connection = false;
+            $this->connection = null;
         }
 
         return (bool)$this->connection;

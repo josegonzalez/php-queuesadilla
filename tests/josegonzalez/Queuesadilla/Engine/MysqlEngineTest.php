@@ -34,6 +34,10 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
+
         $Engine = new MysqlEngine($this->Logger, []);
         $this->assertNotNull($Engine->connection());
 
@@ -49,6 +53,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testConnect()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertTrue($this->Engine->connect());
     }
 
@@ -57,6 +64,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testGetJobClass()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertEquals('\\josegonzalez\\Queuesadilla\\Job\\Base', $this->Engine->getJobClass());
     }
 
@@ -65,6 +75,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertFalse($this->Engine->delete(null));
         $this->assertFalse($this->Engine->delete(false));
         $this->assertFalse($this->Engine->delete(1));
@@ -82,6 +95,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPop()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertNull($this->Engine->pop('default'));
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
         $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
@@ -92,6 +108,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testPush()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
         $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'delay' => 30,
@@ -121,6 +140,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testRelease()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertFalse($this->Engine->release(null, 'default'));
     }
 
@@ -129,6 +151,9 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
      */
     public function testQueues()
     {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to mysql available');
+        }
         $this->assertEquals([], $this->Engine->queues());
         $this->Engine->push($this->Fixtures->default['first']);
         $this->assertEquals(['default'], $this->Engine->queues());
@@ -147,6 +172,10 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
 
     protected function execute($connection, $sql)
     {
+        if ($connection === null) {
+            return;
+        }
+
         $sql = trim($sql);
         try {
             $query = $connection->prepare($sql, []);
