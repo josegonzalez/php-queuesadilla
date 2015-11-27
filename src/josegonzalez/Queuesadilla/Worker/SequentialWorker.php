@@ -87,8 +87,10 @@ class SequentialWorker extends Base
 
         $success = false;
         if (is_array($item['class']) && count($item['class']) == 2) {
-            $item['class'][0] = new $item['class'][0];
-            $success = $item['class'][0]->$item['class'][1]($job);
+            $className = $item['class'][0];
+            $methodName = $item['class'][1];
+            $instance = new $className;
+            $success = $instance->$methodName($job);
         } elseif (is_string($item['class'])) {
             $success = call_user_func($item['class'], $job);
         }
