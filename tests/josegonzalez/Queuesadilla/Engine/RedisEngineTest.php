@@ -56,18 +56,18 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Engine->connect());
 
         $config = $this->config;
-        $config['pass'] = 'some_password';
         $Engine = $this->mockEngine(null, $config);
+        $Engine->config('pass', 'some_password');
         $this->assertFalse($Engine->connect());
 
         $config = $this->config;
-        $config['database'] = 1;
         $Engine = $this->mockEngine(null, $config);
+        $Engine->config('database', 1);
         $this->assertTrue($Engine->connect());
 
         $config = $this->config;
-        $config['persistent'] = false;
         $Engine = $this->mockEngine(null, $config);
+        $Engine->config('persistent', false);
         $this->assertTrue($Engine->connect());
     }
 
