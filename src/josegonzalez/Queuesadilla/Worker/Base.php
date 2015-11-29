@@ -70,10 +70,6 @@ abstract class Base
         $this->disconnect();
 
         $this->logger->info(sprintf("Worker shutting down after running %d iterations", $this->iterations));
-
-        if ($signo === null) {
-            $signo = 0;
-        }
     }
 
     abstract protected function disconnect();
