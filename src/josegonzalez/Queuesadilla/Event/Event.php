@@ -45,6 +45,7 @@ class Event extends AbstractEvent
         $this->name = $name;
         $this->data = $data;
         $this->subject = $subject;
+        return $this;
     }
 
 /**
