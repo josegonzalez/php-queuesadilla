@@ -13,6 +13,7 @@
   <testsuites>
     <testsuite name="Dotenv Test Suite">
       <directory suffix=".php">tests/josegonzalez/Queuesadilla</directory>
+      <exclude>./tests/josegonzalez/Queuesadilla/TestCase.php</exclude>
     </testsuite>
   </testsuites>
   <logging>
