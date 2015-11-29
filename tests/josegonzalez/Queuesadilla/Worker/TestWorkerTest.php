@@ -78,6 +78,6 @@ class TestWorkerTest extends TestCase
      */
     public function testDisconnect()
     {
-        $this->assertTrue($this->protectedMethodCall($this->Worker, disconnect()));
+        $this->assertTrue($this->protectedMethodCall($this->Worker, 'disconnect'));
     }
 }
