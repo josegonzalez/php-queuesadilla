@@ -172,4 +172,12 @@ class SequentialWorkerTest extends TestCase
             'class' => ['josegonzalez\Queuesadilla\MyJob', 'perform']
         ], $this->Job));
     }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\SequentialWorker::disconnect
+     */
+    public function testDisconnect()
+    {
+        $this->assertNull($this->protectedMethodCall($this->Worker, 'disconnect'));
+    }
 }
