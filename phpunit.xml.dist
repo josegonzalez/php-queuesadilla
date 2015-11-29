@@ -20,4 +20,12 @@
     <log type="coverage-html" target="build"/>
     <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
   </logging>
+  <filter>
+    <!-- this is required, even if empty, until
+    https://github.com/sebastianbergmann/phpunit/issues/1872
+    is resolved -->
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
+    </whitelist>
+  </filter>
 </phpunit>
