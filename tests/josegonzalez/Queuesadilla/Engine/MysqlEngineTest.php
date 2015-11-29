@@ -2,15 +2,14 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\MysqlEngine;
+use josegonzalez\Queuesadilla\FixtureData;
+use josegonzalez\Queuesadilla\TestCase;
 use PDO;
 use PDOException;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
-use ReflectionClass;
 
-class MysqlEngineTest extends PHPUnit_Framework_TestCase
+class MysqlEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -222,14 +221,6 @@ class MysqlEngineTest extends PHPUnit_Framework_TestCase
     protected function clearEngine()
     {
         $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 
     protected function mockEngine($methods = null, $config = null)

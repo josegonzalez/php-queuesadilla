@@ -2,13 +2,12 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\Engine\NullEngine;
-use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\FixtureData;
+use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
-use ReflectionClass;
 
-class NullEngineTest extends PHPUnit_Framework_TestCase
+class NullEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -187,14 +186,6 @@ class NullEngineTest extends PHPUnit_Framework_TestCase
     public function testQueues()
     {
         $this->assertEquals([], $this->Engine->queues());
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 
     protected function mockEngine($methods = null, $config = null)

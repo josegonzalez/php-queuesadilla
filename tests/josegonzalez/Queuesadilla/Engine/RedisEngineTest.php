@@ -4,12 +4,11 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\RedisEngine;
 use josegonzalez\Queuesadilla\FixtureData;
-use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
 use RedisException;
-use ReflectionClass;
 
-class RedisEngineTest extends PHPUnit_Framework_TestCase
+class RedisEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -210,14 +209,6 @@ class RedisEngineTest extends PHPUnit_Framework_TestCase
     {
         $this->Engine->connection()->flushdb();
         $this->Engine->connection()->script('flush');
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 
     protected function mockEngine($methods = null, $config = null)

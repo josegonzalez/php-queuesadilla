@@ -4,8 +4,8 @@ namespace josegonzalez\Queuesadilla;
 
 use josegonzalez\Queuesadilla\Engine\NullEngine;
 use josegonzalez\Queuesadilla\Job\Base as BaseJob;
+use josegonzalez\Queuesadilla\TestCase;
 use josegonzalez\Queuesadilla\Worker\SequentialWorker;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\LoggerInterface;
 
 function fail_method()
@@ -20,6 +20,7 @@ function true_method()
 {
     return true;
 }
+
 class MyJob
 {
     public function performTrue()
@@ -48,7 +49,7 @@ class MyJob
     }
 }
 
-class SequentialWorkerTest extends PHPUnit_Framework_TestCase
+class SequentialWorkerTest extends TestCase
 {
     public function setUp()
     {

@@ -4,11 +4,10 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\MemoryEngine;
 use josegonzalez\Queuesadilla\FixtureData;
-use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
-use ReflectionClass;
 
-class MemoryEngineTest extends PHPUnit_Framework_TestCase
+class MemoryEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -159,14 +158,6 @@ class MemoryEngineTest extends PHPUnit_Framework_TestCase
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 
     protected function mockEngine($methods = null, $config = null)

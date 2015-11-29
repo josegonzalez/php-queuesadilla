@@ -3,11 +3,11 @@
 namespace josegonzalez\Queuesadilla;
 
 use josegonzalez\Queuesadilla\Engine\NullEngine;
+use josegonzalez\Queuesadilla\TestCase;
 use josegonzalez\Queuesadilla\Worker\TestWorker;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\LoggerInterface;
 
-class TestWorkerTest extends PHPUnit_Framework_TestCase
+class TestWorkerTest extends TestCase
 {
     public function setUp()
     {

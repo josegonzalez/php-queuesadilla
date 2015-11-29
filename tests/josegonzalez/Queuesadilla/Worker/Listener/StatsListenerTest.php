@@ -2,10 +2,10 @@
 
 namespace josegonzalez\Queuesadilla\Worker\Listener;
 
+use josegonzalez\Queuesadilla\TestCase;
 use josegonzalez\Queuesadilla\Worker\Listener\StatsListener;
-use PHPUnit_Framework_TestCase;
 
-class StatsListenerTest extends PHPUnit_Framework_TestCase
+class StatsListenerTest extends TestCase
 {
     public function setUp()
     {

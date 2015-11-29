@@ -4,12 +4,11 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\BeanstalkEngine;
 use josegonzalez\Queuesadilla\FixtureData;
+use josegonzalez\Queuesadilla\TestCase;
 use Pheanstalk\Exception\ServerException;
-use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
-use ReflectionClass;
 
-class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
+class BeanstalkEngineTest extends TestCase
 {
     public function setUp()
     {
@@ -207,14 +206,6 @@ class BeanstalkEngineTest extends PHPUnit_Framework_TestCase
                 }
             }
         }
-    }
-
-    protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 
     protected function mockEngine($methods = null, $config = null)

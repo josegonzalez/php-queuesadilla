@@ -3,10 +3,10 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\IronEngine;
-use PHPUnit_Framework_TestCase;
+use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
 
-class IronEngineTest extends PHPUnit_Framework_TestCase
+class IronEngineTest extends TestCase
 {
     public function setUp()
     {
