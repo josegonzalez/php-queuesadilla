@@ -31,6 +31,14 @@ class EventTest extends TestCase
         $this->assertInstanceOf('\josegonzalez\Queuesadilla\Event\Event', new Event('name', $this->object, null));
     }
 
+    public function testGetter()
+    {
+        $this->assertEquals('test', $this->Event->name);
+        $this->assertEquals($this->object, $this->Event->subject);
+        $this->assertNull($this->Event->invalidAttribute);
+
+    }
+
     /**
      * @covers josegonzalez\Queuesadilla\Event\Event::__get
      * @covers josegonzalez\Queuesadilla\Event\Event::getName
@@ -70,9 +78,19 @@ class EventTest extends TestCase
     {
         $this->assertInternalType('array', $this->Event->data());
         $this->assertInternalType('array', $this->Event->data);
+        $this->assertEquals([], $this->Event->data);
+
+        $this->Event->data = ['test' => 'passed'];
+        $this->assertEquals(['test' => 'passed'], $this->Event->data);
 
         $Event = new Event('test');
         $this->assertInternalType('array', $Event->data());
         $this->assertInternalType('null', $Event->data);
+        $this->assertNull($Event->data);
+
+        $Event->data = ['test' => 'passed'];
+        $this->assertInternalType('array', $Event->data());
+        $this->assertInternalType('array', $Event->data);
+        $this->assertEquals(['test' => 'passed'], $Event->data);
     }
 }
