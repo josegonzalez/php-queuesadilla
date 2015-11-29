@@ -49,8 +49,6 @@ abstract class Base
         return $this->StatsListener->stats;
     }
 
-    abstract public function work();
-
     public function shutdownHandler($signo = null)
     {
         $this->logger->info("Shutting down");
@@ -71,6 +69,8 @@ abstract class Base
 
         $this->logger->info(sprintf("Worker shutting down after running %d iterations", $this->iterations));
     }
+
+    abstract public function work();
 
     abstract protected function disconnect();
 }
