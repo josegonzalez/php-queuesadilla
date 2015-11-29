@@ -68,6 +68,7 @@ abstract class Base
         $this->disconnect();
 
         $this->logger->info(sprintf("Worker shutting down after running %d iterations", $this->iterations));
+        return true;
     }
 
     abstract public function work();

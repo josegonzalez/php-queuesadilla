@@ -42,6 +42,7 @@ class TestWorkerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Worker->work());
         $this->assertTrue($this->Worker->work());
     }
+
     /**
      * @covers josegonzalez\Queuesadilla\Worker\Base::stats
      */
@@ -57,5 +58,26 @@ class TestWorkerTest extends PHPUnit_Framework_TestCase
             'connectionFailed' => 0,
             'maxIterations' => 0,
         ], $this->Worker->stats());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\Base::shutdownHandler
+     */
+    public function testShutdownHandler()
+    {
+        $this->assertEquals(true, $this->Worker->shutdownHandler());
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGQUIT));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGTERM));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGINT));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGUSR1));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\Base::disconnect
+     * @covers josegonzalez\Queuesadilla\Worker\TestWorker::disconnect
+     */
+    public function testDisconnect()
+    {
+        $this->assertTrue($this->Worker->disconnect());
     }
 }

@@ -14,7 +14,11 @@ class TestWorker extends Base
         return $this->engine->pop();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function disconnect()
     {
+        return true;
     }
 }
