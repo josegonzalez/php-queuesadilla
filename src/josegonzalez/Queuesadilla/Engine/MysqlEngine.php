@@ -65,7 +65,7 @@ class MysqlEngine extends Base
                 $flags
             );
         } catch (PDOException $e) {
-            // TODO: Logging
+            $this->logger()->error($e->getMessage());
             $this->connection = null;
         }
 
@@ -143,6 +143,7 @@ class MysqlEngine extends Base
             }
             $this->connection()->commit();
         } catch (PDOException $e) {
+            $this->logger()->error($e->getMessage());
             $this->connection()->rollBack();
         }
 
