@@ -19,6 +19,7 @@
         "league/event": "~1.0"
     },
     "require-dev": {
+        "squizlabs/php_codesniffer": "dev-master",
         "pda/pheanstalk": "dev-master",
         "iron-io/iron_mq": "dev-master",
         "monolog/monolog": "dev-master",
