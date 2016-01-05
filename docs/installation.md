@@ -1,6 +1,6 @@
 ## Installation
 
-> Queuesadilla requires PHP 5.4+
+> Queuesadilla requires PHP 5.5+
 
 _[Using [Composer](http://getcomposer.org/)]_
 
