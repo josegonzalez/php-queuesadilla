@@ -22,7 +22,7 @@
         "squizlabs/php_codesniffer": "dev-master",
         "pda/pheanstalk": "dev-master",
         "iron-io/iron_mq": "dev-master",
-        "monolog/monolog": "dev-master",
+        "monolog/monolog": "*",
         "satooshi/php-coveralls": "dev-master",
         "phpmd/phpmd": "dev-master"
     },
