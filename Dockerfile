@@ -11,6 +11,7 @@ RUN apt-get -qq install -qq -y beanstalkd
 RUN apt-get -qq install -qq -y redis-server
 RUN apt-get -qq install -qq -y mysql-server
 RUN apt-get -qq install -qq -y make
+RUN apt-get -qq install -qq -y git
 
 # `language-pack-en-base` is necessary to properly install the key for ppa:ondrej/php5-5.6
 RUN \
@@ -21,7 +22,7 @@ RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php5-5.6 && \
 RUN apt-get -qq install -qq -y php5-cli php5-curl php5-mysql php-pear php5-xdebug php5-redis
 
 RUN \
-    curl -sS https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
+    curl -LsS https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
     curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
     mv phpunit.phar /usr/local/bin/phpunit && \
