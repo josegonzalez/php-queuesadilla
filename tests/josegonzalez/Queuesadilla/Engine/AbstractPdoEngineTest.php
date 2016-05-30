@@ -51,7 +51,9 @@ abstract class AbstractPdoEngineTest extends TestCase
         if ($this->Engine->connection() === null) {
             $this->markTestSkipped('No connection to database available');
         }
-        $Engine = new $this->engineClass($this->Logger, []);
+        $Engine = new $this->engineClass($this->Logger, [
+            'user' => 'invalid'
+        ]);
         $this->assertNull($Engine->connection());
 
         $Engine = new $this->engineClass($this->Logger, $this->url);
