@@ -7,17 +7,18 @@ use josegonzalez\Queuesadilla\TestCase;
 use PDO;
 use PDOException;
 
-class MysqlEngineTest extends AbstractPdoEngineTest
+class PostgresEngineTest extends AbstractPdoEngineTest
 {
     public function setUp()
     {
-        $this->url = getenv('MYSQL_URL');
-        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';
+        $this->url = getenv('POSTGRES_URL');
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\PostgresEngine';
         parent::setUp();
     }
 
     protected function clearEngine()
     {
         $this->execute($this->Engine->connection(), 'TRUNCATE TABLE jobs');
+        $this->execute($this->Engine->connection(), 'ALTER SEQUENCE jobs_id_seq RESTART WITH 1');
     }
 }

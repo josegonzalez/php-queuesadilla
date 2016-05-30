@@ -7,7 +7,7 @@ use PDO;
 use PDOException;
 use josegonzalez\Queuesadilla\Engine\PdoEngine;
 
-class MysqlEngine extends PdoEngine
+class PostgresEngine extends PdoEngine
 {
 
     /**
@@ -15,14 +15,14 @@ class MysqlEngine extends PdoEngine
      *
      * @var string
      */
-    protected $startQuote = '`';
+    protected $startQuote = '"';
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $endQuote = '`';
+    protected $endQuote = '"';
 
     protected $baseConfig = [
         'delay' => null,
@@ -31,7 +31,7 @@ class MysqlEngine extends PdoEngine
         'user' => null,
         'pass' => null,
         'persistent' => true,
-        'port' => 3306,
+        'port' => 5432,
         'priority' => 0,
         'queue' => 'default',
         'host' => '127.0.0.1',
@@ -50,11 +50,10 @@ class MysqlEngine extends PdoEngine
 
         $flags = [
             PDO::ATTR_PERSISTENT => $config['persistent'],
-            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ] + $config['flags'];
 
-        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
+        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
 
         try {
             $this->connection = new PDO(
