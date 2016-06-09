@@ -4,6 +4,7 @@ services:
   # - memcached
   # - mongodb
   - mysql
+  - postgres
   # - rabbitmq
   - redis-server
 
@@ -20,6 +21,7 @@ env:
    - NULL_URL="null:///?queue=default&timeout=1"
    - REDIS_URL="redis://travis@127.0.0.1:6379/0?queue=default&timeout=1"
    - MEMORY_URL="synchronous:///?queue=default&timeout=1"
+   - POSTGRES_URL="pgsql://postgres@127.0.0.1:5432/database_name?queue=default"
 
 before_script:
   - sudo apt-get update
@@ -30,6 +32,10 @@ before_script:
   # mysql
   - mysql -e 'CREATE DATABASE database_name;'
   - mysql database_name < config/schema-mysql.sql
+
+  # postgres
+  - psql -c "CREATE DATABASE database_name;" -U postgres;
+  - psql -d database_name -f config/schema-pgsql.sql -U postgres;
 
   # extensions
   - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
