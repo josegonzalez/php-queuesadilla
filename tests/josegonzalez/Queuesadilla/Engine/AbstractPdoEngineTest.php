@@ -77,8 +77,10 @@ abstract class AbstractPdoEngineTest extends TestCase
             $this->markTestSkipped('No connection to database available');
         }
         $engine = $this->mockEngine(null, [
-            'url' => 'foo://invalid:config/db'
+            'database' => 'invalid',
+            'user' => 'invalid'
         ]);
+
         $this->assertFalse($engine->connect());
 
         $this->assertTrue($this->Engine->connect());
