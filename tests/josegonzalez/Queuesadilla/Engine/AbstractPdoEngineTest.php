@@ -45,6 +45,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::__construct
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::__construct
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::__construct
      */
     public function testConstruct()
     {
@@ -65,6 +67,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::connect
      */
     public function testConnect()
     {
@@ -76,6 +80,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::getJobClass
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::getJobClass
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::getJobClass
      */
     public function testGetJobClass()
     {
@@ -87,6 +93,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::acknowledge
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::acknowledge
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::acknowledge
      */
     public function testAcknowledge()
     {
@@ -107,6 +115,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::reject
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::reject
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::reject
      */
     public function testReject()
     {
@@ -127,6 +137,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::pop
      */
     public function testPop()
     {
@@ -140,6 +152,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::push
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::push
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::push
      */
     public function testPush()
     {
@@ -173,6 +187,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::release
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::release
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::release
      */
     public function testRelease()
     {
@@ -184,6 +200,8 @@ abstract class AbstractPdoEngineTest extends TestCase
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::queues
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::queues
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::queues
      */
     public function testQueues()
     {
