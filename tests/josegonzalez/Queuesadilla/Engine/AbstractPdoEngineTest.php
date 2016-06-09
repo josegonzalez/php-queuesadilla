@@ -44,6 +44,7 @@ abstract class AbstractPdoEngineTest extends TestCase
     }
 
     /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::__construct
      * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::__construct
      * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::__construct
      * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::__construct
@@ -75,7 +76,22 @@ abstract class AbstractPdoEngineTest extends TestCase
         if ($this->Engine->connection() === null) {
             $this->markTestSkipped('No connection to database available');
         }
+        $engine = $this->mockEngine(null, [
+            'url' => 'foo://invalid:config/db'
+        ]);
+        $this->assertFalse($engine->connect());
+
         $this->assertTrue($this->Engine->connect());
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\Base::connection
+     */
+    public function testConnection()
+    {
+        $engine = $this->mockEngine();
+        $connection = $engine->connection();
+        $this->assertInstanceOf('PDO', $connection);
     }
 
     /**

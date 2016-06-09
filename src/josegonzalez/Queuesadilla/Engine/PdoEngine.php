@@ -229,20 +229,15 @@ abstract class PdoEngine extends Base
             return $this->startQuote . $identifier . $this->endQuote;
         }
 
+        // string.string
         if (preg_match('/^[\w-]+\.[^ \*]*$/', $identifier)) {
-// string.string
             $items = explode('.', $identifier);
             return $this->startQuote . implode($this->endQuote . '.' . $this->startQuote, $items) . $this->endQuote;
         }
 
+        // string.*
         if (preg_match('/^[\w-]+\.\*$/', $identifier)) {
-// string.*
             return $this->startQuote . str_replace('.*', $this->endQuote . '.*', $identifier);
-        }
-
-        if (preg_match('/^([\w-]+)\((.*)\)$/', $identifier, $matches)) {
-// Functions
-            return $matches[1] . '(' . $this->quoteIdentifier($matches[2]) . ')';
         }
 
         return $identifier;
