@@ -6,7 +6,8 @@ Queuesadilla supports the following engine engines:
 |---------------------|-------------|-----------------------------------------|
 | `BeanstalkEngine`   | **Stable**  | BeanstalkD                              |
 | `MemoryEngine`      | **Stable**  | In-memory                               |
-| `MysqlEngine`       | **Stable**  | Backed by Mysql                         |
+| `MysqlEngine`       | **Stable**  | Backed by PDO/MySQL                         |
+| `PostgresEngine`    | **Stable**  | Backed by PDO/Postgres                         |
 | `RedisEngine`       | **Stable**  | Redis-based                             |
 | `SynchronousEngine` | **Stable**  | Synchronous, in-memory                  |
 | `NullEngine`        | **Stable**  | Always returns "true" for any operation |
