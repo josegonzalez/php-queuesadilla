@@ -63,7 +63,7 @@ abstract class PdoEngine extends Base
         $queue = $this->setting($options, 'queue');
         $selectSql = implode(" ", [
             sprintf(
-                'SELECT id, %s FROM %s',
+                'SELECT id, %s, attempts FROM %s',
                 $this->quoteIdentifier('data'),
                 $this->quoteIdentifier($this->config('table'))
             ),
@@ -100,6 +100,7 @@ abstract class PdoEngine extends Base
                         'args' => $data['args'],
                         'queue' => $queue,
                         'options' => $data['options'],
+                        'attempts' => $result['attempts']
                     ];
                 }
             }
@@ -125,6 +126,7 @@ abstract class PdoEngine extends Base
         $expiresIn = $this->setting($options, 'expires_in');
         $queue = $this->setting($options, 'queue');
         $priority = $this->setting($options, 'priority');
+        $attempts = $this->setting($options, 'attempts');
 
         $delayUntil = null;
         if ($delay !== null) {
@@ -139,10 +141,11 @@ abstract class PdoEngine extends Base
         }
 
         unset($options['queue']);
+        unset($options['attempts']);
         $item['options'] = $options;
         $data = json_encode($item);
 
-        $sql = 'INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?)';
         $sql = sprintf(
             $sql,
             $this->quoteIdentifier($this->config('table')),
@@ -150,7 +153,8 @@ abstract class PdoEngine extends Base
             $this->quoteIdentifier('queue'),
             $this->quoteIdentifier('priority'),
             $this->quoteIdentifier('expires_at'),
-            $this->quoteIdentifier('delay_until')
+            $this->quoteIdentifier('delay_until'),
+            $this->quoteIdentifier('attempts')
         );
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $data, PDO::PARAM_STR);
@@ -158,6 +162,7 @@ abstract class PdoEngine extends Base
         $sth->bindParam(3, $priority, PDO::PARAM_INT);
         $sth->bindParam(4, $expiresAt, PDO::PARAM_STR);
         $sth->bindParam(5, $delayUntil, PDO::PARAM_STR);
+        $sth->bindParam(6, $attempts, PDO::PARAM_INT);
         $sth->execute();
 
         if ($sth->rowCount() == 1) {
@@ -200,6 +205,19 @@ abstract class PdoEngine extends Base
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
+
+        if (isset($item["options"]['max_attempts']) && $item["options"]['max_attempts'] >= $item['attempts']) {
+            $sql = sprintf('UPDATE %s SET attempts = ? WHERE id = ?', $this->config('table'));
+            $sth = $this->connection()->prepare($sql);
+            $sth->bindParam(1, $item['attempts'], PDO::PARAM_INT);
+            $sth->bindParam(2, $item['id'], PDO::PARAM_INT);
+            $sth->execute();
+            if ($item["options"]['max_attempts'] == $item['attempts']) {
+                $this->reject($item);
+            }
+            return $sth->rowCount() == 1;
+        }
+        $this->reject($item);
         return $sth->rowCount() == 1;
     }
 

@@ -34,6 +34,8 @@ class MysqlEngine extends PdoEngine
         'port' => 3306,
         'priority' => 0,
         'queue' => 'default',
+        'attempts' => 0,
+        'max_attempts' => null,
         'host' => '127.0.0.1',
         'table' => 'jobs',
     ];
