@@ -100,7 +100,7 @@ abstract class PdoEngine extends Base
                         'args' => $data['args'],
                         'queue' => $queue,
                         'options' => $data['options'],
-                        'attempts' => $result['attempts']
+                        'attempts' => (int)$result['attempts']
                     ];
                 }
             }
@@ -127,6 +127,7 @@ abstract class PdoEngine extends Base
         $queue = $this->setting($options, 'queue');
         $priority = $this->setting($options, 'priority');
         $attempts = $this->setting($options, 'attempts');
+        $attemptsDelay = $this->setting($options, 'attempts_delay');
 
         $delayUntil = null;
         if ($delay !== null) {
@@ -143,6 +144,7 @@ abstract class PdoEngine extends Base
         unset($options['queue']);
         unset($options['attempts']);
         $item['options'] = $options;
+        $item['options']['attempts_delay'] = $attemptsDelay;
         $data = json_encode($item);
 
         $sql = 'INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?)';
@@ -206,15 +208,23 @@ abstract class PdoEngine extends Base
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
 
-        if (isset($item["options"]['max_attempts']) && $item["options"]['max_attempts'] >= $item['attempts']) {
+        if (isset($item['delay'])) {
+            $datetime = new DateTime;
+            $delayUntil = $datetime->add(new DateInterval(sprintf('PT%sS', $item['delay'])))->format('Y-m-d H:i:s');
+
+            $sql = sprintf('UPDATE %s SET delay_until = ? WHERE id = ?', $this->config('table'));
+            $sth = $this->connection()->prepare($sql);
+            $sth->bindParam(1, $delayUntil, PDO::PARAM_STR);
+            $sth->bindParam(2, $item['id'], PDO::PARAM_INT);
+            $sth->execute();
+        }
+
+        if (isset($item['options']['max_attempts']) && $item['options']['max_attempts'] > $item['attempts']) {
             $sql = sprintf('UPDATE %s SET attempts = ? WHERE id = ?', $this->config('table'));
             $sth = $this->connection()->prepare($sql);
             $sth->bindParam(1, $item['attempts'], PDO::PARAM_INT);
             $sth->bindParam(2, $item['id'], PDO::PARAM_INT);
             $sth->execute();
-            if ($item["options"]['max_attempts'] == $item['attempts']) {
-                $this->reject($item);
-            }
             return $sth->rowCount() == 1;
         }
         $this->reject($item);

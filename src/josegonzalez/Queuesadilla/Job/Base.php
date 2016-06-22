@@ -67,7 +67,11 @@ class Base implements JsonSerializable
         }
 
         $this->item['attempts'] += 1;
-        $this->item['delay'] = $delay;
+        if (isset($this->item['options']['attempts_delay'])) {
+            $this->item['delay'] = $this->item['options']['attempts_delay'];
+        } else {
+            $this->item['delay'] = $delay;
+        }
         return $this->engine->release($this->item);
     }
 

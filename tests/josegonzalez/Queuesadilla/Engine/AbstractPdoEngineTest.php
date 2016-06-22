@@ -23,6 +23,7 @@ abstract class AbstractPdoEngineTest extends TestCase
         $this->Engine = $this->mockEngine();
         $this->Fixtures = new FixtureData;
         $this->clearEngine();
+        $this->expandFixtureData();
     }
 
     /**
@@ -214,6 +215,14 @@ abstract class AbstractPdoEngineTest extends TestCase
             $this->markTestSkipped('No connection to database available');
         }
         $this->assertFalse($this->Engine->release(null, 'default'));
+
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], [
+            'max_attempts' => 5
+        ]));
+        $item = $this->Engine->pop();
+        $item['delay'] = $item['options']['attempts_delay'];
+        $item['attempts'] =+ 1;
+        $this->assertTrue($this->Engine->release($item));
     }
 
     /**
@@ -272,11 +281,24 @@ abstract class AbstractPdoEngineTest extends TestCase
         }
     }
 
+    protected function expandFixtureData() {
+        foreach ($this->Fixtures->default as &$default) {
+            $default['options']['attempts_delay'] = 600;
+        }
+        foreach ($this->Fixtures->other as &$other) {
+            $other['options']['attempts_delay'] = 600;
+        }
+    }
+
     protected function mockEngine($methods = null, $config = null)
     {
         if ($config === null) {
             $config = $this->config;
         }
-        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
+
+        return $this->getMockBuilder($this->engineClass)
+            ->setMethods($methods)
+            ->setConstructorArgs([$this->Logger, $config])
+            ->getMock();
     }
 }
