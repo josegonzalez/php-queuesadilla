@@ -193,7 +193,7 @@ class BaseTest extends TestCase
         $this->assertTrue($this->Jobs[0]->release(10));
         $this->assertEquals([
             'id' => 1,
-            'attempts' => 1,
+            'attempts' => 0,
             'delay' => 10,
             'class' => 'Foo',
             'queue' => 'default',
@@ -209,7 +209,7 @@ class BaseTest extends TestCase
         $this->assertFalse($this->Jobs[1]->release());
         $this->assertEquals([
             'id' => 2,
-            'attempts' => 1,
+            'attempts' => 0,
             'delay' => 0,
             'class' => 'Foo',
             'queue' => 'default',
@@ -224,7 +224,7 @@ class BaseTest extends TestCase
         $this->assertFalse($this->Jobs[2]->release());
         $this->assertEquals([
             'id' => 3,
-            'attempts' => 2,
+            'attempts' => 0,
             'delay' => 0,
             'class' => 'Foo',
             'queue' => 'default',

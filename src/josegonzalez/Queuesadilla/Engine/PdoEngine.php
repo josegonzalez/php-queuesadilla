@@ -219,7 +219,7 @@ abstract class PdoEngine extends Base
             $sth->execute();
         }
 
-        if (isset($item['options']['max_attempts']) && $item['options']['max_attempts'] > $item['attempts']) {
+        if (isset($item['attempts']) && $item['attempts'] > 0) {
             $sql = sprintf('UPDATE %s SET attempts = ? WHERE id = ?', $this->config('table'));
             $sth = $this->connection()->prepare($sql);
             $sth->bindParam(1, $item['attempts'], PDO::PARAM_INT);
