@@ -4,7 +4,7 @@ Jobs are simply PHP callables. Job callables should be available to the worker p
 
 Job callables receive a `Job` instance (not to be confused with your own own jobs), which is a wrapper around the metadata for a given job. The two useful methods of this `Job` instance are:
 
-- `attempts()`: Contains the number of times a job has been attempted. This value may be incorrect, depending upon the semantics of your chosen backend.
+- `attempts()`: Contains the number of attempts a job has has left before being discarded.
 - `data($key = null, $default = null)`: Returns the job payload. If the first argument is passed, then the method will return only that key in the job payload if it exists. You can also fallback to a `$default` value if said key does not exist in the payload
 
 ### Bare Functions
