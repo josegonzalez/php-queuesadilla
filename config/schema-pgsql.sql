@@ -9,6 +9,7 @@ CREATE TABLE jobs (
   priority smallint NOT NULL DEFAULT '0',
   expires_at timestamp DEFAULT NULL,
   delay_until timestamp DEFAULT NULL,
-  locked smallint NOT NULL DEFAULT '0'
+  locked smallint NOT NULL DEFAULT '0',
+  attempts smallint DEFAULT '0'
 );
 CREATE INDEX queue ON JOBS (queue, locked);

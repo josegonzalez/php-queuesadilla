@@ -23,6 +23,7 @@ abstract class AbstractPdoEngineTest extends TestCase
         $this->Engine = $this->mockEngine();
         $this->Fixtures = new FixtureData;
         $this->clearEngine();
+        $this->expandFixtureData();
     }
 
     /**
@@ -214,6 +215,30 @@ abstract class AbstractPdoEngineTest extends TestCase
             $this->markTestSkipped('No connection to database available');
         }
         $this->assertFalse($this->Engine->release(null, 'default'));
+
+        $this->Engine->push($this->Fixtures->default['first'], 'default');
+        $item = $this->Engine->pop();
+        $this->assertTrue($this->Engine->release($item));
+        $sth = $this->execute($this->Engine->connection(), 'SELECT * FROM jobs WHERE id = ' . $this->Fixtures->default['first']['id']);
+        $this->assertFalse($sth->rowCount() == 1);
+
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
+            'attempts' => 10
+        ]));
+
+        $item2 = $this->Engine->pop();
+        $item2['attempts'] = 9;
+        $item2['delay'] = $item2['options']['attempts_delay'];
+        $this->assertTrue($this->Engine->release($item2));
+
+        $date = new \DateTime();
+        $date->modify('+10 minutes');
+        $sth = $this->execute($this->Engine->connection(), 'SELECT * FROM jobs WHERE id = ' . $this->Fixtures->default['second']['id']);
+        $results = $sth->fetch(PDO::FETCH_ASSOC);
+        $inTenMinutes = $date->format('Y-m-d H:i:s');
+
+        $this->assertEquals($inTenMinutes, $results['delay_until']);
+        $this->assertEquals(9, $results['attempts']);
     }
 
     /**
@@ -272,11 +297,24 @@ abstract class AbstractPdoEngineTest extends TestCase
         }
     }
 
+    protected function expandFixtureData() {
+        foreach ($this->Fixtures->default as &$default) {
+            $default['options']['attempts_delay'] = 600;
+        }
+        foreach ($this->Fixtures->other as &$other) {
+            $other['options']['attempts_delay'] = 600;
+        }
+    }
+
     protected function mockEngine($methods = null, $config = null)
     {
         if ($config === null) {
             $config = $this->config;
         }
-        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
+
+        return $this->getMockBuilder($this->engineClass)
+            ->setMethods($methods)
+            ->setConstructorArgs([$this->Logger, $config])
+            ->getMock();
     }
 }

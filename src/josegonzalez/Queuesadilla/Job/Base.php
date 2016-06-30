@@ -62,12 +62,15 @@ class Base implements JsonSerializable
 
     public function release($delay = 0)
     {
-        if (!isset($this->item['attempts'])) {
-            $this->item['attempts'] = 0;
+        $this->item['attempts'] = 0;
+        if (isset($this->item['attempts']) && $this->item['attempts'] > 0) {
+            $this->item['attempts'] -= 1;
         }
 
-        $this->item['attempts'] += 1;
         $this->item['delay'] = $delay;
+        if (isset($this->item['options']['attempts_delay'])) {
+            $this->item['delay'] = $this->item['options']['attempts_delay'];
+        }
         return $this->engine->release($this->item);
     }
 

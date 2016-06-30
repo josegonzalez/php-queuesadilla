@@ -99,7 +99,9 @@ class SequentialWorkerTest extends TestCase
         $Worker = new SequentialWorker($Engine);
         $this->assertFalse($Worker->work());
 
-        $Engine = $this->getMock('josegonzalez\Queuesadilla\Engine\NullEngine', ['pop']);
+        $Engine = $this->getMockBuilder('josegonzalez\Queuesadilla\Engine\NullEngine')
+                ->setMethods(['pop'])
+                ->getMock();
         $Engine->expects($this->at(0))
                 ->method('pop')
                 ->will($this->returnValue(true));

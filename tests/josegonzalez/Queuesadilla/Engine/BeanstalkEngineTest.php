@@ -213,6 +213,10 @@ class BeanstalkEngineTest extends TestCase
         if ($config === null) {
             $config = $this->config;
         }
-        return $this->getMock($this->engineClass, $methods, [$this->Logger, $config]);
+
+        return $this->getMockBuilder($this->engineClass)
+            ->setMethods($methods)
+            ->setConstructorArgs([$this->Logger, $config])
+            ->getMock();
     }
 }
