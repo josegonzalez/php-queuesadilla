@@ -152,7 +152,16 @@ class RabbitmqEngine extends Base
      */
     public function pop($options = [])
     {
-        return null;
+        $item = null;
+        $queue = $this->setting($options, 'queue');
+        if ($this->isConnected()) {
+            $item = $this->channel->basic_get($queue, false);
+        }
+        if (!$item) {
+            return null;
+        }
+
+        return json_decode($item->getBody(), true);
     }
 
     /**
