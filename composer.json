@@ -20,6 +20,7 @@
     },
     "require-dev": {
         "iron-io/iron_mq": "dev-master",
+        "videlalvaro/php-amqplib": "dev-master",
         "monolog/monolog": "*",
         "pda/pheanstalk": "dev-master",
         "phpmd/phpmd": "dev-master",
@@ -30,7 +31,8 @@
     "suggest": {
         "pda/pheanstalk": "Adds support for Beanstalk background workers",
         "iron-io/iron_mq": "Adds support for IronMQ background workers",
-        "monolog/monolog": "Adds support for logging"
+        "monolog/monolog": "Adds support for logging",
+        "videlalvaro/php-amqplib": "Adds support for RabbitMQ"
     },
     "autoload": {
         "psr-0": {
