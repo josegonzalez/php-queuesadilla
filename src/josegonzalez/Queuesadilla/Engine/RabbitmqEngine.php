@@ -42,8 +42,9 @@ class RabbitmqEngine extends Base
         'durable_exchange' => true,
         'auto_delete_exchange' => false,
 
+        'acknowledge' => true,
+
         'confirm' => false,
-        'routing_key' => 'jobs',
         'connect_attempt_delay' => 0.1,
         'connect_attempts' => 3,
         'mandatory_publish' => false,
@@ -55,6 +56,8 @@ class RabbitmqEngine extends Base
     public $channel;
 
     protected $handlerAttached = false;
+
+    protected $queues = null;
 
     /**
      * {@inheritDoc}
@@ -94,17 +97,6 @@ class RabbitmqEngine extends Base
         }
 
         $this->channel = $this->connection->channel();
-        $this->channel->queue_declare(
-            $this->config('queue'),
-            $this->config('passive_queue'),
-            $this->config('durable_queue'),
-            $this->config('exclusive'),
-            $this->config('auto_delete_queue'),
-            $this->config('nowait'),
-            $this->config('arguments'),
-            $this->config('ticket')
-        );
-
         $this->channel->exchange_declare(
             $this->config('exchange'),
             $this->config('type'),
@@ -112,11 +104,8 @@ class RabbitmqEngine extends Base
             $this->config('durable_exchange'),
             $this->config('auto_delete_exchange')
         );
-        $this->channel->queue_bind(
-            $this->config('queue'),
-            $this->config('exchange'),
-            $this->config('routing_key')
-        );
+        $queue = $this->config('queue');
+        $this->declareAndBindQueue($queue);
 
         return true;
     }
@@ -130,7 +119,8 @@ class RabbitmqEngine extends Base
             return false;
         }
         if ($this->isConnected()) {
-            return $this->channel->basic_ack($item['_delivery_tag']);
+            $this->channel->basic_ack($item['_delivery_tag']);
+            return true;
         }
         return false;
     }
@@ -141,7 +131,8 @@ class RabbitmqEngine extends Base
     public function reject($item)
     {
         if ($this->isConnected()) {
-            return $this->channel->basic_reject($item['_delivery_tag'], false);
+            $this->channel->basic_reject($item['_delivery_tag'], false);
+            return true;
         }
 
         return false;
@@ -161,7 +152,12 @@ class RabbitmqEngine extends Base
             return null;
         }
 
-        return json_decode($item->getBody(), true);
+        if ($this->setting($options, 'acknowledge')) {
+            $this->channel->basic_ack($item->delivery_info['delivery_tag']);
+        }
+        $data = json_decode($item->getBody(), true);
+        $data['_delivery_tag'] = $item->delivery_info['delivery_tag'];
+        return $data;
     }
 
     /**
@@ -197,10 +193,17 @@ class RabbitmqEngine extends Base
             $this->channel->tx_select();
         }
 
+        $queue = $this->setting($options, 'queue');
+        if ($this->setting($options, 'queue') !== $this->config('queue')) {
+            $this->declareAndBindQueue($queue);
+            $this->queues[] = $queue;
+            $this->queues = array_unique($this->queues);
+        }
+
         $this->channel->basic_publish(
             new AMQPMessage($body, (array) $options['headers']),
             $this->config('exchange'),
-            $this->config('routing_key'),
+            $queue,
             $this->setting($options, 'mandatory_publish'),
             $this->setting($options, 'immediate_publish'),
             $this->setting($options, 'ticket_publish')
@@ -218,7 +221,10 @@ class RabbitmqEngine extends Base
      */
     public function queues()
     {
-        return [$this->config('queue')];
+        if (empty($this->queues)) {
+            $this->queues = [$this->config('queue')];
+        }
+        return $this->queues;
     }
 
     /**
@@ -226,10 +232,17 @@ class RabbitmqEngine extends Base
      */
     public function release($item, $options = [])
     {
-        if ($this->isConnected()) {
-            return (bool)$this->channel->basic_reject($item['_delivery_tag'], true);
+        if (!$this->isConnected()) {
+            return false;
         }
 
+        if (!empty($item)) {
+            try {
+                return (bool)$this->channel->basic_reject($item['_delivery_tag'], true);
+            } catch (\PhpAmqpLib\Exception\AMQPProtocolChannelException $e) {
+                $this->logger()->info(sprintf('Error releasing message: %s', $e));
+            }
+        }
         return false;
     }
 
@@ -275,6 +288,26 @@ class RabbitmqEngine extends Base
     public function work()
     {
         $this->channel->wait();
+    }
+
+    protected function declareAndBindQueue($queue)
+    {
+        $routingKey = $queue;
+        $this->channel->queue_declare(
+            $queue,
+            $this->config('passive_queue'),
+            $this->config('durable_queue'),
+            $this->config('exclusive'),
+            $this->config('auto_delete_queue'),
+            $this->config('nowait'),
+            $this->config('arguments'),
+            $this->config('ticket')
+        );
+        $this->channel->queue_bind(
+            $queue,
+            $this->config('exchange'),
+            $routingKey
+        );
     }
 
     /**
