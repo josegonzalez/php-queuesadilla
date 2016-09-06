@@ -6,7 +6,6 @@ use josegonzalez\Queuesadilla\Engine\RabbitmqEngine;
 use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
-use RedisException;
 
 class RabbitmqEngineTest extends TestCase
 {
@@ -18,7 +17,6 @@ class RabbitmqEngineTest extends TestCase
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\RabbitmqEngine';
         $this->Engine = $this->mockEngine();
         $this->Fixtures = new FixtureData;
-        $this->clearEngine();
     }
 
     public function tearDown()
@@ -77,7 +75,9 @@ class RabbitmqEngineTest extends TestCase
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
         $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
-        $this->assertTrue($this->Engine->acknowledge($this->Engine->pop(['acknowledge' => false])));
+        $this->assertTrue($this->Engine->isConnected());
+        $data = $this->Engine->pop(['acknowledge' => false]);
+        $this->assertTrue($this->Engine->acknowledge($data));
 
         $this->Engine->pop();
     }
@@ -105,11 +105,13 @@ class RabbitmqEngineTest extends TestCase
      */
     public function testPop()
     {
-        $data = $this->Fixtures->default['first'];
-        $data['_delivery_tag'] = '1';
+        $expected = $this->Fixtures->default['first'];
         $this->assertNull($this->Engine->pop('default'));
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
-        $this->assertEquals($data, $this->Engine->pop('default'));
+
+        $actual = $this->Engine->pop('default');
+        unset($actual['_delivery_tag'], $actual['_message']);
+        $this->assertEquals($expected, $actual);
         $this->assertNull($this->Engine->pop('default'));
     }
 
@@ -153,12 +155,18 @@ class RabbitmqEngineTest extends TestCase
     public function testRelease()
     {
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
-        $this->assertEquals($this->Fixtures->default['first'] + ['_delivery_tag' => '1'], $this->Engine->pop('default'));
+
+        $actual = $this->Engine->pop('default');
+        unset($actual['_delivery_tag'], $actual['_message']);
+        $this->assertEquals($this->Fixtures->default['first'], $actual);
 
         $this->assertFalse($this->Engine->release(null, 'default'));
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], 'default'));
-        $this->assertEquals($this->Fixtures->default['second'] + ['_delivery_tag' => '2'], $this->Engine->pop('default'));
+
+        $actual = $this->Engine->pop('default');
+        unset($actual['_delivery_tag'], $actual['_message']);
+        $this->assertEquals($this->Fixtures->default['second'], $actual);
     }
 
     /**
@@ -184,7 +192,7 @@ class RabbitmqEngineTest extends TestCase
 
     protected function clearEngine()
     {
-        if ($this->Engine->connection() !== null && $this->Engine->connection()->isConnected()) {
+        if ($this->Engine->connection() !== null) {
             $this->Engine->connection()->close();
             $this->Engine->channel->close();
         }
