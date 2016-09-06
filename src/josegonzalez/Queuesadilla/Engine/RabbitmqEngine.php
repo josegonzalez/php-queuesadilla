@@ -54,6 +54,8 @@ class RabbitmqEngine extends Base
 
     public $channel;
 
+    protected $handlerAttached = false;
+
     /**
      * {@inheritDoc}
      */
@@ -243,7 +245,7 @@ class RabbitmqEngine extends Base
             $this->channel->confirm_select();
         }
         $this->channel->basic_qos(null, 1, null);
-        return $this->channel->basic_consume(
+        $attached = $this->channel->basic_consume(
             $this->config('queue'),
             $this->config('routing_key'),
             $options['no_local'],
@@ -254,6 +256,10 @@ class RabbitmqEngine extends Base
             $options['ticket'],
             $options['arguments']
         );
+        if ($attached) {
+            $this->handlerAttached = true;
+        }
+        return $attached;
     }
 
     public function canWork()
