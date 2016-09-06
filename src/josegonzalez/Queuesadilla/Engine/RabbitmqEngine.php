@@ -132,7 +132,7 @@ class RabbitmqEngine extends Base
         if ($this->isConnected()) {
             return $this->channel->basic_ack($item['_delivery_tag']);
         }
-        return true;
+        return false;
     }
 
     /**
@@ -144,7 +144,7 @@ class RabbitmqEngine extends Base
             return $this->channel->basic_reject($item['_delivery_tag'], false);
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -221,7 +221,7 @@ class RabbitmqEngine extends Base
             return (bool)$this->channel->basic_reject($item['_delivery_tag'], true);
         }
 
-        return true;
+        return false;
     }
 
     public function attachHandler($options = [])
