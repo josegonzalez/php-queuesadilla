@@ -35,6 +35,7 @@ before_script:
   - psql -d database_name -f config/schema-pgsql.sql -U postgres;
 
   # extensions
+  - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
   - composer self-update
