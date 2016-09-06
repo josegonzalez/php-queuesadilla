@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "iron-io/iron_mq": "dev-master",
-        "videlalvaro/php-amqplib": "dev-master",
+        "php-amqplib/php-amqplib": "dev-master",
         "monolog/monolog": "*",
         "pda/pheanstalk": "dev-master",
         "phpmd/phpmd": "dev-master",
