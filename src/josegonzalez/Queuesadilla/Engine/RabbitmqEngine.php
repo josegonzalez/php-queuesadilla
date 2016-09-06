@@ -32,7 +32,7 @@ class RabbitmqEngine extends Base
         'exclusive' => false,
         'auto_delete_queue' => false,
         'nowait' => false,
-        'arguments' => null,
+        'arguments' => [],
 
         'exchange' => 'jobs',
         'type' => 'direct',
@@ -67,7 +67,7 @@ class RabbitmqEngine extends Base
             $vhost = '/' . $database;
         }
         try {
-            $this->client = new Client([
+            $this->connection = new Client([
                 'host' => $this->config('host'),
                 'port' => $this->config('port'),
                 'user' => $this->config('user'),
@@ -75,18 +75,21 @@ class RabbitmqEngine extends Base
                 'vhost' => $vhost,
             ]);
 
-            $this->client->connect();
+            $this->connection->connect();
         } catch (Exception $e) {
+            $this->connection = null;
+            $this->channel = null;
             return false;
         }
 
-        if (!$this->client->isConnected()) {
+        if (!$this->isConnected()) {
+            $this->connection = null;
+            $this->channel = null;
             return false;
         }
 
-        $this->channel = $this->client->channel();
-        $this->client->exchangeDeclare(
-            $this->channel,
+        $this->channel = $this->connection->channel();
+        $this->channel->exchangeDeclare(
             $this->config('exchange'),
             $this->config('type'),
             $this->config('passive_exchange'),
@@ -107,8 +110,8 @@ class RabbitmqEngine extends Base
         if (!parent::acknowledge($item)) {
             return false;
         }
-        if ($this->isConnected()) {
-            $this->channel->ack($item['_delivery_tag']);
+        if (isset($item['_message']) && $this->isConnected()) {
+            $this->channel->ack($item['_message']);
             return true;
         }
         return false;
@@ -119,8 +122,8 @@ class RabbitmqEngine extends Base
      */
     public function reject($item)
     {
-        if ($this->isConnected()) {
-            $this->channel->reject($item['_delivery_tag'], false);
+        if (isset($item['_message']) && $this->isConnected()) {
+            $this->channel->reject($item['_message'], false);
             return true;
         }
 
@@ -135,17 +138,17 @@ class RabbitmqEngine extends Base
         $item = null;
         $queue = $this->setting($options, 'queue');
         if ($this->isConnected()) {
-            $item = $this->channel->get($queue, false);
+            $item = $this->channel->get($queue);
         }
         if (!$item) {
             return null;
         }
 
         if ($this->setting($options, 'acknowledge')) {
-            $this->channel->ack($item->delivery_info['delivery_tag']);
+            $this->channel->ack($item);
         }
-        $data = json_decode($item->getBody(), true);
-        $data['_delivery_tag'] = $item->delivery_info['delivery_tag'];
+        $data = json_decode($item->content, true);
+        $data['_message'] = $item;
         return $data;
     }
 
@@ -178,7 +181,7 @@ class RabbitmqEngine extends Base
         }
 
         if ($this->config('confirm')) {
-            $this->channel->tx_select();
+            $this->channel->txSelect();
         }
 
         $queue = $this->setting($options, 'queue');
@@ -198,7 +201,7 @@ class RabbitmqEngine extends Base
         );
 
         if ($this->config('confirm')) {
-            return $this->channel->tx_commit();
+            return $this->channel->txCommit();
         }
 
         return true;
@@ -279,8 +282,7 @@ class RabbitmqEngine extends Base
     protected function declareAndBindQueue($queue)
     {
         $routingKey = $queue;
-        $this->client->queueDeclare(
-            $this->channel,
+        $this->channel->queueDeclare(
             $queue,
             $this->config('passive_queue'),
             $this->config('durable_queue'),
@@ -289,8 +291,7 @@ class RabbitmqEngine extends Base
             $this->config('nowait'),
             $this->config('arguments')
         );
-        $this->client->queueBind(
-            $this->channel,
+        $this->channel->queueBind(
             $queue,
             $this->config('exchange'),
             $routingKey
@@ -317,7 +318,7 @@ class RabbitmqEngine extends Base
         }
     }
 
-    protected function isConnected()
+    public function isConnected()
     {
         return $this->connection !== null && $this->connection->isConnected();
     }
