@@ -184,6 +184,10 @@ class RabbitmqEngineTest extends TestCase
 
     protected function clearEngine()
     {
+        if ($this->Engine->connection() !== null && $this->Engine->connection()->isConnected()) {
+            $this->Engine->connection()->close();
+            $this->Engine->channel->close();
+        }
     }
 
     protected function mockEngine($methods = null, $config = null)
