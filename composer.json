@@ -22,7 +22,7 @@
     "require-dev": {
         "phpunit/phpunit": "~8.0",
         "iron-io/iron_mq": "dev-master",
-        "videlalvaro/php-amqplib": "dev-master",
+        "php-amqplib/php-amqplib": "dev-master",
         "monolog/monolog": "*",
         "pda/pheanstalk": "~3.0",
         "phpmd/phpmd": "dev-master",
