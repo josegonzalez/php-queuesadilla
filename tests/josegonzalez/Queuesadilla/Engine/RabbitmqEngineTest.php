@@ -194,7 +194,6 @@ class RabbitmqEngineTest extends TestCase
     protected function clearEngine()
     {
         if ($this->Engine->connection() !== null) {
-            $this->Engine->connection()->close();
             foreach (['default', 'other'] as $queue) {
                 try {
                     $this->Engine->channel->queuePurge($queue);
@@ -202,7 +201,12 @@ class RabbitmqEngineTest extends TestCase
                 }
             }
             $this->Engine->channel->close();
-            $this->Engine->connection()->disconnect();
+            $connection = $this->Engine->connection();
+            if (method_exists($connection, 'close')) {
+                $connection->close();
+            } else {
+                $connection->disconnect();
+            }
         }
     }
 
