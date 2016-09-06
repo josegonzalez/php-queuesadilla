@@ -2,6 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
+use Exception;
 use josegonzalez\Queuesadilla\Engine\RabbitmqEngine;
 use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\TestCase;
@@ -194,7 +195,14 @@ class RabbitmqEngineTest extends TestCase
     {
         if ($this->Engine->connection() !== null) {
             $this->Engine->connection()->close();
+            foreach (['default', 'other'] as $queue) {
+                try {
+                    $this->Engine->channel->queuePurge($queue);
+                } catch (Exception $e) {
+                }
+            }
             $this->Engine->channel->close();
+            $this->Engine->connection()->disconnect();
         }
     }
 
