@@ -77,7 +77,9 @@ class RabbitmqEngineTest extends TestCase
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
         $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
-        $this->assertTrue($this->Engine->acknowledge($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->acknowledge($this->Engine->pop(['acknowledge' => false])));
+
+        $this->Engine->pop();
     }
 
     /**
@@ -94,7 +96,8 @@ class RabbitmqEngineTest extends TestCase
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first']));
         $this->assertTrue($this->Engine->push($this->Fixtures->other['third']));
-        $this->assertTrue($this->Engine->reject($this->Fixtures->default['first']));
+        $this->assertTrue($this->Engine->reject($this->Engine->pop(['acknowledge' => false])));
+        $this->assertTrue($this->Engine->reject($this->Engine->pop(['acknowledge' => false])));
     }
 
     /**
@@ -102,9 +105,12 @@ class RabbitmqEngineTest extends TestCase
      */
     public function testPop()
     {
+        $data = $this->Fixtures->default['first'];
+        $data['_delivery_tag'] = '1';
         $this->assertNull($this->Engine->pop('default'));
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
-        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
+        $this->assertEquals($data, $this->Engine->pop('default'));
+        $this->assertNull($this->Engine->pop('default'));
     }
 
     /**
@@ -132,7 +138,7 @@ class RabbitmqEngineTest extends TestCase
         $this->assertEmpty($pop1['args']);
 
         $this->markTestIncomplete(
-            'RabbitmqEngine does not yet implement delay or expires_in (tbd sorted sets)'
+            'RabbitmqEngine does not yet implement delay or expires_in'
         );
 
         $this->assertEquals('yet_another_function', $pop2['class']);
@@ -147,12 +153,12 @@ class RabbitmqEngineTest extends TestCase
     public function testRelease()
     {
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
-        $this->assertEquals($this->Fixtures->default['first'], $this->Engine->pop('default'));
+        $this->assertEquals($this->Fixtures->default['first'] + ['_delivery_tag' => '1'], $this->Engine->pop('default'));
 
         $this->assertFalse($this->Engine->release(null, 'default'));
 
-        $this->assertEquals(1, $this->Engine->release($this->Fixtures->default['second'], 'default'));
-        $this->assertEquals($this->Fixtures->default['second'], $this->Engine->pop('default'));
+        $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], 'default'));
+        $this->assertEquals($this->Fixtures->default['second'] + ['_delivery_tag' => '2'], $this->Engine->pop('default'));
     }
 
     /**
@@ -170,7 +176,7 @@ class RabbitmqEngineTest extends TestCase
         $this->assertEquals(['default', 'other'], $queues);
 
         $this->Engine->pop();
-        $this->Engine->pop();
+        $this->Engine->pop(['queue' => 'other']);
         $queues = $this->Engine->queues();
         sort($queues);
         $this->assertEquals(['default', 'other'], $queues);
