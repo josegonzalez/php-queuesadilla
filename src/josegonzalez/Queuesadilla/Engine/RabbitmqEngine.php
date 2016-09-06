@@ -129,7 +129,7 @@ class RabbitmqEngine extends Base
         if (!parent::acknowledge($item)) {
             return false;
         }
-        if ($this->handlerAttached) {
+        if ($this->isConnected()) {
             return $this->channel->basic_ack($item['_delivery_tag']);
         }
         return true;
@@ -140,7 +140,7 @@ class RabbitmqEngine extends Base
      */
     public function reject($item)
     {
-        if ($this->handlerAttached) {
+        if ($this->isConnected()) {
             return $this->channel->basic_reject($item['_delivery_tag'], false);
         }
 
@@ -217,7 +217,7 @@ class RabbitmqEngine extends Base
      */
     public function release($item, $options = [])
     {
-        if ($this->handlerAttached) {
+        if ($this->isConnected()) {
             return (bool)$this->channel->basic_reject($item['_delivery_tag'], true);
         }
 
@@ -245,7 +245,7 @@ class RabbitmqEngine extends Base
             $this->channel->confirm_select();
         }
         $this->channel->basic_qos(null, 1, null);
-        $attached = $this->channel->basic_consume(
+        return $this->channel->basic_consume(
             $this->config('queue'),
             $this->config('routing_key'),
             $options['no_local'],
@@ -256,10 +256,6 @@ class RabbitmqEngine extends Base
             $options['ticket'],
             $options['arguments']
         );
-        if ($attached) {
-            $this->handlerAttached = true;
-        }
-        return $attached;
     }
 
     public function canWork()
