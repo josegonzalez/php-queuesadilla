@@ -2,24 +2,20 @@
 
 namespace josegonzalez\Queuesadilla\Engine;
 
-use josegonzalez\Queuesadilla\Engine\RedisEngine;
+use josegonzalez\Queuesadilla\Engine\PredisEngine;
 use josegonzalez\Queuesadilla\FixtureData;
 use josegonzalez\Queuesadilla\TestCase;
 use Psr\Log\NullLogger;
-use RedisException;
+use Exception as RedisException;
 
-class RedisEngineTest extends TestCase
+class PredisEngineTest extends TestCase
 {
     public function setUp()
     {
-        if (!class_exists('Redis')) {
-            $this->markTestSkipped('Redis extension is not installed or configured properly.');
-        }
-
         $this->url = getenv('REDIS_URL');
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
-        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\RedisEngine';
+        $this->engineClass = 'josegonzalez\Queuesadilla\Engine\PredisEngine';
         $this->Engine = $this->mockEngine();
         $this->Fixtures = new FixtureData;
         $this->clearEngine();
@@ -32,23 +28,23 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::__construct
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::__construct
      */
     public function testConstruct()
     {
-        $Engine = new RedisEngine($this->Logger, []);
+        $Engine = new PredisEngine($this->Logger, []);
         $this->assertNotNull($Engine->connection());
 
-        $Engine = new RedisEngine($this->Logger, $this->url);
+        $Engine = new PredisEngine($this->Logger, $this->url);
         $this->assertNotNull($Engine->connection());
 
-        $Engine = new RedisEngine($this->Logger, $this->config);
+        $Engine = new PredisEngine($this->Logger, $this->config);
         $this->assertNotNull($Engine->connection());
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::connect
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::redisInstance
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::redisInstance
      */
     public function testConnect()
     {
@@ -66,11 +62,15 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::connect
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::redisInstance
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::redisInstance
      */
     public function testConnectAuth()
     {
+        $this->markTestIncomplete(
+            'Predis does not return false on invalid connection'
+        );
+
         $config = $this->config;
         $Engine = $this->mockEngine(null, $config);
         $Engine->config('pass', 'some_password');
@@ -78,7 +78,7 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::connect
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::connect
      */
     public function testConnectionException()
     {
@@ -99,8 +99,8 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::acknowledge
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::evalSha
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::acknowledge
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::evalSha
      */
     public function testAcknowledge()
     {
@@ -117,7 +117,7 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::reject
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::reject
      */
     public function testReject()
     {
@@ -134,7 +134,7 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::pop
      */
     public function testPop()
     {
@@ -144,7 +144,7 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::push
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::push
      */
     public function testPush()
     {
@@ -168,7 +168,7 @@ class RedisEngineTest extends TestCase
         $this->assertEmpty($pop1['args']);
 
         $this->markTestIncomplete(
-            'RedisEngine does not yet implement delay or expires_in (tbd sorted sets)'
+            'PredisEngine does not yet implement delay or expires_in (tbd sorted sets)'
         );
 
         $this->assertEquals('yet_another_function', $pop2['class']);
@@ -177,8 +177,8 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::pop
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::release
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::pop
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::release
      */
     public function testRelease()
     {
@@ -192,8 +192,8 @@ class RedisEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::queues
-     * @covers josegonzalez\Queuesadilla\Engine\RedisEngine::requireQueue
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::queues
+     * @covers josegonzalez\Queuesadilla\Engine\PredisEngine::requireQueue
      */
     public function testQueues()
     {

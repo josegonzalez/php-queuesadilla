@@ -4,10 +4,12 @@ namespace josegonzalez\Queuesadilla\Engine;
 
 use josegonzalez\Queuesadilla\Engine\Base;
 use Redis;
-use RedisException;
+use Exception;
 
 class RedisEngine extends Base
 {
+    protected $persistentEnabled = true;
+
     protected $baseConfig = [
         'database' => null,
         'pass' => false,
@@ -25,7 +27,7 @@ class RedisEngine extends Base
     {
         $return = false;
         $connectMethod = 'connect';
-        if ($this->config('persistent')) {
+        if ($this->config('persistent') && $this->persistentEnabled) {
             $connectMethod = 'pconnect';
         }
 
@@ -38,7 +40,7 @@ class RedisEngine extends Base
                     (int)$this->config('timeout')
                 );
             }
-        } catch (RedisException $e) {
+        } catch (Exception $e) {
             return false;
         }
 
@@ -68,11 +70,7 @@ class RedisEngine extends Base
             return false;
         }
 
-        return (bool)$this->connection()->evalSha(sha1($script), [
-            $item['queue'],
-            rand(),
-            $item['id'],
-        ], 3);
+        return $this->evalSha(sha1($script), $item);
     }
 
     /**
@@ -150,6 +148,15 @@ class RedisEngine extends Base
             return $exists[0];
         }
         return $this->connection()->script('load', $script);
+    }
+
+    protected function evalSha($scriptSha, $item)
+    {
+        return (bool)$this->connection()->evalSha($scriptSha, [
+            $item['queue'],
+            rand(),
+            $item['id'],
+        ], 3);
     }
 
     protected function getRemoveScript()

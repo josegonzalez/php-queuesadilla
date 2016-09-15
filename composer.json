@@ -23,6 +23,7 @@
         "monolog/monolog": "*",
         "pda/pheanstalk": "dev-master",
         "phpmd/phpmd": "dev-master",
+        "predis/predis": "~1.0",
         "satooshi/php-coveralls": "dev-master",
         "squizlabs/php_codesniffer": "dev-master"
     },
