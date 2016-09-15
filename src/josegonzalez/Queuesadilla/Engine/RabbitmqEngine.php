@@ -47,7 +47,6 @@ class RabbitmqEngine extends Base
         'connect_attempts' => 3,
         'mandatory_publish' => false,
         'immediate_publish' => false,
-
     ];
 
     public $channel;
