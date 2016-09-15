@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "iron-io/iron_mq": "dev-master",
-        "bunny/bunny": "dev-master",
+        "bunny/bunny": "~0.2",
         "monolog/monolog": "*",
         "pda/pheanstalk": "dev-master",
         "phpmd/phpmd": "dev-master",
