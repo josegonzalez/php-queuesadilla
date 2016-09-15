@@ -19,12 +19,13 @@
         "league/event": "~2.0"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "dev-master",
-        "pda/pheanstalk": "dev-master",
         "iron-io/iron_mq": "dev-master",
         "monolog/monolog": "*",
+        "pda/pheanstalk": "dev-master",
+        "phpmd/phpmd": "dev-master",
+        "predis/predis": "~1.0",
         "satooshi/php-coveralls": "dev-master",
-        "phpmd/phpmd": "dev-master"
+        "squizlabs/php_codesniffer": "dev-master"
     },
     "suggest": {
         "pda/pheanstalk": "Adds support for Beanstalk background workers",
