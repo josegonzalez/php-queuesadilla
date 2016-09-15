@@ -22,7 +22,7 @@
     "require-dev": {
         "phpunit/phpunit": "~8.0",
         "iron-io/iron_mq": "dev-master",
-        "bunny/bunny": "dev-master",
+        "bunny/bunny": "~0.2",
         "monolog/monolog": "*",
         "pda/pheanstalk": "~3.0",
         "phpmd/phpmd": "dev-master",
