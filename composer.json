@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.5.0",
         "psr/log": "~1.0",
-        "league/event": "~1.0"
+        "league/event": "~2.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "dev-master",

@@ -4,7 +4,7 @@ namespace josegonzalez\Queuesadilla\Event;
 
 use InvalidArgumentException;
 use josegonzalez\Queuesadilla\Event\EventListenerInterface;
-use League\Event\PriorityEmitter as EventManager;
+use League\Event\Emitter as EventManager;
 use League\Event\EmitterInterface;
 
 trait EventManagerTrait

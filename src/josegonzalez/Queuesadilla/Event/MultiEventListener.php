@@ -2,14 +2,14 @@
 
 namespace josegonzalez\Queuesadilla\Event;
 
-use League\Event\AbstractEvent;
 use League\Event\AbstractListener;
+use League\Event\EventInterface;
 
 abstract class MultiEventListener extends AbstractListener implements EventListenerInterface
 {
     abstract public function implementedEvents();
 
-    public function handle(AbstractEvent $event)
+    public function handle(EventInterface $event)
     {
         $events = $this->implementedEvents();
         if (empty($events)) {
