@@ -220,7 +220,7 @@ abstract class AbstractPdoEngineTest extends TestCase
         $item = $this->Engine->pop();
         $this->assertTrue($this->Engine->release($item));
         $sth = $this->execute($this->Engine->connection(), 'SELECT * FROM jobs WHERE id = ' . $this->Fixtures->default['first']['id']);
-        $this->assertFalse($sth->rowCount() == 1);
+        $this->assertTrue($sth->rowCount() == 0);
 
         $this->assertTrue($this->Engine->push($this->Fixtures->default['second'], [
             'attempts' => 10
@@ -233,7 +233,7 @@ abstract class AbstractPdoEngineTest extends TestCase
 
         $date = new \DateTime();
         $date->modify('+10 minutes');
-        $sth = $this->execute($this->Engine->connection(), 'SELECT * FROM jobs WHERE id = ' . $this->Fixtures->default['second']['id']);
+        $sth = $this->execute($this->Engine->connection(), 'SELECT * FROM jobs WHERE id = ' . $item2['id']);
         $results = $sth->fetch(PDO::FETCH_ASSOC);
         $inTenMinutes = $date->format('Y-m-d H:i:s');
 

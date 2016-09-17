@@ -203,31 +203,52 @@ abstract class PdoEngine extends Base
      */
     public function release($item, $options = [])
     {
-        $sql = sprintf('UPDATE %s SET locked = 0 WHERE id = ?', $this->config('table'));
-        $sth = $this->connection()->prepare($sql);
-        $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
-        $sth->execute();
+        if (isset($item['attempts']) && $item['attempts'] === 0) {
+            return $this->reject($item);
+        }
+
+        $fields = [
+            [
+                'type' => PDO::PARAM_INT,
+                'key' => 'locked',
+                'value' => 0,
+            ],
+        ];
 
         if (isset($item['delay'])) {
+            $dateInterval = new DateInterval(sprintf('PT%sS', $item['delay']));
             $datetime = new DateTime;
-            $delayUntil = $datetime->add(new DateInterval(sprintf('PT%sS', $item['delay'])))->format('Y-m-d H:i:s');
-
-            $sql = sprintf('UPDATE %s SET delay_until = ? WHERE id = ?', $this->config('table'));
-            $sth = $this->connection()->prepare($sql);
-            $sth->bindParam(1, $delayUntil, PDO::PARAM_STR);
-            $sth->bindParam(2, $item['id'], PDO::PARAM_INT);
-            $sth->execute();
+            $delayUntil = $datetime->add($dateInterval)
+                                   ->format('Y-m-d H:i:s');
+            $fields[] = [
+                'type' => PDO::PARAM_STR,
+                'key' => 'delay_until',
+                'value' => $delayUntil,
+            ];
         }
-
         if (isset($item['attempts']) && $item['attempts'] > 0) {
-            $sql = sprintf('UPDATE %s SET attempts = ? WHERE id = ?', $this->config('table'));
-            $sth = $this->connection()->prepare($sql);
-            $sth->bindParam(1, $item['attempts'], PDO::PARAM_INT);
-            $sth->bindParam(2, $item['id'], PDO::PARAM_INT);
-            $sth->execute();
-            return $sth->rowCount() == 1;
+            $fields[] = [
+                'type' => PDO::PARAM_INT,
+                'key' => 'attempts',
+                'value' => (int)$item['attempts'],
+            ];
         }
-        $this->reject($item);
+        $updateSql = [];
+        foreach ($fields as $config) {
+            $updateSql[] = sprintf('%1$s = :%1$s', $config['key']);
+        }
+        $sql = sprintf(
+            'UPDATE %s SET %s WHERE id = :id',
+            $this->config('table'),
+            implode(', ', $updateSql)
+        );
+        $sth = $this->connection()->prepare($sql);
+        foreach ($fields as $config) {
+            $sth->bindValue(sprintf(':%s', $config['key']), $config['value'], $config['type']);
+        }
+        $sth->bindValue(':id', (int)$item['id'], PDO::PARAM_INT);
+        $sth->execute();
+
         return $sth->rowCount() == 1;
     }
 
