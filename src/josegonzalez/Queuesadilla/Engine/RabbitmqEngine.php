@@ -229,7 +229,7 @@ class RabbitmqEngine extends Base
 
         if (!empty($item)) {
             try {
-                return (bool)$this->channel->reject($item['_delivery_tag'], true);
+                return (bool)$this->channel->reject($item['_message'], true);
             } catch (\PhpAmqpLib\Exception\AMQPProtocolChannelException $e) {
                 $this->logger()->info(sprintf('Error releasing message: %s', $e));
             }
@@ -254,17 +254,17 @@ class RabbitmqEngine extends Base
         }
 
         if (!$this->config('confirm')) {
-            $this->channel->confirm_select();
+            $this->channel->confirmSelect();
         }
         $this->channel->qos(null, 1, null);
         return $this->channel->consume(
+            $options['handler'],
             $this->config('queue'),
-            $this->config('routing_key'),
+            $options['consumer_tag'],
             $options['no_local'],
             $options['no_ack'],
             $options['exclusive'],
             $options['nowait'],
-            $options['handler'],
             $options['arguments']
         );
     }
@@ -276,7 +276,7 @@ class RabbitmqEngine extends Base
 
     public function work()
     {
-        $this->channel->wait();
+        $this->connection->run();
     }
 
     protected function declareAndBindQueue($queue)
