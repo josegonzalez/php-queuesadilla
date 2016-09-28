@@ -7,7 +7,7 @@ use josegonzalez\Queuesadilla\Worker\SequentialWorker;
 
 class RabbitmqWorker extends SequentialWorker
 {
-        /**
+    /**
      * {@inheritDoc}
      */
     public function work()
@@ -20,8 +20,14 @@ class RabbitmqWorker extends SequentialWorker
 
         $jobClass = $this->engine->getJobClass();
         $handler = function ($message) use ($jobClass) {
-            $item = json_decode($message->body, true);
-            $item['_delivery_tag'] = $message->delivery_info['delivery_tag'];
+            if (is_int($this->maxIterations) && $this->iterations >= $this->maxIterations) {
+                $this->logger()->debug('Max iterations reached, exiting');
+                $this->dispatchEvent('Worker.maxIterations');
+                return;
+            }
+
+            $item = json_decode($message->content, true);
+            $item['_message'] = $message;
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
 
             $success = false;
@@ -56,15 +62,7 @@ class RabbitmqWorker extends SequentialWorker
         };
 
         $this->engine->attachHandler(['handler' => $handler]);
-        while ($this->engine->canWork()) {
-            if (is_int($this->maxIterations) && $this->iterations >= $this->maxIterations) {
-                $this->logger()->debug('Max iterations reached, exiting');
-                $this->dispatchEvent('Worker.maxIterations');
-                break;
-            }
-            $this->iterations++;
-            $this->engine->work();
-        }
+        $this->engine->work();
     }
 
     protected function disconnect()
@@ -72,7 +70,7 @@ class RabbitmqWorker extends SequentialWorker
         $connection = $this->engine->connection();
         if ($connection !== null && $connection->isConnected()) {
             $this->logger()->debug("Shutting down amqp connection");
-            $connection->close();
+            $connection->disconnect();
         }
     }
 }
