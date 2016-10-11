@@ -318,7 +318,7 @@ class RabbitmqEngine extends Base
         }
     }
 
-    public function isConnected()
+    protected function isConnected()
     {
         return $this->connection !== null && $this->connection->isConnected();
     }
