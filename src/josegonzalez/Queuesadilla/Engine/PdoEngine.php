@@ -296,7 +296,7 @@ abstract class PdoEngine extends Base
     }
 
     /**
-     * Check if expired entries are present in the database and reject them
+     * Check if expired jobs are present in the database and reject them
      *
      * @param string $queue name of the queue
      * @return void
