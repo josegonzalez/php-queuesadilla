@@ -291,4 +291,44 @@ abstract class PdoEngine extends Base
 
         return $identifier;
     }
+
+    /**
+     * Check if expired entries are present in the database and reject them
+     *
+     * @param string $options 
+     * @return bool
+     */
+    public function cleanup($options = []) {
+        $queue = $this->setting($options, 'queue');
+        $sql = implode(" ", [
+            sprintf(
+                'SELECT id FROM %s',
+                $this->quoteIdentifier($this->config('table'))
+            ),
+            sprintf('WHERE %s = ?', $this->quoteIdentifier('queue')),
+            'AND expires_at < ?'
+        ]);
+
+        $datetime = new DateTime;
+        $dtFormatted = $datetime->format('Y-m-d H:i:s');
+
+        try {
+            $sth = $this->connection()->prepare($sql);
+            $sth->bindParam(1, $queue, PDO::PARAM_STR);
+            $sth->bindParam(2, $dtFormatted, PDO::PARAM_STR);
+
+            $sth->execute();
+            $result = $sth->fetch(PDO::FETCH_ASSOC);
+
+            if (!empty($result)) {
+                return $this->reject([
+                    'id' => $result['id'],
+                    'queue' => $queue
+                ]);
+            }
+        } catch (PDOException $e) {
+            $this->logger()->error($e->getMessage());
+        }
+        return false;
+    }
 }

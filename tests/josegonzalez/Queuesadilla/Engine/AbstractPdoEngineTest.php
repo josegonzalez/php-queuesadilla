@@ -267,6 +267,28 @@ abstract class AbstractPdoEngineTest extends TestCase
         $this->assertEquals(['default', 'other'], $queues);
     }
 
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::cleanup
+     */
+    public function testCleanup()
+    {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to database available');
+        }
+        $this->assertFalse($this->Engine->cleanup(null));
+        $this->assertFalse($this->Engine->cleanup(false));
+        $this->assertFalse($this->Engine->cleanup(1));
+        $this->assertFalse($this->Engine->cleanup('string'));
+        $this->assertFalse($this->Engine->cleanup(['key' => 'value']));
+        $this->assertFalse($this->Engine->cleanup($this->Fixtures->default['first']));
+
+        $pop1 = $this->Engine->pop();
+
+        $this->assertTrue($this->Engine->cleanup($pop1));
+    }
+
     protected function execute($connection, $sql)
     {
         if ($connection === null) {
@@ -300,9 +322,10 @@ abstract class AbstractPdoEngineTest extends TestCase
     protected function expandFixtureData() {
         foreach ($this->Fixtures->default as &$default) {
             $default['options']['attempts_delay'] = 600;
+            $default['options']['expires_at'] = 60;
         }
         foreach ($this->Fixtures->other as &$other) {
-            $other['options']['attempts_delay'] = 600;
+            $default['options']['expires_at'] = 60;
         }
     }
 

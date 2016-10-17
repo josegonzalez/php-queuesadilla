@@ -26,6 +26,11 @@ class SequentialWorker extends Base
                 break;
             }
 
+            if ($this->engine->cleanup($this->queue)) {
+                $this->logger()->debug('An expired job was cleaned up');
+                $this->dispatchEvent('Worker.cleanup');
+            }
+
             $this->iterations++;
             $item = $this->engine->pop($this->queue);
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
