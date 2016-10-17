@@ -61,6 +61,9 @@ abstract class PdoEngine extends Base
     public function pop($options = [])
     {
         $queue = $this->setting($options, 'queue');
+
+        $this->cleanup($queue);
+
         $selectSql = implode(" ", [
             sprintf(
                 'SELECT id, %s, attempts FROM %s',
@@ -295,11 +298,11 @@ abstract class PdoEngine extends Base
     /**
      * Check if expired entries are present in the database and reject them
      *
-     * @param string $options 
-     * @return bool
+     * @param string $queue name of the queue
+     * @return void
      */
-    public function cleanup($options = []) {
-        $queue = $this->setting($options, 'queue');
+    protected function cleanup($queue)
+    {
         $sql = implode(" ", [
             sprintf(
                 'SELECT id FROM %s',
@@ -321,7 +324,7 @@ abstract class PdoEngine extends Base
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
             if (!empty($result)) {
-                return $this->reject([
+                $this->reject([
                     'id' => $result['id'],
                     'queue' => $queue
                 ]);
@@ -329,6 +332,5 @@ abstract class PdoEngine extends Base
         } catch (PDOException $e) {
             $this->logger()->error($e->getMessage());
         }
-        return false;
     }
 }

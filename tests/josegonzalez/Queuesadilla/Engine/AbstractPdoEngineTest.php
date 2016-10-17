@@ -268,25 +268,30 @@ abstract class AbstractPdoEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::cleanup
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::cleanup
-     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::_cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::_cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::_cleanup
      */
     public function testCleanup()
     {
         if ($this->Engine->connection() === null) {
             $this->markTestSkipped('No connection to database available');
         }
-        $this->assertFalse($this->Engine->cleanup(null));
-        $this->assertFalse($this->Engine->cleanup(false));
-        $this->assertFalse($this->Engine->cleanup(1));
-        $this->assertFalse($this->Engine->cleanup('string'));
-        $this->assertFalse($this->Engine->cleanup(['key' => 'value']));
-        $this->assertFalse($this->Engine->cleanup($this->Fixtures->default['first']));
 
+        $this->Engine->push($this->Fixtures->default['first'], [
+            'queue' => 'default',
+            'expires_in' => 1
+        ]);
         $pop1 = $this->Engine->pop();
+        $this->assertEquals($pop1['id'], 1);
 
-        $this->assertTrue($this->Engine->cleanup($pop1));
+        $this->Engine->push($this->Fixtures->default['first'], [
+            'queue' => 'default',
+            'expires_in' => 1
+        ]);
+        sleep(2);
+        $pop2 = $this->Engine->pop();
+        $this->assertEquals($pop2, null);
     }
 
     protected function execute($connection, $sql)
@@ -322,10 +327,9 @@ abstract class AbstractPdoEngineTest extends TestCase
     protected function expandFixtureData() {
         foreach ($this->Fixtures->default as &$default) {
             $default['options']['attempts_delay'] = 600;
-            $default['options']['expires_at'] = 60;
         }
         foreach ($this->Fixtures->other as &$other) {
-            $default['options']['expires_at'] = 60;
+            $other['options']['attempts_delay'] = 600;
         }
     }
 

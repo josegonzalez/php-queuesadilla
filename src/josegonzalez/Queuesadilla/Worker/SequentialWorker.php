@@ -9,6 +9,7 @@ class SequentialWorker extends Base
 {
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function work()
     {
@@ -24,11 +25,6 @@ class SequentialWorker extends Base
                 $this->logger()->debug('Max iterations reached, exiting');
                 $this->dispatchEvent('Worker.maxIterations');
                 break;
-            }
-
-            if ($this->engine->cleanup($this->queue)) {
-                $this->logger()->debug('An expired job was cleaned up');
-                $this->dispatchEvent('Worker.cleanup');
             }
 
             $this->iterations++;
