@@ -268,9 +268,9 @@ abstract class AbstractPdoEngineTest extends TestCase
     }
 
     /**
-     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::_cleanup
-     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::_cleanup
-     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::_cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::cleanup
      */
     public function testCleanup()
     {
