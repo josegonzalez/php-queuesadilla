@@ -9,6 +9,7 @@ class SequentialWorker extends Base
 {
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function work()
     {

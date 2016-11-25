@@ -267,6 +267,33 @@ abstract class AbstractPdoEngineTest extends TestCase
         $this->assertEquals(['default', 'other'], $queues);
     }
 
+    /**
+     * @covers josegonzalez\Queuesadilla\Engine\PdoEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\MysqlEngine::cleanup
+     * @covers josegonzalez\Queuesadilla\Engine\PostgresEngine::cleanup
+     */
+    public function testCleanup()
+    {
+        if ($this->Engine->connection() === null) {
+            $this->markTestSkipped('No connection to database available');
+        }
+
+        $this->Engine->push($this->Fixtures->default['first'], [
+            'queue' => 'default',
+            'expires_in' => 1
+        ]);
+        $pop1 = $this->Engine->pop();
+        $this->assertEquals($pop1['id'], 1);
+
+        $this->Engine->push($this->Fixtures->default['first'], [
+            'queue' => 'default',
+            'expires_in' => 1
+        ]);
+        sleep(2);
+        $pop2 = $this->Engine->pop();
+        $this->assertEquals($pop2, null);
+    }
+
     protected function execute($connection, $sql)
     {
         if ($connection === null) {
