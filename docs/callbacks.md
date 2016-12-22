@@ -87,6 +87,7 @@ When processing jobs via a worker, you have the ability to hook into the followi
 
 - `Worker.connectionFailed`: Dispatched when the configured backend could not connect to the backend.
 - `Worker.maxIterations`: Dispatched when the configured max number of iterations has been hit.
+- `Worker.maxRuntime`: Dispatched when the configured max runtime is reached.
 - `Worker.job.seen`: Dispatched after `Engine::pop()` has returned. Will contain an `item` key in it's data, which may be populated with item data if the `pop()` was successful.
 - `Worker.job.empty`: Dispatched if the `item` produced from `Engine::pop()` is empty.
 - `Worker.job.invalid`: Dispatched if the `item` produced from `Engine::pop()` contains an invalid callable.

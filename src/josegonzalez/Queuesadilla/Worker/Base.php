@@ -19,6 +19,8 @@ abstract class Base
 
     protected $maxIterations;
 
+    protected $maxRuntime;
+
     protected $queue;
 
     protected $stats;
@@ -27,6 +29,7 @@ abstract class Base
     {
         $params = array_merge([
             'maxIterations' => null,
+            'maxRuntime' => null,
             'queue' => 'default',
         ], $params);
 
@@ -34,6 +37,8 @@ abstract class Base
         $this->queue = $params['queue'];
         $this->maxIterations = $params['maxIterations'];
         $this->iterations = 0;
+        $this->maxRuntime = $params['maxRuntime'];
+        $this->runtime = 0;
         $this->name = get_class($this->engine) . ' Worker';
         $this->setLogger($logger);
 
@@ -67,7 +72,7 @@ abstract class Base
 
         $this->disconnect();
 
-        $this->logger->info(sprintf("Worker shutting down after running %d iterations", $this->iterations));
+        $this->logger->info(sprintf("Worker shutting down after running %d iterations in %ds", $this->iterations, $this->runtime));
         return true;
     }
 
