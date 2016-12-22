@@ -72,7 +72,11 @@ abstract class Base
 
         $this->disconnect();
 
-        $this->logger->info(sprintf("Worker shutting down after running %d iterations in %ds", $this->iterations, $this->runtime));
+        $this->logger->info(sprintf(
+            "Worker shutting down after running %d iterations in %ds",
+            $this->iterations,
+            $this->runtime
+        ));
         return true;
     }
 

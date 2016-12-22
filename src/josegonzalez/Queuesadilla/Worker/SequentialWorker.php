@@ -22,7 +22,6 @@ class SequentialWorker extends Base
         $jobClass = $this->engine->getJobClass();
         $time = microtime(true);
         while (true) {
-
             if (is_int($this->maxRuntime) && $this->runtime >= $this->maxRuntime) {
                 $this->logger()->debug('Max runtime reached, exiting');
                 $this->dispatchEvent('Worker.maxRuntime');
