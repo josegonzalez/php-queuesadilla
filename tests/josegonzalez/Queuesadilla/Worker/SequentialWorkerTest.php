@@ -117,7 +117,7 @@ class SequentialWorkerTest extends TestCase
         $Engine->expects($this->at(4))
                 ->method('pop')
                 ->will($this->returnValue(false));
-        $Worker = new SequentialWorker($Engine, null, ['maxIterations' => 5, 'maxRuntime' => 300]);
+        $Worker = new SequentialWorker($Engine, null, ['maxIterations' => 5]);
         $this->assertTrue($Worker->work());
         $this->assertEquals([
             'seen' => 5,
@@ -128,8 +128,11 @@ class SequentialWorkerTest extends TestCase
             'failure' => 2,
             'connectionFailed' => 0,
             'maxIterations' => 1,
-            'maxRuntime' => 1,
+            'maxRuntime' => 0,
         ], $Worker->stats());
+        $Worker = new SequentialWorker($Engine, null, ['maxRuntime' => 5]);
+        $this->assertTrue($Worker->work());
+        $this->assertEquals(1, $Worker->stats()['maxRuntime']);
     }
 
     /**
