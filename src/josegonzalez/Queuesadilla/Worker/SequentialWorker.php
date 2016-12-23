@@ -26,16 +26,14 @@ class SequentialWorker extends Base
                 $this->logger()->debug('Max runtime reached, exiting');
                 $this->dispatchEvent('Worker.maxRuntime');
                 break;
-            }
-            $this->runtime += microtime(true) - $time;
-            $time = microtime(true);
-
-            if (is_int($this->maxIterations) && $this->iterations >= $this->maxIterations) {
+            } elseif (is_int($this->maxIterations) && $this->iterations >= $this->maxIterations) {
                 $this->logger()->debug('Max iterations reached, exiting');
                 $this->dispatchEvent('Worker.maxIterations');
                 break;
             }
 
+            $this->runtime += microtime(true) - $time;
+            $time = microtime(true);
             $this->iterations++;
             $item = $this->engine->pop($this->queue);
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
