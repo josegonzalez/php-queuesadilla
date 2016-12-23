@@ -4,6 +4,10 @@ namespace josegonzalez\Queuesadilla\Worker\Listener;
 
 use josegonzalez\Queuesadilla\Event\MultiEventListener;
 
+/**
+ * {@inheritDoc}
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class StatsListener extends MultiEventListener
 {
     public $stats = null;
@@ -13,6 +17,7 @@ class StatsListener extends MultiEventListener
         $this->stats = [
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -27,6 +32,7 @@ class StatsListener extends MultiEventListener
         return [
             'Worker.connectionFailed' => 'connectionFailed',
             'Worker.maxIterations' => 'maxIterations',
+            'Worker.maxRuntime' => 'maxRuntime',
             'Worker.job.seen' => 'jobSeen',
             'Worker.job.empty' => 'jobEmpty',
             'Worker.job.invalid' => 'jobInvalid',
@@ -44,6 +50,10 @@ class StatsListener extends MultiEventListener
     public function maxIterations()
     {
         $this->stats['maxIterations'] += 1;
+    }
+    public function maxRuntime()
+    {
+        $this->stats['maxRuntime'] += 1;
     }
     public function jobSeen()
     {

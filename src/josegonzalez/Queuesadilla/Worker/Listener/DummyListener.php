@@ -22,6 +22,7 @@ class DummyListener extends MultiEventListener
         return [
             'Worker.connectionFailed' => 'perform',
             'Worker.maxIterations' => 'perform',
+            'Worker.maxRuntime' => 'perform',
             'Worker.job.seen' => 'perform',
             'Worker.job.empty' => 'perform',
             'Worker.job.invalid' => 'perform',

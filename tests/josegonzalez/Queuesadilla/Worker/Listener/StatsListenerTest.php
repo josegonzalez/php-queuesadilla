@@ -34,6 +34,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'Worker.connectionFailed' => 'connectionFailed',
             'Worker.maxIterations' => 'maxIterations',
+            'Worker.maxRuntime' => 'maxRuntime',
             'Worker.job.seen' => 'jobSeen',
             'Worker.job.empty' => 'jobEmpty',
             'Worker.job.invalid' => 'jobInvalid',
@@ -51,6 +52,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -64,6 +66,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 1,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -81,6 +84,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -94,6 +98,39 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 1,
+            'maxRuntime' => 0,
+            'seen' => 0,
+            'empty' => 0,
+            'exception' => 0,
+            'invalid' => 0,
+            'success' => 0,
+            'failure' => 0,
+        ], $this->StatsListener->stats);
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\Listener\StatsListener::maxRuntime
+     */
+    public function testMaxRuntime()
+    {
+        $this->assertEquals([
+            'connectionFailed' => 0,
+            'maxIterations' => 0,
+            'maxRuntime' => 0,
+            'seen' => 0,
+            'empty' => 0,
+            'exception' => 0,
+            'invalid' => 0,
+            'success' => 0,
+            'failure' => 0,
+        ], $this->StatsListener->stats);
+
+        $this->StatsListener->maxRuntime();
+
+        $this->assertEquals([
+            'connectionFailed' => 0,
+            'maxIterations' => 0,
+            'maxRuntime' => 1,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -111,6 +148,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -124,6 +162,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 1,
             'empty' => 0,
             'exception' => 0,
@@ -141,6 +180,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -154,6 +194,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 1,
             'exception' => 0,
@@ -171,6 +212,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -184,6 +226,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 1,
@@ -201,6 +244,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -214,6 +258,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -231,6 +276,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -244,6 +290,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -261,6 +308,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
@@ -274,6 +322,7 @@ class StatsListenerTest extends TestCase
         $this->assertEquals([
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
             'seen' => 0,
             'empty' => 0,
             'exception' => 0,
