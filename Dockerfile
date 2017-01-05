@@ -11,6 +11,7 @@ RUN apt-get -qq install -qq -y beanstalkd
 RUN apt-get -qq install -qq -y redis-server
 RUN apt-get -qq install -qq -y mysql-server
 RUN apt-get -qq install -qq -y postgresql postgresql-contrib
+RUN apt-get -qq install -qq -y rabbitmq-server
 RUN apt-get -qq install -qq -y make
 RUN apt-get -qq install -qq -y git
 
@@ -41,6 +42,7 @@ ENV BEANSTALK_URL="beanstalk://127.0.0.1:11300?queue=default&timeout=1" \
     MEMORY_URL="memory:///?queue=default&timeout=1" \
     MYSQL_URL="mysql://travis@127.0.0.1:3306/database_name?queue=default&timeout=1" \
     NULL_URL="null:///?queue=default&timeout=1" \
+    RABBITMQ_URL="rabbitmq://guest:guest@127.0.0.1:5672/?queue=default&timeout=1" \
     REDIS_URL="redis://127.0.0.1:6379/0?queue=default&timeout=1" \
     MEMORY_URL="synchronous:///?queue=default&timeout=1" \
     POSTGRES_URL="pgsql://travis:asdf12@127.0.0.1:5432/database_name?queue=default"
