@@ -59,10 +59,10 @@ abstract class Base
         $this->logger->info("Shutting down");
 
         $signals = array(
-            SIGQUIT => "SIGQUIT",
-            SIGTERM => "SIGTERM",
-            SIGINT  => "SIGINT",
-            SIGUSR1 => "SIGUSR1",
+            'SIGQUIT' => "SIGQUIT",
+            'SIGTERM' => "SIGTERM",
+            'SIGINT'  => "SIGINT",
+            'SIGUSR1' => "SIGUSR1",
         );
 
         if ($signo !== null) {
