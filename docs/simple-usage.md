@@ -48,7 +48,7 @@ use Monolog\Logger;
 
 $engine = new MysqlEngine($options);
 $logger = new Logger('test', [new ErrorLogHandler]);
-$worker = new SequentialWorker($engine, $logger, ['maxIterations' => 5]);
+$worker = new SequentialWorker($engine, $logger, ['maxIterations' => 5, 'maxRuntime' => 300]);
 $worker->work();
 ?>
 ```

@@ -128,7 +128,11 @@ class SequentialWorkerTest extends TestCase
             'failure' => 2,
             'connectionFailed' => 0,
             'maxIterations' => 1,
+            'maxRuntime' => 0,
         ], $Worker->stats());
+        $Worker = new SequentialWorker($Engine, null, ['maxRuntime' => 5]);
+        $this->assertTrue($Worker->work());
+        $this->assertEquals(1, $Worker->stats()['maxRuntime']);
     }
 
     /**

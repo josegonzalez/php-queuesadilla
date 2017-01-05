@@ -57,6 +57,7 @@ class TestWorkerTest extends TestCase
             'failure' => 0,
             'connectionFailed' => 0,
             'maxIterations' => 0,
+            'maxRuntime' => 0,
         ], $this->Worker->stats());
     }
 
