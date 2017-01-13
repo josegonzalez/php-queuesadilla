@@ -14,14 +14,15 @@ RUN apt-get -qq install -qq -y postgresql postgresql-contrib
 RUN apt-get -qq install -qq -y rabbitmq-server
 RUN apt-get -qq install -qq -y make
 RUN apt-get -qq install -qq -y git
+RUN apt-get -qq install -qq -y zip
 
 # `language-pack-en-base` is necessary to properly install the key for ppa:ondrej/php5-5.6
 RUN \
     locale-gen en_US.UTF-8 && \
     apt-get -qq install -qq -y language-pack-en-base
-RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php5-5.6 && \
+RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php && \
     apt-get -qq update
-RUN apt-get -qq install -qq -y php5-cli php5-curl php5-mysql php5-pgsql php-pear php5-xdebug php5-redis
+RUN apt-get -qq install -qq -y php5.6-cli php5.6-curl php5.6-mysql php5.6-pgsql php-pear php5.6-xdebug php5.6-redis php5.6-xml
 
 RUN \
     curl -LsS https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
