@@ -72,7 +72,7 @@ class SequentialWorker extends Base
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
             if (empty($item)) {
                 $this->dispatchEvent('Worker.job.empty');
-                sleep(1);
+                sleep($this->interval);
                 continue;
             }
 
