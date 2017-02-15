@@ -17,6 +17,8 @@ abstract class Base
 
     protected $engine;
 
+    protected $interval;
+
     protected $maxIterations;
 
     protected $maxRuntime;
@@ -28,6 +30,7 @@ abstract class Base
     public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
         $params = array_merge([
+            'interval' => 1,
             'maxIterations' => null,
             'maxRuntime' => null,
             'queue' => 'default',
@@ -36,6 +39,7 @@ abstract class Base
         $this->engine = $engine;
         $this->queue = $params['queue'];
         $this->maxIterations = $params['maxIterations'];
+        $this->interval = $params['interval'];
         $this->iterations = 0;
         $this->maxRuntime = $params['maxRuntime'];
         $this->runtime = 0;

@@ -40,7 +40,7 @@ class SequentialWorker extends Base
             if (empty($item)) {
                 $this->logger()->debug('No job!');
                 $this->dispatchEvent('Worker.job.empty');
-                sleep(1);
+                sleep($this->interval);
                 continue;
             }
 
