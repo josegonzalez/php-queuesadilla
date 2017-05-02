@@ -2,11 +2,28 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
+declare(ticks=1);
+
 use Exception;
 use josegonzalez\Queuesadilla\Worker\Base;
+use josegonzalez\Queuesadilla\Engine\EngineInterface;
+use Psr\Log\LoggerInterface;
 
 class SequentialWorker extends Base
 {
+    protected $running;
+
+    public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
+    {
+        parent::__construct($engine, $logger, $params);
+        pcntl_signal(SIGQUIT, [&$this, 'signalHandler']);
+        pcntl_signal(SIGTERM, [&$this, 'signalHandler']);
+        pcntl_signal(SIGINT, [&$this, 'signalHandler']);
+        pcntl_signal(SIGUSR1, [&$this, 'signalHandler']);
+
+        $this->running = true;
+    }
+
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -16,12 +33,13 @@ class SequentialWorker extends Base
         if (!$this->connect()) {
             $this->logger()->alert(sprintf('Worker unable to connect, exiting'));
             $this->dispatchEvent('Worker.job.connectionFailed');
+
             return false;
         }
 
         $jobClass = $this->engine->getJobClass();
         $time = microtime(true);
-        while (true) {
+        while ($this->running) {
             if (is_int($this->maxRuntime) && $this->runtime >= $this->maxRuntime) {
                 $this->logger()->debug('Max runtime reached, exiting');
                 $this->dispatchEvent('Worker.maxRuntime');
@@ -82,6 +100,7 @@ class SequentialWorker extends Base
     {
         $maxIterations = $this->maxIterations ? sprintf(', max iterations %s', $this->maxIterations) : '';
         $this->logger()->info(sprintf('Starting worker%s', $maxIterations));
+
         return (bool)$this->engine->connection();
     }
 
@@ -110,5 +129,55 @@ class SequentialWorker extends Base
 
     protected function disconnect()
     {
+    }
+
+    public function signalHandler($signo = null)
+    {
+        $signals = [
+            SIGQUIT => "SIGQUIT",
+            SIGTERM => "SIGTERM",
+            SIGINT => "SIGINT",
+            SIGUSR1 => "SIGUSR1",
+        ];
+
+        if ($signo !== null) {
+            $signal = $signals[$signo];
+            $this->logger->info(sprintf("Received %s... Shutting down", $signal));
+        }
+
+        switch ($signo) {
+            case SIGQUIT:
+                $this->logger()->debug('SIG: Caught SIGQUIT');
+                $this->running = false;
+                break;
+            case SIGTERM:
+                $this->logger()->debug('SIG: Caught SIGTERM');
+                $this->running = false;
+                break;
+            case SIGINT:
+                $this->logger()->debug('SIG: Caught CTRL+C');
+                $this->running = false;
+                break;
+            case SIGUSR1:
+                $this->logger()->debug('SIG: Caught SIGUSR1');
+                $this->running = false;
+                break;
+            default:
+                $this->logger()->debug('SIG:received other signal');
+                break;
+        }
+        return true;
+    }
+
+    public function shutdownHandler($signo = null)
+    {
+        $this->disconnect();
+
+        $this->logger->info(sprintf(
+            "Worker shutting down after running %d iterations in %ds",
+            $this->iterations,
+            $this->runtime
+        ));
+        return true;
     }
 }

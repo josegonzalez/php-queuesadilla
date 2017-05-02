@@ -186,4 +186,28 @@ class SequentialWorkerTest extends TestCase
     {
         $this->assertNull($this->protectedMethodCall($this->Worker, 'disconnect'));
     }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\SequentialWorker::signalHandler
+     */
+    public function testSignalHandler()
+    {
+        $this->assertEquals(true, $this->Worker->signalHandler());
+        $this->assertEquals(true, $this->Worker->signalHandler(SIGQUIT));
+        $this->assertEquals(true, $this->Worker->signalHandler(SIGTERM));
+        $this->assertEquals(true, $this->Worker->signalHandler(SIGINT));
+        $this->assertEquals(true, $this->Worker->signalHandler(SIGUSR1));
+    }
+
+    /**
+     * @covers josegonzalez\Queuesadilla\Worker\SequentialWorker::shutdownHandler
+     */
+    public function testShutdownHandler()
+    {
+        $this->assertEquals(true, $this->Worker->shutdownHandler());
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGQUIT));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGTERM));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGINT));
+        $this->assertEquals(true, $this->Worker->shutdownHandler(SIGUSR1));
+    }
 }

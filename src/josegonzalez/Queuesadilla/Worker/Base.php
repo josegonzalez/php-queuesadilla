@@ -58,18 +58,17 @@ abstract class Base
     {
         $this->logger->info("Shutting down");
 
-        $signals = array(
+        $signals = [
             SIGQUIT => "SIGQUIT",
             SIGTERM => "SIGTERM",
-            SIGINT  => "SIGINT",
+            SIGINT => "SIGINT",
             SIGUSR1 => "SIGUSR1",
-        );
+        ];
 
         if ($signo !== null) {
             $signal = $signals[$signo];
             $this->logger->info(sprintf("Received received %s... Shutting down", $signal));
         }
-
         $this->disconnect();
 
         $this->logger->info(sprintf(
@@ -77,6 +76,7 @@ abstract class Base
             $this->iterations,
             $this->runtime
         ));
+
         return true;
     }
 

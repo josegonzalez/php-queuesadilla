@@ -2,10 +2,9 @@
 
 namespace josegonzalez\Queuesadilla;
 
-use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase  extends \PHPUnit\Framework\TestCase
 {
     protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
     {
