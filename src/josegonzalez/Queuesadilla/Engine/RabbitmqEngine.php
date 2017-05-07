@@ -78,6 +78,7 @@ class RabbitmqEngine extends Base
                 $this->channel->close();
             }
             $this->channel = null;
+            gc_collect_cycles();
         } catch (ClientException $e) {
         }
 
@@ -86,6 +87,7 @@ class RabbitmqEngine extends Base
                 $this->connection->disconnect();
             }
             $this->connection = null;
+            gc_collect_cycles();
         } catch (ClientException $e) {
         }
     }
