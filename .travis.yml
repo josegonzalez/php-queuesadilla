@@ -27,6 +27,7 @@ before_script:
   - sudo apt-get update
   # beanstalkd
   - sudo apt-get install -qq --force-yes beanstalkd
+  - sudo service beanstalkd start || true
 
   # mysql
   - mysql -e 'CREATE DATABASE database_name;'
@@ -47,6 +48,7 @@ script:
   - vendor/bin/phpcs --standard=psr2 src/
   - vendor/bin/phpunit
   - vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode
+  - sudo service beanstalkd stop
 
 after_success:
   - php vendor/bin/php-coveralls -v
