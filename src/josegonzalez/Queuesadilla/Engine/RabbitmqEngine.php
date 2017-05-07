@@ -53,6 +53,8 @@ class RabbitmqEngine extends Base
 
     ];
 
+    public $connection;
+
     public $channel;
 
     protected $handlerAttached = false;
