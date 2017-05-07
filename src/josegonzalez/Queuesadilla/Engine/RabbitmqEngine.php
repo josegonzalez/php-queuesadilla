@@ -274,6 +274,11 @@ class RabbitmqEngine extends Base
         return count($this->channel->callbacks);
     }
 
+    public function isConnected()
+    {
+        return $this->connection !== null && $this->connection->isConnected();
+    }
+
     public function work()
     {
         $this->connection->run();
@@ -316,10 +321,5 @@ class RabbitmqEngine extends Base
             $this->connect();
             sleep($this->config('connect_attempt_delay'));
         }
-    }
-
-    public function isConnected()
-    {
-        return $this->connection !== null && $this->connection->isConnected();
     }
 }
