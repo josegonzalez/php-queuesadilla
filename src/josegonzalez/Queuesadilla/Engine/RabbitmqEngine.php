@@ -3,6 +3,7 @@
 namespace josegonzalez\Queuesadilla\Engine;
 
 use Bunny\Client;
+use Bunny\Exception\ClientException;
 use Exception;
 use josegonzalez\Queuesadilla\Engine\Base;
 
@@ -60,6 +61,34 @@ class RabbitmqEngine extends Base
     protected $handlerAttached = false;
 
     protected $queues = null;
+    /**
+     * Destructor.
+     *
+     * Clean shutdown = disconnect if connected.
+     */
+    public function __destruct()
+    {
+        $this->disconnect();
+    }
+
+    public function disconnect()
+    {
+        try {
+            if ($this->channel !== null) {
+                $this->channel->close();
+            }
+            $this->channel = null;
+        } catch (ClientException $e) {
+        }
+
+        try {
+            if ($this->isConnected()) {
+                $this->connection->disconnect();
+            }
+            $this->connection = null;
+        } catch (ClientException $e) {
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -82,14 +111,12 @@ class RabbitmqEngine extends Base
 
             $this->connection->connect();
         } catch (Exception $e) {
-            $this->channel = null;
-            $this->connection = null;
+            $this->disconnect();
             return false;
         }
 
         if (!$this->isConnected()) {
-            $this->channel = null;
-            $this->connection = null;
+            $this->disconnect();
             return false;
         }
 
