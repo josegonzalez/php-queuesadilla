@@ -25,6 +25,7 @@ env:
 
 before_script:
   - sudo apt-get update
+
   # beanstalkd
   - sudo apt-get install -qq --force-yes beanstalkd
   - sudo service beanstalkd start || true
@@ -38,7 +39,7 @@ before_script:
   - psql -d database_name -f config/schema-pgsql.sql -U postgres;
 
   # extensions
-  - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  # - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
   - composer self-update
