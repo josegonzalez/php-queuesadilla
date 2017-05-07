@@ -82,14 +82,14 @@ class RabbitmqEngine extends Base
 
             $this->connection->connect();
         } catch (Exception $e) {
-            $this->connection = null;
             $this->channel = null;
+            $this->connection = null;
             return false;
         }
 
         if (!$this->isConnected()) {
-            $this->connection = null;
             $this->channel = null;
+            $this->connection = null;
             return false;
         }
 
