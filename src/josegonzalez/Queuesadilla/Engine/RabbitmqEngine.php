@@ -6,6 +6,9 @@ use Bunny\Client;
 use Exception;
 use josegonzalez\Queuesadilla\Engine\Base;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class RabbitmqEngine extends Base
 {
     protected $baseConfig = [
