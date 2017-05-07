@@ -23,7 +23,7 @@ class RabbitmqEngineTest extends TestCase
     public function tearDown()
     {
         $this->clearEngine();
-        // unset($this->Engine);
+        unset($this->Engine);
     }
 
     /**
@@ -193,21 +193,16 @@ class RabbitmqEngineTest extends TestCase
 
     protected function clearEngine()
     {
-        if ($this->Engine->connection() !== null) {
+        if ($this->Engine->channel !== null) {
             foreach (['default', 'other'] as $queue) {
                 try {
                     $this->Engine->channel->queuePurge($queue);
                 } catch (Exception $e) {
                 }
             }
-            $this->Engine->channel->close();
-            $connection = $this->Engine->connection();
-            if (method_exists($connection, 'close')) {
-                $connection->close();
-            } else {
-                $connection->disconnect();
-            }
         }
+
+        $this->Engine->disconnect();
     }
 
     protected function mockEngine($methods = null, $config = null)
