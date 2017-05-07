@@ -23,7 +23,7 @@ class RabbitmqEngineTest extends TestCase
     public function tearDown()
     {
         $this->clearEngine();
-        unset($this->Engine);
+        // unset($this->Engine);
     }
 
     /**
