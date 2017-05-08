@@ -36,11 +36,11 @@ before_script:
 
   # mysql
   - mysql -e 'CREATE DATABASE database_name;'
-  - mysql database_name < config/schema-mysql.sql
+  - mysql database_name < contrib/schema-mysql.sql
 
   # postgres
   - psql -c "CREATE DATABASE database_name;" -U postgres;
-  - psql -d database_name -f config/schema-pgsql.sql -U postgres;
+  - psql -d database_name -f contrib/schema-pgsql.sql -U postgres;
 
   # extensions
   # - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
