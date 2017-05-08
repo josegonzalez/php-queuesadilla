@@ -74,31 +74,8 @@ class RabbitmqEngine extends Base
 
     public function disconnect()
     {
-        $gcCollectCycles = function () {
-            try {
-                gc_collect_cycles();
-            } catch (ClientException $e) {
-            }
-        };
-
-        if ($this->channel !== null) {
-            try {
-                $this->channel->close()->done(function () use ($gcCollectCycles) {
-                    $this->channel = null;
-                    $gcCollectCycles();
-                });
-            } catch (ClientException $e) {
-            }
-        }
-
-        try {
-            if ($this->isConnected()) {
-                $this->connection->disconnect()->done(function () use ($gcCollectCycles) {
-                    $this->connection = null;
-                    $gcCollectCycles();
-                });
-            }
-        } catch (ClientException $e) {
+        if ($this->isConnected()) {
+            $this->connection = null;
         }
     }
 
