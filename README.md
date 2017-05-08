@@ -40,6 +40,9 @@ Add the plugin to your project's `composer.json` - something like this:
 Tests are run via `phpunit` and depend upon multiple datastores. You may also run tests using the included `Dockerfile`:
 
 ```shell
-docker build -t queuesadilla-test .
-docker run --rm -v $PWD:/app queuesadilla-test make test-docker
+# php56
+make test-56
+
+# php7
+make test-7
 ```
