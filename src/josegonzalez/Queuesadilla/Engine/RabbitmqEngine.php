@@ -74,7 +74,7 @@ class RabbitmqEngine extends Base
 
     public function disconnect()
     {
-        $gcCollectCycles = function() {
+        $gcCollectCycles = function () {
             try {
                 gc_collect_cycles();
             } catch (ClientException $e) {
@@ -83,7 +83,7 @@ class RabbitmqEngine extends Base
 
         if ($this->channel !== null) {
             try {
-                $this->channel->close()->done(function() use ($gcCollectCycles) {
+                $this->channel->close()->done(function () use ($gcCollectCycles) {
                     $this->channel = null;
                     $gcCollectCycles();
                 });
@@ -93,7 +93,7 @@ class RabbitmqEngine extends Base
 
         try {
             if ($this->isConnected()) {
-                $this->connection->disconnect()->done(function() use ($gcCollectCycles) {
+                $this->connection->disconnect()->done(function () use ($gcCollectCycles) {
                     $this->connection = null;
                     $gcCollectCycles();
                 });
