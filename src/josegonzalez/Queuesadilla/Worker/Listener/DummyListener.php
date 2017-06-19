@@ -26,6 +26,7 @@ class DummyListener extends MultiEventListener
             'Worker.job.seen' => 'perform',
             'Worker.job.empty' => 'perform',
             'Worker.job.invalid' => 'perform',
+            'Worker.job.start' => 'perform',
             'Worker.job.exception' => 'perform',
             'Worker.job.success' => 'perform',
             'Worker.job.failure' => 'perform',

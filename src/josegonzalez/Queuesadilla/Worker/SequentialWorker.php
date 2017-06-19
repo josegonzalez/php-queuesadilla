@@ -53,6 +53,8 @@ class SequentialWorker extends Base
                 continue;
             }
 
+            $this->dispatchEvent('Worker.job.start', ['job' => $job]);
+
             try {
                 $success = $this->perform($item, $job);
             } catch (Exception $e) {

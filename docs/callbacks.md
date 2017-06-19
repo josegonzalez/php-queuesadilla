@@ -91,6 +91,7 @@ When processing jobs via a worker, you have the ability to hook into the followi
 - `Worker.job.seen`: Dispatched after `Engine::pop()` has returned. Will contain an `item` key in it's data, which may be populated with item data if the `pop()` was successful.
 - `Worker.job.empty`: Dispatched if the `item` produced from `Engine::pop()` is empty.
 - `Worker.job.invalid`: Dispatched if the `item` produced from `Engine::pop()` contains an invalid callable.
+- `Worker.job.start`: Dispatched before a job is performed. Data contains a `job` key.
 - `Worker.job.exception`: Dispatched if performing the job resulted in any kind of exception. Data contains both a `job` and `exception` key.
 - `Worker.job.success`: Dispatched if performing the job was successful. Data contains a `job` key.
 - `Worker.job.failure`: Dispatched if performing the job failed. Data contains a `job` key.
