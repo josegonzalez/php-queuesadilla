@@ -280,7 +280,7 @@ abstract class AbstractPdoEngineTest extends TestCase
 
         $this->Engine->push($this->Fixtures->default['first'], [
             'queue' => 'default',
-            'expires_in' => 1
+            'expires_in' => 2
         ]);
         $pop1 = $this->Engine->pop();
         $this->assertEquals($pop1['id'], 1);
@@ -289,7 +289,7 @@ abstract class AbstractPdoEngineTest extends TestCase
             'queue' => 'default',
             'expires_in' => 1
         ]);
-        sleep(3);
+        sleep(2);
         $pop2 = $this->Engine->pop();
         $this->assertEquals($pop2, null);
     }
