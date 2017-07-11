@@ -10,6 +10,6 @@ Queuing options are configured either at Engine creation or when queuing a job. 
     - Job::MEDIUM
     - Job::HIGH
     - Job::CRITICAL
-- `delay`: Seconds to wait before putting the job in the ready queue. The job will be in the "delayed" state during this time.
+- `delay`: Seconds to wait before putting the job in the ready queue. The job will be in the "delayed" state during this time. Not available with the `RedisEngine` or `PredisEngine`.
 - `time_to_run`: Max amount of time (in seconds) a job can take to run before it is released to the general queue. Not available with the `MysqlEngine`
-- `expires_in`: Max amount of time a job may be in the queue until it is discarded
+- `expires_in`: Max amount of time a job may be in the queue until it is discarded. Not available with the `RedisEngine` or `PredisEngine`.
