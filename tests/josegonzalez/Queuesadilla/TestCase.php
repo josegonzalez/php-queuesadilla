@@ -4,7 +4,7 @@ namespace josegonzalez\Queuesadilla;
 
 use ReflectionClass;
 
-class TestCase  extends \PHPUnit\Framework\TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function protectedMethodCall(&$object, $methodName, array $parameters = [])
     {
