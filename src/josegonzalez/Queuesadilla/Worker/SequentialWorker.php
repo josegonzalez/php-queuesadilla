@@ -5,8 +5,9 @@ namespace josegonzalez\Queuesadilla\Worker;
 declare(ticks=1);
 
 use Exception;
-use josegonzalez\Queuesadilla\Worker\Base;
 use josegonzalez\Queuesadilla\Engine\EngineInterface;
+use josegonzalez\Queuesadilla\Event\Event;
+use josegonzalez\Queuesadilla\Worker\Base;
 use Psr\Log\LoggerInterface;
 
 class SequentialWorker extends Base
@@ -22,6 +23,20 @@ class SequentialWorker extends Base
         pcntl_signal(SIGUSR1, [&$this, 'signalHandler']);
 
         $this->running = true;
+    }
+
+    /**
+     * events this class listens to
+     *
+     * @return array
+     */
+    public function implementedEvents()
+    {
+        return [
+            'Worker.job.empty' => 'jobEmpty',
+            'Worker.job.exception' => 'jobException',
+            'Worker.job.success' => 'jobSuccess',
+        ];
     }
 
     /**
@@ -56,7 +71,6 @@ class SequentialWorker extends Base
             $item = $this->engine->pop($this->queue);
             $this->dispatchEvent('Worker.job.seen', ['item' => $item]);
             if (empty($item)) {
-                $this->logger()->debug('No job!');
                 $this->dispatchEvent('Worker.job.empty');
                 sleep(1);
                 continue;
@@ -76,7 +90,6 @@ class SequentialWorker extends Base
             try {
                 $success = $this->perform($item, $job);
             } catch (Exception $e) {
-                $this->logger()->alert(sprintf('Exception: "%s"', $e->getMessage()));
                 $this->dispatchEvent('Worker.job.exception', [
                     'job' => $job,
                     'exception' => $e,
@@ -84,7 +97,6 @@ class SequentialWorker extends Base
             }
 
             if ($success) {
-                $this->logger()->debug('Success. Acknowledging job on queue.');
                 $job->acknowledge();
                 $this->dispatchEvent('Worker.job.success', ['job' => $job]);
                 continue;
@@ -181,5 +193,39 @@ class SequentialWorker extends Base
             $this->runtime
         ));
         return true;
+    }
+
+    /**
+     * Event triggered on Worker.job.empty
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function jobEmpty(Event $event)
+    {
+        $this->logger()->debug('No job!');
+    }
+
+    /**
+     * Event triggered on Worker.job.exception
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function jobException(Event $event)
+    {
+        $data = $event->data();
+        $this->logger()->alert(sprintf('Exception: "%s"', $data['exception']->getMessage()));
+    }
+
+    /**
+     * Event triggered on Worker.job.success
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function jobSuccess(Event $event)
+    {
+        $this->logger()->debug('Success. Acknowledging job on queue.');
     }
 }
