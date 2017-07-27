@@ -4,12 +4,12 @@ namespace josegonzalez\Queuesadilla\Worker;
 
 use josegonzalez\Queuesadilla\Engine\EngineInterface;
 use josegonzalez\Queuesadilla\Event\EventManagerTrait;
+use josegonzalez\Queuesadilla\Event\MultiEventListener;
 use josegonzalez\Queuesadilla\Utility\LoggerTrait;
 use josegonzalez\Queuesadilla\Worker\Listener\StatsListener;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
-abstract class Base
+abstract class Base extends MultiEventListener
 {
     use EventManagerTrait;
 
@@ -44,6 +44,7 @@ abstract class Base
 
         $this->StatsListener = new StatsListener;
         $this->attachListener($this->StatsListener);
+        $this->attachListener($this);
         register_shutdown_function(array(&$this, 'shutdownHandler'));
 
         return $this;
