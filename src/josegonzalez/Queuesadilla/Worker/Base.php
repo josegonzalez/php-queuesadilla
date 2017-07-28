@@ -50,6 +50,11 @@ abstract class Base extends MultiEventListener
         return $this;
     }
 
+    public function implementedEvents()
+    {
+        return [];
+    }
+
     public function stats()
     {
         return $this->StatsListener->stats;
