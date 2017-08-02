@@ -203,6 +203,7 @@ class SequentialWorker extends Base
      */
     public function jobEmpty(Event $event)
     {
+        $event;
         $this->logger()->debug('No job!');
     }
 
@@ -226,6 +227,7 @@ class SequentialWorker extends Base
      */
     public function jobSuccess(Event $event)
     {
+        $event;
         $this->logger()->debug('Success. Acknowledging job on queue.');
     }
 }
