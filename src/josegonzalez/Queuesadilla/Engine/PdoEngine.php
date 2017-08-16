@@ -25,9 +25,9 @@ abstract class PdoEngine extends Base
     const JOB_STATUS_NEW = 'new';
 
     /**
-     * @const JON_STATUS_STALLED
+     * @const JOB_STATUS_STALLED
      */
-    const JON_STATUS_STALLED = 'stalled'; 
+    const JOB_STATUS_STALLED = 'stalled'; 
     
     /**
      *  String used to start a database identifier quoting to make it safe
@@ -77,7 +77,7 @@ abstract class PdoEngine extends Base
      */
     public function reject($item)
     {
-        return $this->acknowledge($item, static::JOB_STATUS_FAILED);
+        return $this->acknowledge($item, static::JOB_STATUS_STALLED);
     }
 
     /**
@@ -259,6 +259,18 @@ abstract class PdoEngine extends Base
                 'type' => PDO::PARAM_INT,
                 'key' => 'attempts',
                 'value' => (int)$item['attempts'],
+            ];
+        }
+        if (!empty($this->settings['keepJob']) && (bool)$this->settings['keepJob'] === true) {
+            $fields[] = [
+                'type' => PDO::PARAM_STR,
+                'key' => 'status',
+                'value' => static::JOB_STATUS_FAILED
+            ];
+            $fields[] = [
+                'type' => PDO::PARAM_STR,
+                'key' => 'executed_date',
+                'value' => $datetime->format('Y-m-d H:i:s')
             ];
         }
         $updateSql = [];
