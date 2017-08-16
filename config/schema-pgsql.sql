@@ -10,6 +10,8 @@ CREATE TABLE jobs (
   expires_at timestamp DEFAULT NULL,
   delay_until timestamp DEFAULT NULL,
   locked smallint NOT NULL DEFAULT '0',
-  attempts smallint DEFAULT '0'
+  attempts smallint DEFAULT '0',
+  status varchar(50) NOT NULL DEFAULT 'new',
+  executed_date timestamp DEFAULT NULL
 );
 CREATE INDEX queue ON JOBS (queue, locked);

@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `delay_until` datetime DEFAULT NULL,
   `locked` tinyint(1) NOT NULL DEFAULT '0',
   `attempts`int(11) DEFAULT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'new',
+  `executed_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `queue` (`queue`,`locked`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
