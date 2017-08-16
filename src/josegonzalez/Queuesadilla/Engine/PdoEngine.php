@@ -10,6 +10,16 @@ use josegonzalez\Queuesadilla\Engine\Base;
 abstract class PdoEngine extends Base
 {
     /**
+     * @const JOB_STATUS_SUCCESS
+     */
+    const JOB_STATUS_SUCCESS = 'success';
+    
+    /**
+     * @const JOB_STATUS_FAILED
+     */
+    const JOB_STATUS_FAILED = 'failed';
+    
+    /**
      *  String used to start a database identifier quoting to make it safe
      *
      * @var string
@@ -33,13 +43,18 @@ abstract class PdoEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function acknowledge($item)
+    public function acknowledge($item, $status = JOB_STATUS_SUCCESS)
     {
         if (!parent::acknowledge($item)) {
             return false;
         }
 
-        $sql = sprintf('DELETE FROM %s WHERE id = ?', $this->quoteIdentifier($this->config('table')));
+        if ($this->settings['keepJob']) {
+            $sql = sprintf('UPDATE %s SET status = "' . $status . '", executed_date = NOW() WHERE id = ?',
+                                                        $this->quoteIdentifier($this->config('table')));
+        } else {
+            $sql = sprintf('DELETE FROM %s WHERE id = ?', $this->quoteIdentifier($this->config('table')));
+        }
 
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
@@ -52,7 +67,7 @@ abstract class PdoEngine extends Base
      */
     public function reject($item)
     {
-        return $this->acknowledge($item);
+        return $this->acknowledge($item, static::JOB_STATUS_FAILED);
     }
 
     /**
