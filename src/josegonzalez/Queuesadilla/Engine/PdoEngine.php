@@ -10,6 +10,26 @@ use josegonzalez\Queuesadilla\Engine\Base;
 abstract class PdoEngine extends Base
 {
     /**
+     * @const JOB_STATUS_SUCCESS
+     */
+    const JOB_STATUS_SUCCESS = 'success';
+    
+    /**
+     * @const JOB_STATUS_FAILED
+     */
+    const JOB_STATUS_FAILED = 'failed';
+
+    /**
+     * @const JOB_STATUS_NEW
+     */
+    const JOB_STATUS_NEW = 'new';
+
+    /**
+     * @const JOB_STATUS_STALLED
+     */
+    const JOB_STATUS_STALLED = 'stalled';
+    
+    /**
      *  String used to start a database identifier quoting to make it safe
      *
      * @var string
@@ -33,13 +53,24 @@ abstract class PdoEngine extends Base
     /**
      * {@inheritDoc}
      */
-    public function acknowledge($item)
+    public function acknowledge($item, $status = null)
     {
+        if (empty($status)) {
+            $status = static::JOB_STATUS_SUCCESS;
+        }
+
         if (!parent::acknowledge($item)) {
             return false;
         }
 
-        $sql = sprintf('DELETE FROM %s WHERE id = ?', $this->quoteIdentifier($this->config('table')));
+        if (!empty($this->settings['keepJob']) && $this->settings['keepJob']) {
+            $sql = sprintf(
+                'UPDATE %s SET status = "' . $status . '", executed_date = NOW() WHERE id = ?',
+                $this->quoteIdentifier($this->config('table'))
+            );
+        } else {
+            $sql = sprintf('DELETE FROM %s WHERE id = ?', $this->quoteIdentifier($this->config('table')));
+        }
 
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
@@ -52,7 +83,7 @@ abstract class PdoEngine extends Base
      */
     public function reject($item)
     {
-        return $this->acknowledge($item);
+        return $this->acknowledge($item, static::JOB_STATUS_STALLED);
     }
 
     /**
@@ -64,7 +95,9 @@ abstract class PdoEngine extends Base
 
         $this->cleanup($queue);
 
-        $selectSql = implode(" ", [
+        $selectSql = implode(
+            " ",
+            [
             sprintf(
                 'SELECT id, %s, attempts FROM %s',
                 $this->quoteIdentifier('data'),
@@ -74,7 +107,8 @@ abstract class PdoEngine extends Base
             'AND (expires_at IS NULL OR expires_at > ?)',
             'AND (delay_until IS NULL OR delay_until < ?)',
             'ORDER BY priority ASC LIMIT 1 FOR UPDATE',
-        ]);
+            ]
+        );
         $updateSql = sprintf('UPDATE %s SET locked = 1 WHERE id = ?', $this->quoteIdentifier($this->config('table')));
 
         $datetime = new DateTime;
@@ -181,14 +215,17 @@ abstract class PdoEngine extends Base
      */
     public function queues()
     {
-        $sql = implode(" ", [
+        $sql = implode(
+            " ",
+            [
             sprintf(
                 'SELECT %s FROM %s',
                 $this->quoteIdentifier('queue'),
                 $this->quoteIdentifier($this->config('table'))
             ),
             sprintf('GROUP BY %s', $this->quoteIdentifier('queue')),
-        ]);
+            ]
+        );
         $sth = $this->connection()->prepare($sql);
         $sth->execute();
         $results = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -196,9 +233,12 @@ abstract class PdoEngine extends Base
         if (empty($results)) {
             return [];
         }
-        return array_map(function ($result) {
-            return trim($result['queue']);
-        }, $results);
+        return array_map(
+            function ($result) {
+                return trim($result['queue']);
+            },
+            $results
+        );
     }
 
     /**
@@ -222,7 +262,7 @@ abstract class PdoEngine extends Base
             $dateInterval = new DateInterval(sprintf('PT%sS', $item['delay']));
             $datetime = new DateTime;
             $delayUntil = $datetime->add($dateInterval)
-                                   ->format('Y-m-d H:i:s');
+                ->format('Y-m-d H:i:s');
             $fields[] = [
                 'type' => PDO::PARAM_STR,
                 'key' => 'delay_until',
@@ -234,6 +274,18 @@ abstract class PdoEngine extends Base
                 'type' => PDO::PARAM_INT,
                 'key' => 'attempts',
                 'value' => (int)$item['attempts'],
+            ];
+        }
+        if (!empty($this->settings['keepJob']) && (bool)$this->settings['keepJob'] === true) {
+            $fields[] = [
+                'type' => PDO::PARAM_STR,
+                'key' => 'status',
+                'value' => static::JOB_STATUS_FAILED
+            ];
+            $fields[] = [
+                'type' => PDO::PARAM_STR,
+                'key' => 'executed_date',
+                'value' => $datetime->format('Y-m-d H:i:s')
             ];
         }
         $updateSql = [];
@@ -261,7 +313,7 @@ abstract class PdoEngine extends Base
      *
      * Method taken from CakePHP 3.2.10
      *
-     * @param string $identifier The identifier to quote.
+     * @param  string $identifier The identifier to quote.
      * @return string
      */
     public function quoteIdentifier($identifier)
@@ -298,19 +350,22 @@ abstract class PdoEngine extends Base
     /**
      * Check if expired jobs are present in the database and reject them
      *
-     * @param string $queue name of the queue
+     * @param  string $queue name of the queue
      * @return void
      */
     protected function cleanup($queue)
     {
-        $sql = implode(" ", [
+        $sql = implode(
+            " ",
+            [
             sprintf(
                 'SELECT id FROM %s',
                 $this->quoteIdentifier($this->config('table'))
             ),
             sprintf('WHERE %s = ?', $this->quoteIdentifier('queue')),
             'AND expires_at < ?'
-        ]);
+            ]
+        );
 
         $datetime = new DateTime;
         $dtFormatted = $datetime->format('Y-m-d H:i:s');
@@ -324,10 +379,12 @@ abstract class PdoEngine extends Base
             $result = $sth->fetch(PDO::FETCH_ASSOC);
 
             if (!empty($result)) {
-                $this->reject([
+                $this->reject(
+                    [
                     'id' => $result['id'],
                     'queue' => $queue
-                ]);
+                    ]
+                );
             }
         } catch (PDOException $e) {
             $this->logger()->error($e->getMessage());
