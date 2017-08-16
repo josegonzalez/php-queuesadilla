@@ -18,6 +18,16 @@ abstract class PdoEngine extends Base
      * @const JOB_STATUS_FAILED
      */
     const JOB_STATUS_FAILED = 'failed';
+
+    /**
+     * @const JOB_STATUS_NEW
+     */
+    const JOB_STATUS_NEW = 'new';
+
+    /**
+     * @const JON_STATUS_STALLED
+     */
+    const JON_STATUS_STALLED = 'stalled'; 
     
     /**
      *  String used to start a database identifier quoting to make it safe
@@ -49,7 +59,7 @@ abstract class PdoEngine extends Base
             return false;
         }
 
-        if ($this->settings['keepJob']) {
+        if (!empty($this->settings['keepJob']) && $this->settings['keepJob']) {
             $sql = sprintf('UPDATE %s SET status = "' . $status . '", executed_date = NOW() WHERE id = ?',
                                                         $this->quoteIdentifier($this->config('table')));
         } else {
