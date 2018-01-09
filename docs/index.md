@@ -12,3 +12,4 @@ A job/worker system built to support various queuing systems.
 - [Defining Jobs](/php-queuesadilla/defining-jobs)
 - [Job Options](/php-queuesadilla/job-options)
 - [Available Callbacks](/php-queuesadilla/callbacks)
+- [Pop order of jobs](/php-queuesadilla/pop-order)
