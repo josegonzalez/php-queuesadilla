@@ -18,16 +18,16 @@ RUN apt-get -qq install -qq -y git
 RUN \
     locale-gen en_US.UTF-8 && \
     apt-get -qq install -qq -y language-pack-en-base
-RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php5-5.6 && \
+RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php && \
     apt-get -qq update
-RUN apt-get -qq install -qq -y php5-cli php5-curl php5-mysql php5-pgsql php-pear php5-xdebug php5-redis
+RUN apt-get -qq install -qq -y php5.6-cli php5.6-curl php5.6-mysql php5.6-pgsql php-pear php5.6-xdebug php5.6-redis php5.6-dom php5.6-zip
 
 RUN \
-    curl -LsS https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
     curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
-    mv phpunit.phar /usr/local/bin/phpunit && \
-    chmod +x /usr/local/bin/composer /usr/local/bin/phpunit && \
+    chmod +x /usr/local/bin/composer && \
+    composer global require phpunit/phpunit ^5.0 && \
+    ln -s ~/.composer/vendor/bin/phpunit /usr/local/bin/phpunit && \
     phpunit --version
 
 ADD composer.json /app/composer.json
