@@ -40,6 +40,7 @@ class IronEngine extends Base
         }
 
         $this->connection = new IronMQ($settings);
+
         return (bool)$this->connection;
     }
 
@@ -75,6 +76,7 @@ class IronEngine extends Base
         }
 
         $data = json_decode($item->body, true);
+
         return [
             'id' => $item->id,
             'class' => $data['class'],
@@ -90,6 +92,7 @@ class IronEngine extends Base
         $queue = $this->setting($options, 'queue');
 
         $item = json_encode(compact('class', 'args', 'queue'));
+
         return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->config('time_to_run'),
             "delay" => $this->config('delay'),
@@ -111,6 +114,7 @@ class IronEngine extends Base
     public function release($item, $options = [])
     {
         $queue = $this->setting($options, 'queue');
+
         return $this->connection()->postMessage($queue, $item, [
             "timeout" => $this->config('time_to_run'),
             "delay" => $this->config('delay'),

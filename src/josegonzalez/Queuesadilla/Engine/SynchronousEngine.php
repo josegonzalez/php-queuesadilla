@@ -14,6 +14,7 @@ class SynchronousEngine extends MemoryEngine
     {
         parent::push($class, $args, $options);
         $worker = $this->getWorker();
+
         return $worker->work();
     }
 

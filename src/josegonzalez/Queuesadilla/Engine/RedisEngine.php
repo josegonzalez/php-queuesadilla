@@ -147,6 +147,7 @@ class RedisEngine extends Base
         if (!empty($exists[0])) {
             return $exists[0];
         }
+
         return $this->connection()->script('load', $script);
     }
 
@@ -196,6 +197,7 @@ redis.pcall('del', requeueQueue)
 redis.pcall('del', tempQueue)
 return deleted
 EOF;
+
         return trim($script);
     }
 

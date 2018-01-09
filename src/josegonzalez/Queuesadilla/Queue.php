@@ -11,6 +11,7 @@ class Queue
     public function __construct($engine)
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -29,7 +30,7 @@ class Queue
         $item = [
             'queue' => $queue,
             'class' => $callable,
-            'args'  => array($args),
+            'args'  => [$args],
             'id'    => md5(uniqid('', true)),
             'queue_time' => microtime(true),
         ];

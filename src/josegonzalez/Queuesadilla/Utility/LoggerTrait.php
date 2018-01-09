@@ -15,6 +15,7 @@ trait LoggerTrait
         if ($logger === null) {
             $logger = new NullLogger;
         }
+
         return $this->logger = $logger;
     }
 

@@ -50,6 +50,7 @@ trait DsnParserTrait
         }
 
         $parsed = $queryArgs + $parsed;
+
         return $parsed;
     }
 }

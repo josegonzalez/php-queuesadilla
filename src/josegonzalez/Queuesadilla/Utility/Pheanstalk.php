@@ -27,6 +27,7 @@ class Pheanstalk extends \Pheanstalk\Pheanstalk
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod('_dispatch');
         $method->setAccessible(true);
+
         return $method->invokeArgs($object, $parameters);
     }
 }

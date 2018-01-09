@@ -36,7 +36,6 @@ class EventTest extends TestCase
         $this->assertEquals('test', $this->Event->name);
         $this->assertEquals($this->object, $this->Event->subject);
         $this->assertNull($this->Event->invalidAttribute);
-
     }
 
     /**

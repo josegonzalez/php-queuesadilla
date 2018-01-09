@@ -41,6 +41,7 @@ class BeanstalkEngine extends Base
             $this->config('port'),
             $this->config('timeout')
         );
+
         return $this->connection->getConnection()->isServiceListening();
     }
 
@@ -57,6 +58,7 @@ class BeanstalkEngine extends Base
         }
 
         $response = $this->connection()->deleteJob($item['job']);
+
         return $response->getResponseName() == Response::RESPONSE_DELETED;
     }
 
@@ -151,6 +153,7 @@ class BeanstalkEngine extends Base
 
         $this->connection()->useTube($queue);
         $response = $this->connection()->releaseJob($item['job'], $priority, $delay);
+
         return $response->getResponseName() == Response::RESPONSE_RELEASED;
     }
 }
