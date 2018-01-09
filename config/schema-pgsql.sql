@@ -10,6 +10,7 @@ CREATE TABLE jobs (
   expires_at timestamp DEFAULT NULL,
   delay_until timestamp DEFAULT NULL,
   locked smallint NOT NULL DEFAULT '0',
-  attempts smallint DEFAULT '0'
+  attempts smallint DEFAULT '0',
+  created_at timestamp DEFAULT NULL
 );
 CREATE INDEX queue ON JOBS (queue, locked);
