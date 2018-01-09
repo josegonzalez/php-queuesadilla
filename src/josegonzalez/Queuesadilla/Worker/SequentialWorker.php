@@ -2,7 +2,7 @@
 
 namespace josegonzalez\Queuesadilla\Worker;
 
-declare(ticks=1);
+declare(ticks = 1);
 
 use Exception;
 use josegonzalez\Queuesadilla\Engine\EngineInterface;
@@ -180,6 +180,7 @@ class SequentialWorker extends Base
                 $this->logger()->debug('SIG:received other signal');
                 break;
         }
+
         return true;
     }
 
@@ -192,6 +193,7 @@ class SequentialWorker extends Base
             $this->iterations,
             $this->runtime
         ));
+
         return true;
     }
 

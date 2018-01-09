@@ -24,6 +24,7 @@ class NullEngine extends Base
         if (!parent::acknowledge($item)) {
             return false;
         }
+
         return $this->return;
     }
 
@@ -49,6 +50,7 @@ class NullEngine extends Base
     public function push($item, $options = [])
     {
         $this->lastJobId = $this->return;
+
         return $this->return;
     }
 

@@ -45,7 +45,7 @@ abstract class Base extends MultiEventListener
         $this->StatsListener = new StatsListener;
         $this->attachListener($this->StatsListener);
         $this->attachListener($this);
-        register_shutdown_function(array(&$this, 'shutdownHandler'));
+        register_shutdown_function([&$this, 'shutdownHandler']);
 
         return $this;
     }

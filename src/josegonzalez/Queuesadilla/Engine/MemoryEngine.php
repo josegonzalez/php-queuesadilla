@@ -48,6 +48,7 @@ class MemoryEngine extends Base
                 break;
             }
         }
+
         return $deleted;
     }
 
@@ -77,6 +78,7 @@ class MemoryEngine extends Base
 
             if ($itemId === $item['id']) {
                 array_push($this->queues[$queue], $item);
+
                 return null;
             }
 
@@ -137,6 +139,7 @@ class MemoryEngine extends Base
         if ($newCount === ($oldCount + 1)) {
             $this->lastJobId = $item['id'];
         }
+
         return $newCount === ($oldCount + 1);
     }
 
@@ -173,6 +176,7 @@ class MemoryEngine extends Base
         if (!empty($item['options']['delay_until']) && $datetime < $item['options']['delay_until']) {
             return true;
         }
+
         return false;
     }
 
@@ -182,6 +186,7 @@ class MemoryEngine extends Base
         if (!empty($item['options']['expires_at']) && $datetime > $item['options']['expires_at']) {
             return true;
         }
+
         return false;
     }
 }

@@ -121,7 +121,7 @@ class SequentialWorkerTest extends TestCase
         $this->assertTrue($Worker->work());
         $this->assertEquals([
             'seen' => 5,
-            'empty' =>1,
+            'empty' => 1,
             'exception' => 1,
             'invalid' => 1,
             'success' => 1,

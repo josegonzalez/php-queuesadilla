@@ -39,6 +39,7 @@ trait SettingTrait
         if (isset($settings[$key])) {
             return $settings[$key];
         }
+
         return $default;
     }
 }
