@@ -54,6 +54,7 @@ abstract class PdoEngine extends Base
         $sth = $this->connection()->prepare($sql);
         $sth->bindParam(1, $item['id'], PDO::PARAM_INT);
         $sth->execute();
+
         return $sth->rowCount() == 1;
     }
 
@@ -96,6 +97,7 @@ abstract class PdoEngine extends Base
                 $this->connection()->commit();
                 if ($sth->rowCount() == 1) {
                     $data = json_decode($result['data'], true);
+
                     return [
                         'id' => $result['id'],
                         'class' => $data['class'],
@@ -175,6 +177,7 @@ abstract class PdoEngine extends Base
         if ($sth->rowCount() == 1) {
             $this->lastJobId = $this->connection()->lastInsertId();
         }
+
         return $sth->rowCount() == 1;
     }
 
@@ -198,6 +201,7 @@ abstract class PdoEngine extends Base
         if (empty($results)) {
             return [];
         }
+
         return array_map(function ($result) {
             return trim($result['queue']);
         }, $results);
@@ -286,6 +290,7 @@ abstract class PdoEngine extends Base
         // string.string
         if (preg_match('/^[\w-]+\.[^ \*]*$/', $identifier)) {
             $items = explode('.', $identifier);
+
             return $this->startQuote . implode($this->endQuote . '.' . $this->startQuote, $items) . $this->endQuote;
         }
 
@@ -388,6 +393,7 @@ abstract class PdoEngine extends Base
     protected function formattedDateNow()
     {
         $datetime = new DateTime;
+
         return $datetime->format('Y-m-d H:i:s');
     }
 }

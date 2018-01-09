@@ -359,6 +359,7 @@ abstract class AbstractPdoEngineTest extends TestCase
             $query->setFetchMode(PDO::FETCH_LAZY);
             if (!$query->execute([])) {
                 $query->closeCursor();
+
                 return false;
             }
             if (!$query->columnCount()) {
@@ -367,6 +368,7 @@ abstract class AbstractPdoEngineTest extends TestCase
                     return true;
                 }
             }
+
             return $query;
         } catch (PDOException $e) {
             $e->queryString = $sql;
@@ -377,7 +379,8 @@ abstract class AbstractPdoEngineTest extends TestCase
         }
     }
 
-    protected function expandFixtureData() {
+    protected function expandFixtureData()
+    {
         foreach ($this->Fixtures->default as &$default) {
             $default['options']['attempts_delay'] = 600;
         }
