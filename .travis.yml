@@ -27,7 +27,7 @@ before_script:
   - sudo apt-get update
   # beanstalkd
   - sudo apt-get install -qq --force-yes beanstalkd
-  - sudo beanstalkd -d -l 127.0.0.1 -p 11300
+  - sudo beanstalkd -l 127.0.0.1 -p 11300
 
   # mysql
   - mysql -e 'CREATE DATABASE database_name;'
