@@ -26,7 +26,7 @@
         "pda/pheanstalk": "dev-master",
         "phpmd/phpmd": "dev-master",
         "predis/predis": "~1.0",
-        "satooshi/php-coveralls": "dev-master",
+        "satooshi/php-coveralls": "~2.0",
         "squizlabs/php_codesniffer": "dev-master"
     },
     "suggest": {
