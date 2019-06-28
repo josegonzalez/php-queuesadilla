@@ -22,14 +22,13 @@ class MongoEngineTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $mongoUrl = env('MONGO_URL');
+        $mongoUrl = getenv('MONGO_URL');
         if (empty($mongoUrl)) {
             $this->markTestSkipped("The env 'MONGO_URL' is not defined for this TestCase");
         }
         $this->Logger = new NullLogger();
         $this->Engine = new MongoEngine($this->Logger, [
-            'uri' => $mongoUrl,
-            'database' => env('MONGO_DATABASE'),
+            'url' => $mongoUrl
         ]);
     }
 

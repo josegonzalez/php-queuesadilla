@@ -16,7 +16,9 @@ use MongoDB\Operation\FindOneAndUpdate;
 class MongoEngine extends Base
 {
     protected $baseConfig = [
-        'uri' => 'mongodb://127.0.0.1:27017',
+        'scheme' => 'mongodb',
+        'host' => '127.0.0.1',
+        'port' => 27017,
         'database' => null,
         'collection' => 'default_queues'
     ];
@@ -34,7 +36,13 @@ class MongoEngine extends Base
 
                 return true;
             }
-            $client = new Client($this->config('uri'));
+            $dsn = sprintf(
+                "%s://%s:%s",
+                $this->config('scheme'),
+                $this->config('host'),
+                $this->config('port')
+            );
+            $client = new Client($dsn);
             $this->connection = $client->selectDatabase($this->config('database'));
 
             return true;
