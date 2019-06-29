@@ -3,37 +3,45 @@ language: php
 services:
   - mysql
   - postgres
-  # - rabbitmq
+  - rabbitmq
   - redis-server
 
 php:
   - 7.2
   - 7.3
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 env:
   global:
    - BEANSTALK_URL="beanstalk://127.0.0.1:11300?queue=default&timeout=1"
    - MEMORY_URL="memory:///?queue=default&timeout=1"
-   - MYSQL_URL="mysql://travis@127.0.0.1:3306/database_name?queue=default&timeout=1"
+   - MYSQL_URL="mysql://root@127.0.0.1:3306/database_name?queue=default&timeout=1"
    - NULL_URL="null:///?queue=default&timeout=1"
+   - RABBITMQ_URL="rabbitmq://guest:guest@127.0.0.1:5672/?queue=default&timeout=1"
    - REDIS_URL="redis://travis@127.0.0.1:6379/0?queue=default&timeout=1"
    - MEMORY_URL="synchronous:///?queue=default&timeout=1"
    - POSTGRES_URL="pgsql://postgres@127.0.0.1:5432/database_name?queue=default"
 
 before_script:
   - sudo apt-get update
+
   # beanstalkd
   - sudo apt-get install -qq --force-yes beanstalkd
+  - sudo service beanstalkd start || true
 
   # mysql
   - mysql -e 'CREATE DATABASE database_name;'
-  - mysql database_name < config/schema-mysql.sql
+  - mysql database_name < contrib/schema-mysql.sql
 
   # postgres
   - psql -c "CREATE DATABASE database_name;" -U postgres;
-  - psql -d database_name -f config/schema-pgsql.sql -U postgres;
+  - psql -d database_name -f contrib/schema-pgsql.sql -U postgres;
 
   # extensions
+  # - echo "extension = amqp.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
   - composer self-update
@@ -43,6 +51,7 @@ script:
   - vendor/bin/phpcs --standard=psr2 src/
   - vendor/bin/phpunit
   - vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode
+  - sudo service beanstalkd stop
 
 after_success:
   - php vendor/bin/php-coveralls -v
