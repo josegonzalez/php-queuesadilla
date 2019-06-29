@@ -16,7 +16,7 @@ abstract class AbstractPdoEngineTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
