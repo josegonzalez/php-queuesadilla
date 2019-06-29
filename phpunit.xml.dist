@@ -24,8 +24,5 @@
     <whitelist>
       <directory suffix=".php">./src/</directory>
     </whitelist>
-    <blacklist>
-        <directory suffix=".php">./vendor/</directory>
-    </blacklist>
   </filter>
 </phpunit>
