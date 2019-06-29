@@ -1,7 +1,6 @@
 language: php
 
 services:
-  # - mongodb
   - mysql
   - postgres
   # - rabbitmq
@@ -35,7 +34,6 @@ before_script:
 
   # extensions
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
   - composer self-update
   - composer install
