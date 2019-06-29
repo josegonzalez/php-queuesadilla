@@ -8,12 +8,36 @@ namespace josegonzalez\Queuesadilla\Engine;
 interface EngineInterface
 {
 
+    /**
+     * Returns a string representation of the class name
+     *
+     * @return string
+     */
     public function getJobClass();
 
+    /**
+     * Gets a configuration setting
+     *
+     * @param array  $settings    an array of settings
+     * @param string $key         a key to set or retrieve
+     * @param mixed  $default     a default value to return if the config value does not exist
+     *
+     * @return mixed
+     **/
     public function setting($settings, $key, $default = null);
 
+    /**
+     * Creates a connection to the underlying engine datastore
+     *
+     * @return boolean
+     **/
     public function connect();
 
+    /**
+     * Returns a connection to the underlying datastore
+     *
+     * @return mixed
+     **/
     public function connection();
 
     /**
