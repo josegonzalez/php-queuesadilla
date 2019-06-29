@@ -10,7 +10,7 @@ A job/worker system built to support various queuing systems.
 
 ## Requirements
 
-- PHP 5.6+
+- PHP 7.2+
 
 ## Installation
 
