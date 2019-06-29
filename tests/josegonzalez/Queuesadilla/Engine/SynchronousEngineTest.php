@@ -13,7 +13,7 @@ use Psr\Log\NullLogger;
 
 class SynchronousEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('SYNCHRONOUS_URL');
         $this->config = ['url' => $this->url];
@@ -26,7 +26,7 @@ class SynchronousEngineTest extends TestCase
         $this->Fixtures = new FixtureData;
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
     }

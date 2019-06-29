@@ -9,7 +9,7 @@ use Psr\Log\NullLogger;
 
 class NullEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('NULL_URL');
         $this->config = ['url' => $this->url];
@@ -19,7 +19,7 @@ class NullEngineTest extends TestCase
         $this->Fixtures = new FixtureData;
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
     }

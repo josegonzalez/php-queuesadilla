@@ -9,7 +9,7 @@ use Psr\Log\NullLogger;
 
 class BaseTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $config = [];
         $items = [
@@ -62,7 +62,7 @@ class BaseTest extends TestCase
         ];
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
         unset($this->Jobs);

@@ -9,7 +9,7 @@ use PDOException;
 
 class MysqlEngineTest extends AbstractPdoEngineTest
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('MYSQL_URL');
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\MysqlEngine';

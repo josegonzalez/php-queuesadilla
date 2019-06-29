@@ -9,7 +9,7 @@ use PDOException;
 
 class PostgresEngineTest extends AbstractPdoEngineTest
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('POSTGRES_URL');
         $this->engineClass = 'josegonzalez\Queuesadilla\Engine\PostgresEngine';

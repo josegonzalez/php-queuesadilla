@@ -7,13 +7,13 @@ use stdClass;
 
 class EventTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->object = new stdClass();
         $this->Event = new Event('test', $this->object, []);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->object);
         unset($this->Event);
