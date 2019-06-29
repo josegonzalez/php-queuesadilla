@@ -75,21 +75,20 @@ class EventTest extends TestCase
      */
     public function testData()
     {
-        $this->assertInternalType('array', $this->Event->data());
-        $this->assertInternalType('array', $this->Event->data);
+        $this->assertIsArray($this->Event->data());
+        $this->assertIsArray($this->Event->data);
         $this->assertEquals([], $this->Event->data);
 
         $this->Event->data = ['test' => 'passed'];
         $this->assertEquals(['test' => 'passed'], $this->Event->data);
 
         $Event = new Event('test');
-        $this->assertInternalType('array', $Event->data());
-        $this->assertInternalType('null', $Event->data);
+        $this->assertIsArray($Event->data());
         $this->assertNull($Event->data);
 
         $Event->data = ['test' => 'passed'];
-        $this->assertInternalType('array', $Event->data());
-        $this->assertInternalType('array', $Event->data);
+        $this->assertIsArray($Event->data());
+        $this->assertIsArray($Event->data);
         $this->assertEquals(['test' => 'passed'], $Event->data);
     }
 }

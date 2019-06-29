@@ -115,7 +115,7 @@ class BeanstalkEngineTest extends TestCase
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
 
         $item = $this->Engine->pop('default');
-        $this->assertInternalType('array', $item);
+        $this->assertIsArray($item);
         $this->assertArrayHasKey('class', $item);
         $this->assertArrayHasKey('args', $item);
         $this->assertArrayHasKey('job', $item);
