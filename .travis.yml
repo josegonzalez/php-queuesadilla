@@ -1,7 +1,6 @@
 language: php
 
 services:
-  # - memcached
   # - mongodb
   - mysql
   - postgres
@@ -38,7 +37,6 @@ before_script:
 
   # extensions
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
   - composer self-update
