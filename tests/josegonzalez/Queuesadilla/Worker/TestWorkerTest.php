@@ -9,13 +9,13 @@ use Psr\Log\LoggerInterface;
 
 class TestWorkerTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->Engine = new NullEngine;
         $this->Worker = new TestWorker($this->Engine);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
         unset($this->Worker);

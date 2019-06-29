@@ -51,7 +51,7 @@ class MyJob
 
 class SequentialWorkerTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->Engine = new NullEngine;
         $this->Worker = new SequentialWorker($this->Engine);
@@ -70,7 +70,7 @@ class SequentialWorkerTest extends TestCase
         $this->Job = new BaseJob($this->Item, $this->Engine);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
         unset($this->Worker);

@@ -10,7 +10,7 @@ use Exception as RedisException;
 
 class PredisEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('REDIS_URL');
         $this->config = ['url' => $this->url];
@@ -21,7 +21,7 @@ class PredisEngineTest extends TestCase
         $this->clearEngine();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->clearEngine();
         unset($this->Engine);

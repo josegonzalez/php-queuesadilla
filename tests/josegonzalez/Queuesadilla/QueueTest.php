@@ -8,7 +8,7 @@ use josegonzalez\Queuesadilla\TestCase;
 
 class QueueTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->Engine = new NullEngine;
         $this->Queue = new Queue($this->Engine);

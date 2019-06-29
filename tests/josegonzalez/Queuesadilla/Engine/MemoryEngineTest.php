@@ -9,7 +9,7 @@ use Psr\Log\NullLogger;
 
 class MemoryEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('MEMORY_URL');
         $this->config = ['url' => $this->url];
@@ -18,7 +18,7 @@ class MemoryEngineTest extends TestCase
         $this->Fixtures = new FixtureData;
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unset($this->Engine);
     }

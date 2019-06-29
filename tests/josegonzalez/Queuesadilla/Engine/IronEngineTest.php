@@ -8,12 +8,12 @@ use Psr\Log\NullLogger;
 
 class IronEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         // $this->Engine = new IronEngine();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         // unset($this->Engine);
     }
