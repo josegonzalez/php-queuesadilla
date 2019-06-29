@@ -23,7 +23,7 @@
         "phpunit/phpunit": "~5.0",
         "iron-io/iron_mq": "dev-master",
         "monolog/monolog": "*",
-        "pda/pheanstalk": "dev-master",
+        "pda/pheanstalk": "~3.0",
         "phpmd/phpmd": "dev-master",
         "predis/predis": "~1.0",
         "satooshi/php-coveralls": "~2.0",
