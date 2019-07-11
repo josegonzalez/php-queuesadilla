@@ -16,7 +16,7 @@ abstract class AbstractPdoEngineTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->config = ['url' => $this->url];
         $this->Logger = new NullLogger;
@@ -27,22 +27,22 @@ abstract class AbstractPdoEngineTest extends TestCase
     }
 
     /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown() : void
+    {
+        $this->clearEngine();
+        unset($this->Engine);
+    }
+
+    /**
      * Used to truncate the jobs table and to reset the auto increment value.
      *
      * @return void
      */
     abstract protected function clearEngine();
-
-    /**
-     * Tear Down
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->clearEngine();
-        unset($this->Engine);
-    }
 
     /**
      * @covers josegonzalez\Queuesadilla\Engine\Base::__construct

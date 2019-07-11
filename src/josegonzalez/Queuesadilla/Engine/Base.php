@@ -41,6 +41,7 @@ abstract class Base implements EngineInterface
 
         return $this;
     }
+
     public function getJobClass()
     {
         return '\\josegonzalez\\Queuesadilla\\Job\\Base';

@@ -10,7 +10,7 @@ use RedisException;
 
 class RedisEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         if (!class_exists('Redis')) {
             $this->markTestSkipped('Redis extension is not installed or configured properly.');
@@ -25,7 +25,7 @@ class RedisEngineTest extends TestCase
         $this->clearEngine();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->clearEngine();
         unset($this->Engine);

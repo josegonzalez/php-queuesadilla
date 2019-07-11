@@ -10,7 +10,7 @@ use Psr\Log\NullLogger;
 
 class BeanstalkEngineTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = getenv('BEANSTALK_URL');
         $this->config = ['url' => $this->url];
@@ -21,7 +21,7 @@ class BeanstalkEngineTest extends TestCase
         $this->clearEngine();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->clearEngine();
         unset($this->Engine);
@@ -115,7 +115,7 @@ class BeanstalkEngineTest extends TestCase
         $this->assertTrue($this->Engine->push($this->Fixtures->default['first'], 'default'));
 
         $item = $this->Engine->pop('default');
-        $this->assertInternalType('array', $item);
+        $this->assertIsArray($item);
         $this->assertArrayHasKey('class', $item);
         $this->assertArrayHasKey('args', $item);
         $this->assertArrayHasKey('job', $item);
