@@ -195,7 +195,7 @@ class MongoEngine extends Base
      * @param $options
      * @return array
      */
-    protected function getPopFilter($options): array
+    protected function getPopFilter($options)
     {
         $timeNow = (new DateTime())->getTimestamp();
 
