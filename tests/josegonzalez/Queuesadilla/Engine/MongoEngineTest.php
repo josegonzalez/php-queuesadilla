@@ -19,7 +19,7 @@ class MongoEngineTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
         $mongoUrl = getenv('MONGO_URL');
@@ -35,7 +35,7 @@ class MongoEngineTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function tearDown(): void
+    public function tearDown()
     {
         parent::tearDown();
         try {
