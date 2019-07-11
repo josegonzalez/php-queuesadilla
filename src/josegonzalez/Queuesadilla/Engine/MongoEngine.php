@@ -122,9 +122,9 @@ class MongoEngine extends Base
             $item['options'] = $options;
             $item['options']['attempts_delay'] = $attemptsDelay;
 
-            $id = $this->getCollection()->insertOne($data + $item)->getInsertedId();
-            if ($id) {
-                $this->lastJobId = (string)$id;
+            $insertedId = $this->getCollection()->insertOne($data + $item)->getInsertedId();
+            if ($insertedId) {
+                $this->lastJobId = (string)$insertedId;
 
                 return true;
             }
