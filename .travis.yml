@@ -38,6 +38,7 @@ before_script:
 
   # extensions
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - pecl install mongodb
 
   - composer self-update
   - composer install
