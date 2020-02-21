@@ -136,6 +136,10 @@ class RedisEngine extends Base
 
         $queue = $this->setting($options, 'queue');
         $this->requireQueue($options);
+	
+        if (isset($item['attempts']) && $item['attempts'] === 0) {
+            return $this->reject($item);
+        }
 
         return $this->connection()->rpush('queue:' . $queue, json_encode($item));
     }
