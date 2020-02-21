@@ -44,4 +44,16 @@ class PredisEngine extends RedisEngine
             'timeout' => (int)$this->config('timeout'),
         ]);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function release($item, $options = [])
+    {
+        if (isset($item['attempts']) && $item['attempts'] === 0) {
+            return $this->reject($item);
+        }
+
+        return parent::release($item, $options);
+    }
 }
