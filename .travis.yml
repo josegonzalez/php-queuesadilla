@@ -1,6 +1,8 @@
 language: php
 
 services:
+  # - memcached
+  - mongodb
   - mysql
   - postgres
   # - rabbitmq
@@ -19,6 +21,7 @@ env:
    - REDIS_URL="redis://travis@127.0.0.1:6379/0?queue=default&timeout=1"
    - MEMORY_URL="synchronous:///?queue=default&timeout=1"
    - POSTGRES_URL="pgsql://postgres@127.0.0.1:5432/database_name?queue=default"
+   - MONGO_URL="mongodb://127.0.0.1:27017/database_name"
 
 before_script:
   - sudo apt-get update
@@ -35,6 +38,7 @@ before_script:
 
   # extensions
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - pecl install mongodb
 
   - composer self-update
   - composer install
