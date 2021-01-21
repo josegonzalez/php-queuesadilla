@@ -6,10 +6,10 @@ A job/worker system built to support various queuing systems.
 
 ## Table Of Contents
 
-- [Installation](/php-queuesadilla/installation)
-- [Supported Systems](/php-queuesadilla/supported-systems)
-- [Simple Usage](/php-queuesadilla/simple-usage)
-- [Defining Jobs](/php-queuesadilla/defining-jobs)
-- [Job Options](/php-queuesadilla/job-options)
-- [Available Callbacks](/php-queuesadilla/callbacks)
-- [Pop order of jobs](/php-queuesadilla/pop-order)
+- [Installation](installation.md)
+- [Supported Systems](supported-systems.md)
+- [Simple Usage](simple-usage.md)
+- [Defining Jobs](defining-jobs.md)
+- [Job Options](job-options.md)
+- [Available Callbacks](callbacks.md)
+- [Pop order of jobs](pop-order.md)
