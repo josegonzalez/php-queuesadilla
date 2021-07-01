@@ -127,22 +127,30 @@ abstract class PdoEngine extends Base
         }
 
         $delay = $this->setting($options, 'delay');
+        $delayUntil = $this->setting($options, 'delay_until');
         $expiresIn = $this->setting($options, 'expires_in');
+        $expiresAt = $this->setting($options, 'expires_at');
         $queue = $this->setting($options, 'queue');
         $priority = $this->setting($options, 'priority');
         $attempts = $this->setting($options, 'attempts');
         $attemptsDelay = $this->setting($options, 'attempts_delay');
 
-        $delayUntil = null;
         if ($delay !== null) {
             $datetime = new DateTime;
-            $delayUntil = $datetime->add(new DateInterval(sprintf('PT%sS', $delay)))->format('Y-m-d H:i:s');
+            $delayUntil = $datetime->add(new DateInterval(sprintf('PT%sS', $delay)));
+        }
+        if (!empty($delayUntil) && $delayUntil instanceof DateTime) {
+            $delayUntil = $delayUntil->format('Y-m-d H:i:s');
         }
 
         $expiresAt = null;
         if ($expiresIn !== null) {
             $datetime = new DateTime;
             $expiresAt = $datetime->add(new DateInterval(sprintf('PT%sS', $expiresIn)))->format('Y-m-d H:i:s');
+        }
+
+        if (!empty($expiresAt) && $expiresAt instanceof DateTime) {
+            $expiresAt = $expiresAt->format('Y-m-d H:i:s');
         }
 
         unset($options['queue']);
