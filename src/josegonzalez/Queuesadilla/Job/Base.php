@@ -83,7 +83,7 @@ class Base implements JsonSerializable
         return json_encode($this);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->item;
     }
