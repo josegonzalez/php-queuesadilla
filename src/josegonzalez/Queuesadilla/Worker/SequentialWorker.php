@@ -17,10 +17,6 @@ class SequentialWorker extends Base
     public function __construct(EngineInterface $engine, LoggerInterface $logger = null, $params = [])
     {
         parent::__construct($engine, $logger, $params);
-        pcntl_signal(SIGQUIT, [&$this, 'signalHandler']);
-        pcntl_signal(SIGTERM, [&$this, 'signalHandler']);
-        pcntl_signal(SIGINT, [&$this, 'signalHandler']);
-        pcntl_signal(SIGUSR1, [&$this, 'signalHandler']);
 
         $this->running = true;
     }
@@ -143,45 +139,6 @@ class SequentialWorker extends Base
 
     protected function disconnect()
     {
-    }
-
-    public function signalHandler($signo = null)
-    {
-        $signals = [
-            SIGQUIT => "SIGQUIT",
-            SIGTERM => "SIGTERM",
-            SIGINT => "SIGINT",
-            SIGUSR1 => "SIGUSR1",
-        ];
-
-        if ($signo !== null) {
-            $signal = $signals[$signo];
-            $this->logger->info(sprintf("Received %s... Shutting down", $signal));
-        }
-
-        switch ($signo) {
-            case SIGQUIT:
-                $this->logger()->debug('SIG: Caught SIGQUIT');
-                $this->running = false;
-                break;
-            case SIGTERM:
-                $this->logger()->debug('SIG: Caught SIGTERM');
-                $this->running = false;
-                break;
-            case SIGINT:
-                $this->logger()->debug('SIG: Caught CTRL+C');
-                $this->running = false;
-                break;
-            case SIGUSR1:
-                $this->logger()->debug('SIG: Caught SIGUSR1');
-                $this->running = false;
-                break;
-            default:
-                $this->logger()->debug('SIG:received other signal');
-                break;
-        }
-
-        return true;
     }
 
     public function shutdownHandler($signo = null)
