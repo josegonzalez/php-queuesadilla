@@ -113,8 +113,8 @@ class MongoEngine extends Base
             $data = [
                 'queue' => $this->setting($options, 'queue'),
                 'priority' => $this->setting($options, 'priority'),
-                'expiresAt' => $expiresAt,
-                'delayUntil' => $delayUntil,
+                'expires_at' => $expiresAt,
+                'delay_until' => $delayUntil,
                 'attempts' => $this->setting($options, 'attempts')
             ];
             unset($options['queue']);
@@ -209,14 +209,14 @@ class MongoEngine extends Base
                 ],
                 [
                     '$or' => [
-                        ['delayUntil' => ['$lt' => $timeNow]],
-                        ['delayUntil' => null]
+                        ['delay_until' => ['$lt' => $timeNow]],
+                        ['delay_until' => null]
                     ]
                 ],
                 [
                     '$or' => [
-                        ['expiresAt' => ['$gt' => $timeNow]],
-                        ['expiresAt' => null]
+                        ['expires_at' => ['$gt' => $timeNow]],
+                        ['expires_at' => null]
                     ]
                 ],
             ]
