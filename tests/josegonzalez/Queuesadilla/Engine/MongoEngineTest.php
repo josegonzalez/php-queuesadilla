@@ -129,7 +129,7 @@ class MongoEngineTest extends \PHPUnit\Framework\TestCase
             'queue' => 'test_push',
             'priority' => 0,
             'expiresAt' => null,
-            'delayUntil' => null,
+            'delay_until' => null,
             'attempts' => 0,
             'options' => [
                 'attempts_delay' => null
